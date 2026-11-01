@@ -109,6 +109,10 @@ is required:
   run: bundle exec rspec spec/architecture_spec.rb
 ~~~
 
+## 🎬 Demo
+
+https://github.com/user-attachments/assets/9b7305a0-deee-454d-b99e-f8fac63d06ab
+
 ## 🚐 Setup
 
 ### Explain why a rule exists
