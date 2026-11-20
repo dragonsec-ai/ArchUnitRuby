@@ -4,6 +4,7 @@ require 'prism'
 require_relative '../common/extraction/import_kind'
 require_relative 'conservative_local_flow'
 require_relative 'local_string_tracker'
+require_relative 'load_arguments'
 
 module ArchUnit
   module Extraction
@@ -44,14 +45,24 @@ module ArchUnit
       def record_import(node)
         import_kind = CALL_KINDS[node.name]
         arguments = node.arguments&.arguments || []
-        argument = import_argument(arguments, import_kind)
-        module_name = @local_strings.resolve(argument)
+        module_name = import_module_name(node, arguments, import_kind)
         unless valid_module_name?(module_name)
           @unresolved_imports += 1
           return
         end
 
         @imports << located_import(module_name, import_kind, node)
+      end
+
+      def import_module_name(node, arguments, import_kind)
+        if import_kind == Common::Extraction::ImportKind::LOAD
+          # Arguments are evaluated before the call: a wrap expression or & conversion can
+          # mutate an earlier path object. Never reuse its pre-call tracked string value.
+          @local_strings.invalidate_all if LoadArguments.effectful?(node, arguments)
+          return @local_strings.resolve(LoadArguments.path(arguments))
+        end
+
+        @local_strings.resolve(import_argument(arguments, import_kind))
       end
 
       def located_import(module_name, import_kind, node)
@@ -83,14 +94,13 @@ module ArchUnit
       end
 
       def import_argument(arguments, import_kind)
-        if import_kind == Common::Extraction::ImportKind::AUTOLOAD
-          return unless arguments.length == 2
-
-          arguments[1]
+        case import_kind
+        when Common::Extraction::ImportKind::AUTOLOAD
+          arguments[1] if arguments.length == 2
+        when Common::Extraction::ImportKind::LOAD
+          arguments.first if LoadArguments.possible?(arguments)
         else
-          return unless arguments.length == 1
-
-          arguments[0]
+          arguments[0] if arguments.length == 1
         end
       end
 
