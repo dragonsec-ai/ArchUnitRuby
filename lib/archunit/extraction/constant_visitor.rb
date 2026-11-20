@@ -21,11 +21,13 @@ module ArchUnit
       end
 
       def visit_class_node(node)
+        visit_namespace_receiver(node.constant_path)
         visit(node.superclass)
         visit_namespace(node, inherited: !node.superclass.nil?)
       end
 
       def visit_module_node(node)
+        visit_namespace_receiver(node.constant_path)
         visit_namespace(node, inherited: false)
       end
 
@@ -35,6 +37,7 @@ module ArchUnit
       end
 
       def visit_constant_path_write_node(node)
+        visit_namespace_receiver(node.target)
         name = static_name(node.target)
         define_constant(declaration_name(name), node) if name
         visit(node.value)
@@ -72,6 +75,11 @@ module ArchUnit
       end
 
       private
+
+      def visit_namespace_receiver(path)
+        # Only the owner is read; the final name is being declared, not referenced.
+        visit(path.parent) if path.is_a?(Prism::ConstantPathNode) && static_name(path)
+      end
 
       def visit_namespace(node, inherited:)
         name = static_name(node.constant_path)

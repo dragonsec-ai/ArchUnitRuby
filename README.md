@@ -547,6 +547,11 @@ the assignment executes or its resulting value. Multiple candidate files stay am
 compound writes (`&&=`, operators) and multiple-assignment declarations are not inferred as new
 definition owners; unsupported targets remain unresolved rather than inventing ownership.
 
+Qualified class/module declarations and `=`/`||=` writes also read their namespace receiver:
+`class Db::Service` and `Db::VALUE = 42` depend on the unique file defining `Db`, not on a prior
+definition of `Service` or `VALUE`. Root qualification and enclosing lexical lookup are preserved;
+unknown or reopened namespace owners remain unresolved or ambiguous.
+
 References with multiple definition files (reopened classes/modules), missing definitions, and
 dynamic definitions are omitted, never assigned to an arbitrary file. `Alias = Original` defines
 `Alias` in its own file and records the reference to `Original`; lookup through aliases such as
