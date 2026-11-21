@@ -40,7 +40,7 @@ module ArchUnit
         source_path:, project_root:, load_paths:, profile:, cache: resolution_cache
       )
       parse_result ||= parse_source(source_path, profile)
-      resolve_imports(parsed_imports(parse_result, profile), resolver)
+      resolve_imports(parsed_imports(parse_result, profile, source_path:), resolver)
     rescue SystemCallError => e
       raise TechnicalError, "could not parse Ruby source file: #{e.message}"
     end
@@ -68,9 +68,9 @@ module ArchUnit
     end
     private_class_method :parse_source
 
-    def parsed_imports(parse_result, profile)
+    def parsed_imports(parse_result, profile, source_path:)
       ExtractionProfile.measure(profile, :import_extraction) do
-        visitor = ImportVisitor.new
+        visitor = ImportVisitor.new(source_path:, syntax_tree: parse_result.value)
         visitor.visit(parse_result.value)
         profile&.increment(:unresolved_imports, visitor.unresolved_imports)
         reject_ignored_imports(visitor.imports, parse_result.comments)

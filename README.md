@@ -521,6 +521,31 @@ disabled for that scope. Independent literal assignments inside a method or bloc
 such as `ENV.fetch('PLUGIN_PATH')`, interpolation, and method results remain unresolved. No source,
 Gemfile, gemspec, initializer, or `const_missing` hook is executed.
 
+A bounded AST whitelist also recognizes file-relative construction, including the pattern used by
+RestClient:
+
+~~~ ruby
+require File.dirname(__FILE__) + '/restclient/version'
+require File.expand_path('../db/store', __dir__)
+path = __dir__ + '/../db/store.rb'
+load path, true
+~~~
+
+Supported operands are string literals, `__FILE__`, zero-argument implicit `__dir__`, and nested
+whitelisted expressions. String `+` concatenates two such operands. `File`/`::File.dirname` accepts
+one absolute operand; `File`/`::File.expand_path` accepts an absolute operand or a path with an
+explicit absolute base. CWD/drive-relative expansion, `~` expansion, interpolation, `File.join`,
+`Pathname`, local variables *inside* these expressions, and arbitrary methods remain unresolved.
+An entire computed result can be assigned to a local and used under the same safety rules above.
+Folding is bounded to 12 nested levels and 16 KiB strings.
+
+These intrinsics assume ordinary Ruby core semantics. Source-local `File`/`String` shadowing or
+reopening, `__dir__` overrides, refinements, and reflective mutation disable the affected inference
+conservatively across that source file. Arbitrary cross-file core monkey-patches are not modeled.
+Existing exclusions, canonical target matching and symlink boundaries still apply. See Ruby's
+[path expansion](https://docs.ruby-lang.org/en/3.3/File.html#method-c-expand_path) and
+[`__dir__`](https://docs.ruby-lang.org/en/3.3/Kernel.html#method-i-__dir__) semantics.
+
 ### Constant References (Opt-in)
 
 For autoloaded applications, enable dependencies from known project constants alongside imports:
