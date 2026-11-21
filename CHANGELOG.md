@@ -5,6 +5,9 @@
 - Record namespace-owner dependencies in qualified class/module declarations and constant writes
   in expanded analysis, preserving lexical lookup, ambiguity handling, and source evidence.
 
+- Recognize `load(path, wrap)` dependencies and count dynamic/variadic wrapped paths as unresolved,
+  without reusing stale local strings across effectful wrap expressions or block conversions.
+
 - Add an opt-in `archunit` executable with non-destructive configuration initialization, named
   Checkable rules, check/explain commands, text or versioned JSON diagnostics, and explicit
   success/violation/error exit codes. This is development work, not a published 1.1.0 release.
