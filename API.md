@@ -247,6 +247,13 @@ gemspecs or running application code.
 literal-string assignments in supported straight-line scopes. Aliases, mutation/escape, closures,
 reflection, and unsupported control flow invalidate inferred values; runtime paths are not guessed.
 
+The bounded file-relative whitelist also accepts `__FILE__`, implicit `__dir__`, literal/static
+string `+`, `File.dirname(absolute_expression)` and `File.expand_path(path, absolute_base)`
+(also `::File`, or one absolute operand for `expand_path`). Operands cannot contain local-variable
+reads or arbitrary calls; the completed result may be assigned to a local. No source is evaluated.
+Source-local core overrides/reflection disable affected inference; arbitrary cross-file core
+monkey-patching is not modeled. See the README for the exact limits and unsupported forms.
+
 For autoloaded projects, opt into known project constant references alongside imports:
 
 ~~~ruby
