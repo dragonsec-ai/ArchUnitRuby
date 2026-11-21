@@ -17,13 +17,14 @@ module ArchUnit
 
     module_function
 
-    def extract_imports(
-      source_file, project_root:, load_paths: nil, profile: nil, resolution_cache: nil
+    def extract_imports( # rubocop:disable Metrics/ParameterLists
+      source_file, project_root:, load_paths: nil, profile: nil, resolution_cache: nil,
+      rails_imports: false
     )
       source_path = ExtractionPaths.source_file(source_file)
       root = ExtractionPaths.project_root(project_root)
       extract_imports_from(
-        source_path, project_root: root, load_paths:, profile:, resolution_cache:
+        source_path, project_root: root, load_paths:, profile:, resolution_cache:, rails_imports:
       )
     rescue UserError
       raise
@@ -34,22 +35,18 @@ module ArchUnit
     # Share the parsed AST with constant analysis.
     def extract_imports_from( # rubocop:disable Metrics/ParameterLists
       source_path, project_root:, load_paths: nil, profile: nil, resolution_cache: nil,
-      parse_result: nil
+      parse_result: nil, rails_imports: false, helper_load_paths: nil
     )
-      resolver = build_import_resolver(
-        source_path:, project_root:, load_paths:, profile:, cache: resolution_cache
+      resolver = ImportResolver.new(
+        source_path:, project_root:, load_paths:, profile:,
+        cache: resolution_cache, helper_load_paths:
       )
       parse_result ||= parse_source(source_path, profile)
-      resolve_imports(parsed_imports(parse_result, profile, source_path:), resolver)
+      resolve_imports(parsed_imports(parse_result, profile, source_path:, rails_imports:), resolver)
     rescue SystemCallError => e
       raise TechnicalError, "could not parse Ruby source file: #{e.message}"
     end
     private_class_method :extract_imports_from
-
-    def build_import_resolver(**)
-      ImportResolver.new(**)
-    end
-    private_class_method :build_import_resolver
 
     def resolve_imports(imports, resolver)
       imports.map { |import| resolved_import(import, resolver) }.freeze
@@ -68,9 +65,9 @@ module ArchUnit
     end
     private_class_method :parse_source
 
-    def parsed_imports(parse_result, profile, source_path:)
+    def parsed_imports(parse_result, profile, source_path:, rails_imports:)
       ExtractionProfile.measure(profile, :import_extraction) do
-        visitor = ImportVisitor.new(source_path:, syntax_tree: parse_result.value)
+        visitor = ImportVisitor.new(source_path:, syntax_tree: parse_result.value, rails_imports:)
         visitor.visit(parse_result.value)
         profile&.increment(:unresolved_imports, visitor.unresolved_imports)
         reject_ignored_imports(visitor.imports, parse_result.comments)

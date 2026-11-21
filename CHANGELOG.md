@@ -2,6 +2,9 @@
 
 ## 1.1.0 (unreleased)
 
+- Add explicit static Rails `require_dependency` imports, separate helper search-root priority,
+  and CLI `--rails-imports` / repeatable `--load-path` options without booting Rails.
+
 - Fold a bounded, source-aware whitelist of file-relative import expressions without evaluating
   source, including RestClient-style `File.dirname(__FILE__) + '/feature'` imports.
 

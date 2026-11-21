@@ -8,10 +8,13 @@ module ArchUnit
   module Extraction
     # Resolves one source file's imports and reuses context-independent feature lookups.
     class ImportResolver
-      def initialize(source_path:, project_root:, load_paths:, profile: nil, cache: nil)
+      def initialize( # rubocop:disable Metrics/ParameterLists
+        source_path:, project_root:, load_paths:, profile: nil, cache: nil, helper_load_paths: nil
+      )
         @source_path = source_path
         @project_root = project_root
         @load_paths = load_paths
+        @helper_load_paths = helper_load_paths || load_paths
         @profile = profile
         @cache = cache
       end
@@ -40,9 +43,15 @@ module ArchUnit
             source_file: @source_path,
             project_root: @project_root,
             import_kind:,
-            load_paths: @load_paths
+            load_paths: resolution_paths(import_kind)
           )
         end
+      end
+
+      def resolution_paths(kind)
+        return @helper_load_paths if kind == Common::Extraction::ImportKind::REQUIRE_DEPENDENCY
+
+        @load_paths
       end
 
       def cache_key(module_name, import_kind)

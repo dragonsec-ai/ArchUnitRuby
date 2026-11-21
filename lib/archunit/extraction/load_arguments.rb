@@ -4,15 +4,15 @@ require 'prism'
 
 module ArchUnit
   module Extraction
-    # Bounds Kernel.load arguments without evaluating paths, wrapping, or block conversion.
+    # Bounds positional import arity and Kernel.load wrapping without evaluating source.
     module LoadArguments
       VARIADIC = [Prism::SplatNode, Prism::ForwardingArgumentsNode].freeze
       PURE_WRAP = [Prism::TrueNode, Prism::FalseNode, Prism::NilNode,
                    Prism::LocalVariableReadNode].freeze
       private_constant :VARIADIC, :PURE_WRAP
 
-      def self.possible?(arguments)
-        !arguments.empty? && arguments.count { |argument| !variadic?(argument) } <= 2
+      def self.possible?(arguments, max: 2)
+        !arguments.empty? && arguments.count { |argument| !variadic?(argument) } <= max
       end
 
       def self.path(arguments)
