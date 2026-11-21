@@ -78,7 +78,8 @@ module ArchUnit
         Extraction.clear_graph_cache
         options = Common::FluentApi::CheckOptions.new(
           dependency_analysis: @options.dependency_analysis.to_sym,
-          rails_imports: @options.rails_imports, load_paths: @options.load_paths
+          rails_imports: @options.rails_imports, load_paths: @options.load_paths,
+          source_exclusions: @options.source_exclusions
         )
         check_rules(rules, options)
         failed = @report.payload[:rules].any? { |rule| rule[:status] == 'failed' }

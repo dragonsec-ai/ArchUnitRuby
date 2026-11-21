@@ -59,6 +59,9 @@ jobs:
       - name: Exercise opt-in Rails import checks
         run: bundle exec ruby scripts/check_rails_imports.rb
 
+      - name: Exercise read-only source exclusions
+        run: bundle exec ruby scripts/check_source_exclusions.rb
+
   quality:
     name: Quality and package — Ruby 4.0 on Ubuntu
     runs-on: ubuntu-latest
@@ -156,6 +159,7 @@ jobs:
           ruby scripts/check_namespace_receivers.rb
           ruby scripts/check_static_paths.rb
           ruby scripts/check_rails_imports.rb
+          ruby scripts/check_source_exclusions.rb
           ruby scripts/check_cli.rb
           ruby -e "
             require 'json'

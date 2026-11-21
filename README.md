@@ -212,6 +212,39 @@ Source-code edits still require `clear_cache: true` in a long-lived process. The
 Negation (`!pattern`), NUL characters, and a bare `/` are rejected with `ArchUnit::UserError`.
 No configuration or application code is executed.
 
+For read-only audits, unreleased 1.1 also accepts caller-owned exclusions without creating or
+editing a target `.archignore`:
+
+~~~ ruby
+options = ArchUnit::CheckOptions.new(
+  source_exclusions: ['lib/generators/active_record/templates/migration.rb']
+)
+violations = rule.check(options)
+graph = ArchUnit.project_graph.with_check_options(options).to_json
+counts = ArchUnit.metrics.count.classes.measure(options)
+report_options = ArchUnit::MetricsExportOptions.new(check_options: options)
+ArchUnit.metrics.count.export_as_html('metrics.html', report_options)
+~~~
+
+~~~ sh
+bundle exec archunit check --config /path/to/your/trusted-rules.rb \
+  --exclude-source 'lib/generators/active_record/templates/migration.rb' \
+  --exclude-source 'lib/generators/active_record/templates/migration_existing.rb'
+~~~
+
+`source_exclusions` is an immutable array of project-relative globs. It is **additive** to defaults
+and root `.archignore`; it never re-enables repository-excluded files. Only the low-level legacy
+`exclude_patterns: []` argument disables defaults, and repository/caller exclusions still apply.
+Separators and leading `./` normalize, directory-only patterns retain their meaning, and duplicates
+or ordering do not create a different graph-cache entry. Negation, parent traversal, drive/UNC
+paths, NUL/newlines, empty patterns and a bare `/` are rejected.
+
+Graphs, source metrics, coupling metrics and reports share this source policy. Fluent selectors
+such as `.in_path('app/**')` select rule subjects **after** whole-project discovery; they do not
+exclude generator templates from parsing. Included malformed Ruby remains `SourceParseError`
+(CLI exit 2); zero selected subjects remain violations. No directory named `templates` is ignored
+automatically: exclude only identified non-source files, or fix actual Ruby syntax errors.
+
 ### Fluent Grammar
 
 Every rule is built left to right from the same small grammar:

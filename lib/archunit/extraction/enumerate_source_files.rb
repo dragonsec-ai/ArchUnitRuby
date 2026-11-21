@@ -5,6 +5,7 @@ require 'pathname'
 require_relative '../error/technical_error'
 require_relative '../error/user_error'
 require_relative 'arch_ignore'
+require_relative '../common/fluentapi/check_options'
 
 module ArchUnit
   # Ruby-specific project discovery and source extraction.
@@ -30,9 +31,12 @@ module ArchUnit
 
     module_function
 
-    def enumerate_source_files(project_root, exclude_patterns: nil)
+    def enumerate_source_files(project_root, exclude_patterns: nil, options: nil)
+      options = Common::FluentApi::CheckOptions.resolve(options)
       root = source_root(project_root)
-      patterns = resolve_project_exclude_patterns(root, exclude_patterns)
+      patterns = resolve_project_exclude_patterns(
+        root, exclude_patterns, source_exclusions: options.source_exclusions
+      )
       enumerate_source_files_with_patterns(root, patterns)
     end
 
@@ -45,9 +49,9 @@ module ArchUnit
     end
     private_class_method :enumerate_source_files_with_patterns
 
-    def resolve_project_exclude_patterns(root, value)
+    def resolve_project_exclude_patterns(root, value, source_exclusions: [])
       configured = resolve_exclude_patterns(value)
-      resolve_exclude_patterns([*configured, *ArchIgnore.patterns(root)])
+      resolve_exclude_patterns([*configured, *ArchIgnore.patterns(root), *source_exclusions])
     end
     private_class_method :resolve_project_exclude_patterns
 

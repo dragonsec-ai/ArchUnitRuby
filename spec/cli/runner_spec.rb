@@ -126,6 +126,32 @@ RSpec.describe ArchUnit::CLI do
     expect(errors).to eq('')
   end
 
+  it 'excludes explicit generator templates read-only and keeps all other syntax failures fatal' do
+    template = File.join(@root, 'lib/generators/templates/migration.rb')
+    FileUtils.mkdir_p(File.dirname(template))
+    File.write(template, '<%= migration_class_name %>')
+    code, payload = json_check
+    expect(code).to eq(2)
+    expect(payload.dig('error', 'guidance').join(' ')).to include('--exclude-source')
+    code, payload = json_check('--exclude-source', 'lib/generators/templates/migration.rb')
+    expect(code).to eq(0)
+    expect(payload.fetch('source_exclusions')).to eq(['lib/generators/templates/migration.rb'])
+    expect(File.read(template)).to eq('<%= migration_class_name %>')
+    expect(File.exist?(File.join(@root, '.archignore'))).to be(false)
+    File.write(File.join(@root, 'app/broken.rb'), 'class Broken <')
+    expect(json_check('--exclude-source', 'lib/generators/templates/migration.rb').first).to eq(2)
+  end
+
+  it 'accepts repeatable source exclusions and does not turn empty analysis into a pass' do
+    %w[first second].each do |name|
+      File.write(File.join(@root, "#{name}.rb"), '<%= invalid %>')
+    end
+    result = json_check('--exclude-source', 'first.rb', '--exclude-source', 'second.rb')
+    expect(result.first).to eq(0)
+    expect(json_check('--exclude-source', '**/*.rb').first).to eq(1)
+    expect(json_check('--exclude-source', '!app/**').first).to eq(2)
+  end
+
   it 'reports structured parse diagnostics with a technical-error status, not a rule violation' do
     File.write(File.join(@root, 'app/db/settings.rb'), 'class Broken <')
     code, payload = json_check

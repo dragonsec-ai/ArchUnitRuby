@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'optparse'
+require_relative '../common/extraction/source_exclusions'
 
 module ArchUnit
   module CLI
@@ -8,7 +9,7 @@ module ArchUnit
     # @api private
     class Options
       attr_reader :command, :project_root, :config_path, :format, :dependency_analysis, :parser,
-                  :rails_imports, :load_paths
+                  :rails_imports, :load_paths, :source_exclusions
 
       def initialize(arguments, cwd:)
         @arguments = arguments.dup
@@ -19,6 +20,7 @@ module ArchUnit
         @dependency_analysis = 'imports'
         @rails_imports = false
         @load_paths = []
+        @source_exclusions = []
         @parser = build_parser
       end
 
@@ -33,6 +35,7 @@ module ArchUnit
 
         @config_path ||= File.join(project_root, '.archunit.rb')
         @load_paths.freeze
+        @source_exclusions = Common::Extraction::SourceExclusions.normalize(@source_exclusions)
         self
       end
 
@@ -57,6 +60,7 @@ module ArchUnit
           options.banner = 'Usage: archunit [init|check|explain] [options]'
           project_options(options)
           load_path_option(options)
+          source_exclusion_option(options)
           output_options(options)
         end
       end
@@ -85,6 +89,13 @@ module ArchUnit
         analysis_options(options)
         options.on('-h', '--help', 'Show help without loading config') { @command = 'help' }
         options.on('-v', '--version', 'Show the installed version') { @command = 'version' }
+      end
+
+      def source_exclusion_option(options)
+        options.on('--exclude-source GLOB',
+                   'Additional source exclusion (repeatable; no target edits)') do |value|
+          @source_exclusions << value
+        end
       end
 
       def analysis_options(options)

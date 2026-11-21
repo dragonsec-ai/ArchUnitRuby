@@ -16,7 +16,7 @@ module ArchUnit
 
     def extract_dependencies(project_root, exclude_patterns: nil, options: nil)
       options = Common::FluentApi::CheckOptions.resolve(options)
-      source_files = enumerate_source_files(project_root, exclude_patterns:)
+      source_files = enumerate_source_files(project_root, exclude_patterns:, options:)
       root = Pathname.new(path_value(project_root)).expand_path.realpath
       load_paths = LoadPaths.resolve(
         root, explicit_paths: options.load_paths, source_files:

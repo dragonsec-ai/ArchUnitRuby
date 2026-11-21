@@ -77,6 +77,16 @@ Changing source contents still requires explicit cache clearing. Reads are bound
 BOMs are accepted and invalid bytes replaced. Symlinks (including project-local ones), non-regular
 files, negation, NUL characters, and a bare `/` are rejected. No Ruby or gemspec code is evaluated.
 
+In unreleased 1.1, `CheckOptions.new(source_exclusions: ['lib/templates/migration.rb'])` adds
+immutable caller-owned globs without changing the target repository. These combine with defaults
+and repository policy; legacy `exclude_patterns: []` still disables only defaults. The effective
+normalized set determines graph-cache identity, including when API and legacy inputs express the
+same policy. Source selectors do not narrow the discovery universe. Included invalid Ruby remains
+fatal; no template directories are implicitly skipped. CLI uses repeatable `--exclude-source GLOB`.
+Globs are project-relative (optional leading `/`); negation, traversal, drive/UNC paths, NUL/newlines
+and empty/root-only patterns are rejected. Counts/cohesion/distance accept the same check options.
+For metric HTML, pass `MetricsExportOptions.new(check_options: options)` to `export_as_html`.
+
 | Scope or predicate | Purpose |
 | --- | --- |
 | `with_name(pattern)` | Select or require a filename pattern |

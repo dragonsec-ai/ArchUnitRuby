@@ -12,15 +12,16 @@ module ArchUnit
         # @return [nil]
         def export_as_html(output_path, options = nil)
           options = Reporting::MetricsExportOptions.resolve(options).with(output_path:)
-          Reporting::MetricsExporter.export_as_html(metric_report_data, options)
+          data = metric_report_data(options.check_options)
+          Reporting::MetricsExporter.export_as_html(data, options)
           nil
         end
 
         private
 
-        def metric_report_data
+        def metric_report_data(check_options = nil)
           report_metrics.group_by(&:subject_type).each_with_object({}) do |(type, metrics), data|
-            subjects = scope.__send__(:subjects_for, type)
+            subjects = scope.__send__(:subjects_for, type, options: check_options)
             metrics.each { |metric| add_metric_values(data, subjects, metric) }
           end.freeze
         end

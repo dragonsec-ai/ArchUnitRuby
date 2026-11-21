@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../logging/logging_options'
+require_relative '../extraction/source_exclusions'
 
 module ArchUnit
   module Common
@@ -8,7 +9,7 @@ module ArchUnit
       # Immutable options shared by every terminal rule check.
       CheckOptions = Data.define(
         :allow_empty_tests, :logging, :clear_cache, :load_paths, :dependency_analysis,
-        :rails_imports
+        :rails_imports, :source_exclusions
       ) do
         # Normalizes nil or an existing options value for terminal execution.
         # @param value [CheckOptions, nil]
@@ -26,15 +27,17 @@ module ArchUnit
         # @param load_paths [Array<String, Pathname>] additional project-contained source roots
         # @param dependency_analysis [Symbol] :imports or opt-in :imports_and_constants
         # @param rails_imports [Boolean] opt into static Rails require_dependency syntax
+        # @param source_exclusions [Array<String>] additional project-relative source globs
         def initialize( # rubocop:disable Metrics/ParameterLists
           allow_empty_tests: false, logging: nil, clear_cache: false, load_paths: [],
-          dependency_analysis: :imports, rails_imports: false
+          dependency_analysis: :imports, rails_imports: false, source_exclusions: []
         )
           validate_boolean(allow_empty_tests, :allow_empty_tests)
           validate_logging(logging)
           validate_boolean(clear_cache, :clear_cache)
           validate_boolean(rails_imports, :rails_imports)
           load_paths = immutable_load_paths(load_paths)
+          source_exclusions = Common::Extraction::SourceExclusions.normalize(source_exclusions)
           unless %i[imports imports_and_constants].include?(dependency_analysis)
             raise ArgumentError, 'dependency_analysis must be :imports or :imports_and_constants'
           end

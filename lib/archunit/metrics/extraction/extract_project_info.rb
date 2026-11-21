@@ -15,9 +15,10 @@ module ArchUnit
     module Extraction
       module_function
 
-      def extract_project_info(project_locator = nil, exclude_patterns: nil)
+      def extract_project_info(project_locator = nil, exclude_patterns: nil, options: nil)
         root = Pathname.new(ArchUnit::Extraction.locate_project(project_locator))
-        files = ArchUnit::Extraction.enumerate_source_files(root, exclude_patterns:).map do |path|
+        sources = ArchUnit::Extraction.enumerate_source_files(root, exclude_patterns:, options:)
+        files = sources.map do |path|
           extract_file_info(root.join(path), relative_path: path)
         end
         ProjectInfo.new(project_root: root.to_s, files:)
