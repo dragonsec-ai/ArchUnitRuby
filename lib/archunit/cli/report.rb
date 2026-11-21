@@ -16,7 +16,9 @@ module ArchUnit
         @payload = {
           schema_version: 1, archunit_version: ArchUnit::VERSION, command: options.command,
           project_root: options.project_root, config_path: options.config_path,
-          dependency_analysis: options.dependency_analysis, status: 'error', rules: []
+          dependency_analysis: options.dependency_analysis,
+          rails_imports: options.rails_imports, load_paths: options.load_paths,
+          status: 'error', rules: []
         }
       end
 
@@ -73,6 +75,7 @@ module ArchUnit
       end
 
       def write_notice(out)
+        out.puts('Rails require_dependency imports: enabled') if payload[:rails_imports]
         case payload[:status]
         when 'configured'
           out.puts('Rules are configured, not evaluated.')

@@ -9,7 +9,8 @@ RSpec.describe ArchUnit::Common::FluentApi::CheckOptions do
       logging: nil,
       clear_cache: false,
       load_paths: [],
-      dependency_analysis: :imports
+      dependency_analysis: :imports,
+      rails_imports: false
     )
     expect(options.allow_empty_tests?).to be(false)
     expect(options.clear_cache?).to be(false)
@@ -65,5 +66,15 @@ RSpec.describe ArchUnit::Common::FluentApi::CheckOptions do
     expect(expanded).to be_constant_references
     expect { described_class.new(dependency_analysis: :dynamic) }
       .to raise_error(ArgumentError, /dependency_analysis/)
+  end
+
+  it 'requires an explicit boolean Rails import opt-in and preserves immutable copies' do
+    original = described_class.new
+    expect(original).not_to be_rails_imports
+    enabled = original.with(rails_imports: true)
+    expect(enabled).to be_rails_imports
+    expect(original.rails_imports).to be(false)
+    expect { described_class.new(rails_imports: 'yes') }
+      .to raise_error(ArgumentError, 'rails_imports must be true or false')
   end
 end

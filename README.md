@@ -489,6 +489,7 @@ ArchUnitRuby uses Prism and statically recognizes:
 | `autoload :Order, 'models/order'` | `:autoload` |
 | `load 'config/setup.rb'` | `:load` |
 | `load 'config/setup.rb', true` | `:load` |
+| `require_dependency 'item'` (explicit Rails opt-in) | `:require_dependency` |
 
 `load` also accepts its optional wrap argument with implicit, `Kernel`, or `::Kernel` receivers.
 The path must still be a literal or safely known local string. Effectful wrap expressions or
@@ -520,6 +521,71 @@ blocks. Once a closure or reflective binding can access an enclosing scope, loca
 disabled for that scope. Independent literal assignments inside a method or block can still resolve. Runtime values
 such as `ENV.fetch('PLUGIN_PATH')`, interpolation, and method results remain unresolved. No source,
 Gemfile, gemspec, initializer, or `const_missing` hook is executed.
+
+A bounded AST whitelist also recognizes file-relative construction, including the pattern used by
+RestClient:
+
+~~~ ruby
+require File.dirname(__FILE__) + '/restclient/version'
+require File.expand_path('../db/store', __dir__)
+path = __dir__ + '/../db/store.rb'
+load path, true
+~~~
+
+Supported operands are string literals, `__FILE__`, zero-argument implicit `__dir__`, and nested
+whitelisted expressions. String `+` concatenates two such operands. `File`/`::File.dirname` accepts
+one absolute operand; `File`/`::File.expand_path` accepts an absolute operand or a path with an
+explicit absolute base. CWD/drive-relative expansion, `~` expansion, interpolation, `File.join`,
+`Pathname`, local variables *inside* these expressions, and arbitrary methods remain unresolved.
+An entire computed result can be assigned to a local and used under the same safety rules above.
+Folding is bounded to 12 nested levels and 16 KiB strings.
+
+These intrinsics assume ordinary Ruby core semantics. Source-local `File`/`String` shadowing or
+reopening, `__dir__` overrides, refinements, and reflective mutation disable the affected inference
+conservatively across that source file. Arbitrary cross-file core monkey-patches are not modeled.
+Existing exclusions, canonical target matching and symlink boundaries still apply. See Ruby's
+[path expansion](https://docs.ruby-lang.org/en/3.3/File.html#method-c-expand_path) and
+[`__dir__`](https://docs.ruby-lang.org/en/3.3/Kernel.html#method-i-__dir__) semantics.
+
+### Rails Helper Imports (Opt-in, unreleased 1.1)
+
+File-relative expression folding above and the Rails helper option below are unreleased 1.1
+features; published 1.0.0 retains its literal/local-literal import contract.
+
+Enable static `require_dependency` recognition only for code where that name has Rails semantics:
+
+~~~ ruby
+options = ArchUnit::CheckOptions.new(
+  rails_imports: true,
+  load_paths: ['app/models', 'app/services'],
+  dependency_analysis: :imports_and_constants # optional; imports mode also works
+)
+rule = ArchUnit.project_files.in_path('app/controllers/**')
+               .should_not.depend_on_files.in_path('app/models/**')
+ArchUnit.assert_passes(rule, options)
+~~~
+
+The default is `rails_imports: false`. Under the opt-in, implicit and `self.require_dependency`
+calls with supported literal/local/static paths produce `:require_dependency` edges. Explicit
+custom receivers are not assumed to be Rails. Source-local helper overrides or reflection make
+accepted calls unresolved instead of inventing targets; cross-file method replacement is not
+modeled. Dynamic `Rails.root`/glob paths, forwarded arguments and unknown local values increment
+the unresolved-import counter. Counters describe static call sites, not runtime loop iterations.
+
+Explicit `load_paths` are validated project-local directories and are searched first, in supplied
+order, for the helper; ordinary `require` keeps its existing search order. The opt-in does not
+discover Rails autoload paths or boot Rails. Missing helper targets retain the existing external
+dependency representation. Exclusions, source evidence, rule/report integration and cache identity
+use the same pipeline in both analysis modes.
+
+~~~ sh
+bundle exec archunit check --rails-imports --load-path app/models --load-path app/services
+~~~
+
+CLI JSON includes additive `rails_imports` and `load_paths` settings; `--no-rails-imports` disables
+the helper explicitly. Rails itself documents
+[`require_dependency` as obsolete for modern autoloading](https://api.rubyonrails.org/classes/ActiveSupport/Dependencies/RequireDependency.html).
+This compatibility option models existing legacy/engine code, not complete Rails runtime behavior.
 
 ### Constant References (Opt-in)
 

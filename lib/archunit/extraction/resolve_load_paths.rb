@@ -19,6 +19,11 @@ module ArchUnit
         deduplicate(defaults + explicit + discovered)
       end
 
+      # The caller explicitly supplies helper search roots; no Rails environment is consulted.
+      def with_explicit_first(root, paths, explicit_paths)
+        deduplicate(resolve_explicit_paths(root, explicit_paths) + paths)
+      end
+
       def canonical_root(value)
         path = value.respond_to?(:to_path) ? value.to_path : value
         unless path.is_a?(String) && !path.empty?

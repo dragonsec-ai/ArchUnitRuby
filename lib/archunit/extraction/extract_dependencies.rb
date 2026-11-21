@@ -7,15 +7,11 @@ require_relative 'enumerate_source_files'
 require_relative 'extract_imports'
 require_relative 'resolve_load_paths'
 require_relative 'constant_index'
+require_relative 'dependency_context'
 
 module ArchUnit
   # Turns statically resolvable Ruby imports into dependency edges.
   module Extraction
-    DependencyContext = Data.define(
-      :root, :targets, :load_paths, :profile, :cache, :include_evidence
-    )
-    private_constant :DependencyContext
-
     module_function
 
     def extract_dependencies(project_root, exclude_patterns: nil, options: nil)
@@ -29,9 +25,9 @@ module ArchUnit
     end
 
     def extract_dependencies_from(root, source_files, load_paths:, options:, profile: nil)
-      context = DependencyContext.new(
+      context = DependencyContext.build(
         root:, targets: profiled_target_index(root, source_files, profile), load_paths:,
-        profile:, cache: {}, include_evidence: options.constant_references?
+        profile:, options:
       )
 
       analyses = options.constant_references? ? parse_sources(root, source_files, profile) : {}
@@ -64,12 +60,7 @@ module ArchUnit
 
     def dependencies_for_source(source, context, parse_result)
       imports = extract_imports_from(
-        context.root.join(source),
-        project_root: context.root,
-        load_paths: context.load_paths,
-        profile: context.profile,
-        resolution_cache: context.cache,
-        parse_result:
+        context.root.join(source), **context.extractor_options, parse_result:
       )
       context.profile&.increment(:imports, imports.length)
       classify_imports(source, imports, context)

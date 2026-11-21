@@ -38,6 +38,9 @@ jobs:
           - name: rspec-core
             repository: rspec/rspec-core
             revision: aec5f49485d97908183dbe790a7fefb8baaa8091
+          - name: rest-client
+            repository: rest-client/rest-client
+            revision: 2c72a2e77e2e87d25ff38feba0cf048d51bd5eca
     defaults:
       run:
         working-directory: archunit

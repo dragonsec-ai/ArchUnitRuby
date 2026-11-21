@@ -53,6 +53,12 @@ jobs:
       - name: Exercise qualified namespace regression checks
         run: bundle exec ruby scripts/check_namespace_receivers.rb
 
+      - name: Exercise static path regression checks
+        run: bundle exec ruby scripts/check_static_paths.rb
+
+      - name: Exercise opt-in Rails import checks
+        run: bundle exec ruby scripts/check_rails_imports.rb
+
   quality:
     name: Quality and package — Ruby 4.0 on Ubuntu
     runs-on: ubuntu-latest
@@ -148,6 +154,8 @@ jobs:
           ruby scripts/check_constant_writes.rb
           ruby scripts/check_wrapped_loads.rb
           ruby scripts/check_namespace_receivers.rb
+          ruby scripts/check_static_paths.rb
+          ruby scripts/check_rails_imports.rb
           ruby scripts/check_cli.rb
           ruby -e "
             require 'json'

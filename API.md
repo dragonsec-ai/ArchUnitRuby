@@ -232,6 +232,7 @@ options = ArchUnit::CheckOptions.new(
   clear_cache: false,
   load_paths: ['components/billing/lib'],
   dependency_analysis: :imports,
+  rails_imports: false,
   logging: logging
 )
 
@@ -246,6 +247,21 @@ gemspecs or running application code.
 `dependency_analysis` defaults to `:imports`. Imports accept literal arguments and preceding local
 literal-string assignments in supported straight-line scopes. Aliases, mutation/escape, closures,
 reflection, and unsupported control flow invalidate inferred values; runtime paths are not guessed.
+
+The bounded file-relative whitelist also accepts `__FILE__`, implicit `__dir__`, literal/static
+string `+`, `File.dirname(absolute_expression)` and `File.expand_path(path, absolute_base)`
+(also `::File`, or one absolute operand for `expand_path`). Operands cannot contain local-variable
+reads or arbitrary calls; the completed result may be assigned to a local. No source is evaluated.
+Source-local core overrides/reflection disable affected inference; arbitrary cross-file core
+monkey-patching is not modeled. See the README for the exact limits and unsupported forms.
+
+In unreleased 1.1, `rails_imports: true` separately opts into implicit/`self.require_dependency`
+calls. Accepted paths use the same literal/local/static contract, and edges use
+`:require_dependency`. Explicit `load_paths` are searched first for this helper only; ordinary
+`require` resolution is unchanged. Custom receivers are ignored; local helper overrides/reflection
+and unknown operands remain unresolved. No Rails boot or automatic autoload-root discovery occurs.
+The option is immutable, validated and part of graph-cache identity; it composes with either
+dependency-analysis mode. Cross-file method replacement and dynamic Rails/glob values are not modeled.
 
 For autoloaded projects, opt into known project constant references alongside imports:
 
@@ -282,6 +298,7 @@ Checkable rules without changing RSpec/Minitest or the library's default analysi
 archunit init --project .
 archunit check --project . --format json
 archunit check --dependency-analysis imports_and_constants
+archunit check --rails-imports --load-path app/models --load-path app/services
 archunit explain --config ./trusted-architecture.rb
 ~~~
 
@@ -308,7 +325,8 @@ remain violations. Text errors go to stderr; JSON diagnostics go to stdout witho
 format option applies to init/check/explain and errors; help/version remain plain text.
 
 `--format json` produces one document with `schema_version: 1`, `archunit_version`, `command`,
-`project_root`, `config_path`, `dependency_analysis`, `status`, `rules`, and `summary`. Rule entries
+`project_root`, `config_path`, `dependency_analysis`, `rails_imports`, `load_paths`, `status`, `rules`,
+and `summary`. The new settings are additive schema-1 fields. Rule entries
 carry `name`, nullable `rationale`, `status`, and `violations`; each violation carries its `type`,
 shared formatter `message`, and `details`. Summary counts describe completed/listed rules and their
 violations; an analysis error may stop later rules, so a partial summary is never a pass. An error
