@@ -44,6 +44,9 @@ jobs:
       - name: Exercise dependency-analysis reproducers
         run: bundle exec ruby scripts/check_dependency_analysis.rb
 
+      - name: Exercise wrapped load regression checks
+        run: bundle exec ruby scripts/check_wrapped_loads.rb
+
       - name: Exercise command-line acceptance checks
         run: bundle exec ruby scripts/check_cli.rb
 
@@ -140,6 +143,7 @@ jobs:
           gem install pkg/archunit.gem --no-document
           ruby scripts/check_dependency_analysis.rb
           ruby scripts/check_constant_writes.rb
+          ruby scripts/check_wrapped_loads.rb
           ruby scripts/check_cli.rb
           ruby -e "
             require 'json'

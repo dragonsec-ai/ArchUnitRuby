@@ -488,6 +488,12 @@ ArchUnitRuby uses Prism and statically recognizes:
 | `require_relative '../models/order'` | `:require_relative` |
 | `autoload :Order, 'models/order'` | `:autoload` |
 | `load 'config/setup.rb'` | `:load` |
+| `load 'config/setup.rb', true` | `:load` |
+
+`load` also accepts its optional wrap argument with implicit, `Kernel`, or `::Kernel` receivers.
+The path must still be a literal or safely known local string. Effectful wrap expressions or
+explicit `&` block conversions invalidate tracked local paths; splatted/forwarded arguments stay
+unresolved rather than inventing a dependency. The analyzer never executes the load or wrap code.
 
 Project dependencies use normalized, project-relative paths. Standard-library and gem dependencies
 retain the module name written in source. Inline or immediately preceding ignore directives can
