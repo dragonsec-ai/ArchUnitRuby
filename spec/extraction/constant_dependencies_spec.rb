@@ -128,7 +128,8 @@ RSpec.describe ArchUnit::Extraction, 'constant dependencies' do
     profile = ArchUnit::Extraction::ExtractionProfile.new
 
     expect(dependencies(profile:)).to be_empty
-    expect(profile.counters[:unresolved_constant_references]).to eq(1)
+    # The bounded fallback includes ten namespace receiver reads plus ::Known.
+    expect(profile.counters[:unresolved_constant_references]).to eq(11)
   end
 
   it 'resolves root-qualified writes and uses inside singleton bodies' do

@@ -45,6 +45,7 @@ RSpec.describe 'the CI workflow' do
       'gem install pkg/archunit.gem', "require 'archunit'", 'ArchUnit.project_files',
       'ruby scripts/check_constant_writes.rb',
       'ruby scripts/check_wrapped_loads.rb',
+      'ruby scripts/check_namespace_receivers.rb',
       'ruby scripts/check_cli.rb',
       'depend_on_files', 'depend_on_external_modules', "matching('json')",
       'adhere_to', 'file.extension', 'ArchUnit::Checkable',
@@ -82,6 +83,11 @@ RSpec.describe 'the CI workflow' do
 
   it 'exercises CLI acceptance on every supported compatibility platform' do
     expect(steps).to include(include('run' => 'bundle exec ruby scripts/check_cli.rb'))
+  end
+
+  it 'exercises qualified namespaces on every supported compatibility platform' do
+    command = 'bundle exec ruby scripts/check_namespace_receivers.rb'
+    expect(steps).to include(include('run' => command))
   end
 
   it 'exercises wrapped loads on every supported compatibility platform' do

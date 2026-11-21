@@ -2,6 +2,9 @@
 
 ## 1.1.0 (unreleased)
 
+- Record namespace-owner dependencies in qualified class/module declarations and constant writes
+  in expanded analysis, preserving lexical lookup, ambiguity handling, and source evidence.
+
 - Recognize `load(path, wrap)` dependencies and count dynamic/variadic wrapped paths as unresolved,
   without reusing stale local strings across effectful wrap expressions or block conversions.
 
