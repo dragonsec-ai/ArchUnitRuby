@@ -194,6 +194,39 @@ is required:
   run: bundle exec rspec spec/architecture_spec.rb
 ~~~
 
+## Reusable architecture presets (unreleased 1.1)
+
+Presets compose the existing named-layer rules, preserving CheckOptions, empty-selection failures,
+RSpec/Minitest, CLI, and static-analysis limitations. Construction is lazy; no Rails app is booted.
+
+~~~ruby
+rule = ArchUnit.architecture_preset(
+  :hexagonal,
+  ArchUnit::PresetOptions.new(project_locator: '.', folders: { domain: 'lib/domain/**' })
+).because('Keep the domain independent of infrastructure')
+expect(rule).to pass
+~~~
+
+| Preset | Default layers / source patterns | Allowed cross-layer directions |
+| --- | --- | --- |
+| `:layered` | presentation `app/api/**`; application `app/services/**`; persistence `app/db/**` | presentation → application → persistence; no skipping |
+| `:hexagonal` | domain `app/domain/**`; application `app/application/**`; adapters `app/adapters/**` | application → domain; adapters → application/domain |
+| `:rails` | controllers `app/controllers/**`; services `app/services/**`; models `app/models/**` | controllers → services/models; services → models |
+
+Dependencies within a layer are allowed; the innermost layer may not depend on another mapped layer.
+Unmapped files and external modules are not constrained by this folder policy; source discovery is
+not narrowed. Add file/layer/cycle rules for additional boundaries. Missing policy layers fail by
+default; override patterns or consciously use `CheckOptions.new(allow_empty_tests: true)` if intended.
+Overlapping observed membership raises UserError instead of choosing a layer silently. All source
+patterns can be overridden with `PresetOptions.folders` (String or Array of source globs per layer).
+Unknown/duplicate keys and empty patterns are errors. For arbitrary policies use `project_layers`.
+The Rails preset is opinionated and expects a services layer; it is not full Rails/DDD verification
+and does not automatically enable `rails_imports` or constant analysis.
+
+In trusted CLI configuration use `rule('Core independent') { architecture_preset(:hexagonal) }`;
+the helper defaults to the CLI's selected project root. Public `ArchUnit.architecture_preset` uses
+normal project auto-discovery when no locator is supplied.
+
 ## 🎬 Demo
 
 https://github.com/user-attachments/assets/9b7305a0-deee-454d-b99e-f8fac63d06ab

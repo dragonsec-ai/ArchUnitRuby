@@ -2,6 +2,9 @@
 
 ## 1.1.0 (unreleased)
 
+- Compose layered, hexagonal and Rails folder presets from existing layer rules, with immutable
+  pattern overrides, CLI integration, overlap errors and unchanged empty/source-analysis defenses.
+
 - Add explicit CLI accepted-debt baselines with versioned structured fingerprints, one-to-one
   occurrence matching, stale-entry failures, strict JSON validation and safe explicit output.
 
