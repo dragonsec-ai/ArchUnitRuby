@@ -7,7 +7,8 @@ module ArchUnit
     module FluentApi
       # Immutable options shared by every terminal rule check.
       CheckOptions = Data.define(
-        :allow_empty_tests, :logging, :clear_cache, :load_paths, :dependency_analysis
+        :allow_empty_tests, :logging, :clear_cache, :load_paths, :dependency_analysis,
+        :rails_imports
       ) do
         # Normalizes nil or an existing options value for terminal execution.
         # @param value [CheckOptions, nil]
@@ -24,13 +25,15 @@ module ArchUnit
         # @param clear_cache [Boolean] rebuild the dependency graph for this check
         # @param load_paths [Array<String, Pathname>] additional project-contained source roots
         # @param dependency_analysis [Symbol] :imports or opt-in :imports_and_constants
-        def initialize(
+        # @param rails_imports [Boolean] opt into static Rails require_dependency syntax
+        def initialize( # rubocop:disable Metrics/ParameterLists
           allow_empty_tests: false, logging: nil, clear_cache: false, load_paths: [],
-          dependency_analysis: :imports
+          dependency_analysis: :imports, rails_imports: false
         )
           validate_boolean(allow_empty_tests, :allow_empty_tests)
           validate_logging(logging)
           validate_boolean(clear_cache, :clear_cache)
+          validate_boolean(rails_imports, :rails_imports)
           load_paths = immutable_load_paths(load_paths)
           unless %i[imports imports_and_constants].include?(dependency_analysis)
             raise ArgumentError, 'dependency_analysis must be :imports or :imports_and_constants'
@@ -51,6 +54,10 @@ module ArchUnit
 
         def constant_references?
           dependency_analysis == :imports_and_constants
+        end
+
+        def rails_imports?
+          rails_imports
         end
 
         private

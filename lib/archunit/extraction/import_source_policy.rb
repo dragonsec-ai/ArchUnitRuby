@@ -5,7 +5,7 @@ require 'prism'
 module ArchUnit
   module Extraction
     # Source-local guards, not a claim to model arbitrary cross-file monkey-patching.
-    class StaticPathPolicy < Prism::Visitor
+    class ImportSourcePolicy < Prism::Visitor
       REFLECTION = %i[
         eval class_eval module_eval instance_eval class_exec module_exec instance_exec
         define_method define_singleton_method alias_method remove_method undef_method
@@ -13,12 +13,18 @@ module ArchUnit
       ].freeze
       private_constant :REFLECTION
 
-      attr_reader :file_calls, :directory_calls, :string_addition
-
       def initialize(tree)
         super()
-        @file_calls = @directory_calls = @string_addition = true
-        visit(tree)
+        @tree = tree
+        @disabled = {}
+      end
+
+      def allowed?(capability)
+        unless @analyzed
+          @analyzed = true
+          visit(@tree)
+        end
+        !@disabled[capability]
       end
 
       def visit_constant_write_node(node)
@@ -58,8 +64,9 @@ module ArchUnit
       end
 
       def visit_def_node(node)
-        @directory_calls = false if node.name == :__dir__
-        @string_addition = false if node.name == :+
+        @disabled[:directory_calls] = true if node.name == :__dir__
+        @disabled[:string_addition] = true if node.name == :+
+        @disabled[:rails_helpers] = true if node.name == :require_dependency
         shadow(node.receiver.name) if node.receiver.respond_to?(:name)
         super
       end
@@ -89,8 +96,8 @@ module ArchUnit
       private
 
       def shadow(name)
-        @file_calls = false if name == :File
-        @string_addition = false if name == :String
+        @disabled[:file_calls] = true if name == :File
+        @disabled[:string_addition] = true if name == :String
       end
 
       def check_autoload(node)
@@ -107,9 +114,10 @@ module ArchUnit
       end
 
       def disable
-        @file_calls = @directory_calls = @string_addition = false
+        @disabled.merge!(file_calls: true, directory_calls: true,
+                         string_addition: true, rails_helpers: true)
       end
     end
-    private_constant :StaticPathPolicy
+    private_constant :ImportSourcePolicy
   end
 end

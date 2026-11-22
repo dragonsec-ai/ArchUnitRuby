@@ -97,6 +97,35 @@ RSpec.describe ArchUnit::CLI do
     expect(payload.dig('rules', 0, 'violations', 0, 'type')).to eq('ArchUnit::Common::Assertion::EmptyTestViolation')
   end
 
+  it 'requires an explicit Rails helper opt-in and reports it in JSON' do
+    File.write(File.join(@root, 'app/api/request.rb'), "require_dependency 'app/db/settings'")
+    expect(json_check.first).to eq(0)
+    code, payload = json_check('--rails-imports')
+    expect(code).to eq(1)
+    expect(payload).to include('rails_imports' => true, 'load_paths' => [])
+    expect(payload.fetch('rules').first.fetch('violations').first.fetch('details'))
+      .to include('app/db/settings.rb')
+    expect(json_check('--rails-imports', '--no-rails-imports').first).to eq(0)
+  end
+
+  it 'supports explicit project-local CLI load paths and validates their boundaries' do
+    File.write(File.join(@root, 'app/api/request.rb'), "require_dependency 'settings'")
+    code, payload = json_check('--rails-imports', '--load-path', 'app/db')
+    expect(code).to eq(1)
+    expect(payload.fetch('load_paths')).to eq(['app/db'])
+    code, payload = json_check('--rails-imports', '--load-path', File.dirname(@root))
+    expect(code).to eq(2)
+    expect(payload.dig('error', 'message')).to include('load path must stay inside')
+  end
+
+  it 'describes the explicit Rails mode in text output without booting the application' do
+    File.write(File.join(@root, 'app/api/request.rb'), "require_dependency 'settings'")
+    code, output, errors = invoke('check', '--rails-imports', '--load-path', 'app/db')
+    expect(code).to eq(1)
+    expect(output).to include('Rails require_dependency imports: enabled')
+    expect(errors).to eq('')
+  end
+
   it 'reports structured parse diagnostics with a technical-error status, not a rule violation' do
     File.write(File.join(@root, 'app/db/settings.rb'), 'class Broken <')
     code, payload = json_check

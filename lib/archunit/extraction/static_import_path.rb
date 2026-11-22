@@ -2,7 +2,7 @@
 
 require 'pathname'
 require 'prism'
-require_relative 'static_path_policy'
+require_relative 'import_source_policy'
 
 module ArchUnit
   module Extraction
@@ -12,9 +12,9 @@ module ArchUnit
       MAX_BYTES = 16_384
       private_constant :MAX_DEPTH, :MAX_BYTES
 
-      def initialize(source_path:, syntax_tree:)
+      def initialize(source_path:, syntax_tree: nil, source_policy: nil)
         @source_path = source_path&.to_s
-        @syntax_tree = syntax_tree
+        @policy = source_policy || ImportSourcePolicy.new(syntax_tree)
       end
 
       def resolve(node, depth = 0)
@@ -28,6 +28,8 @@ module ArchUnit
 
       private
 
+      attr_reader :policy
+
       def resolve_node(node, depth)
         case node
         when Prism::StringNode then node.unescaped
@@ -38,10 +40,6 @@ module ArchUnit
 
       def valid_value?(value)
         value.is_a?(String) && value.bytesize <= MAX_BYTES && !value.include?("\0")
-      end
-
-      def policy
-        @policy ||= StaticPathPolicy.new(@syntax_tree)
       end
 
       def resolve_call(node, depth)
@@ -55,7 +53,7 @@ module ArchUnit
       end
 
       def resolve_file_call(node, arguments, depth)
-        return unless file_receiver?(node.receiver) && policy.file_calls
+        return unless file_receiver?(node.receiver) && policy.allowed?(:file_calls)
 
         values = arguments.map { |argument| resolve(argument, depth + 1) }
         return if values.any?(&:nil?)
@@ -64,13 +62,13 @@ module ArchUnit
       end
 
       def directory(node, arguments)
-        return unless node.receiver.nil? && arguments.empty? && policy.directory_calls
+        return unless node.receiver.nil? && arguments.empty? && policy.allowed?(:directory_calls)
 
         @directory ||= File.dirname(File.realpath(@source_path))
       end
 
       def concatenate(node, arguments, depth)
-        return unless arguments.length == 1 && policy.string_addition
+        return unless arguments.length == 1 && policy.allowed?(:string_addition)
 
         left = resolve(node.receiver, depth + 1)
         right = resolve(arguments.first, depth + 1)
