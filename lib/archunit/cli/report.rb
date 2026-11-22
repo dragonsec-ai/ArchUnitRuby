@@ -6,6 +6,7 @@ require_relative '../testing/violation_factory'
 require_relative '../error/source_parse_error'
 require_relative 'analysis_report'
 require_relative 'analysis_text'
+require_relative 'baseline_text'
 
 module ArchUnit
   module CLI
@@ -89,6 +90,7 @@ module ArchUnit
         write_notice(out)
         payload[:rules].each { |rule| write_rule(rule, out) }
         AnalysisText.write(payload[:analysis], out)
+        BaselineText.write(payload[:baseline], out)
       end
 
       def write_header(out)

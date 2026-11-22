@@ -124,6 +124,33 @@ evaluate a target Gemfile/gemspec, install its dependencies, or boot Rails. Invo
 still has Bundler's normal Gemfile behavior. RSpec/Minitest remain fully supported; the CLI composes
 the same Checkable rules and is not a replacement for their integrations.
 
+#### Gradual adoption with explicit accepted debt (unreleased 1.1)
+
+```sh
+# Evaluate all rules and explicitly record current supported violations; review this JSON in Git.
+bundle exec archunit baseline --output .archunit-baseline.json
+bundle exec archunit check --baseline .archunit-baseline.json
+```
+
+Every rule still runs over the same sources. The baseline accepts specific violations, not whole
+files. New violations **and stale entries for fixed/removed violations** fail with exit 1; invalid
+baseline/config/source errors exit 2. A fully accepted result exits 0 with status `accepted`, not a
+clean `passed` result. Raw violations stay visible, with separate accepted/new/stale counts.
+`check` never rewrites debt. Explicitly regenerate with `baseline --output ... --force` only after
+reviewing changes; recording debt is not proof that the architecture passes.
+
+Versioned fingerprints use rule names, structured violation data and analysis scope/settings, not
+message prose, line numbers or absolute checkout paths. Line edits/relocation preserve identities;
+changed rule names, policies or analysis modes can invalidate them. Duplicate occurrences match
+one-for-one. Supported identities: built-in file/external dependencies, naming, simple directed
+cycles, layer/slice dependencies and numeric metric thresholds. Empty-selection failures, custom
+predicates/violations, metric zones and unknown types cannot be recorded silently. Baselines are
+bounded JSON (2 MB / 10,000 entries), not executable configuration; symlinks and directories are
+rejected. Creation requires a `.json` output and refuses overwrite unless `--force` is explicit.
+Atomic output needs a filesystem supporting same-directory hard links; an unsupported filesystem
+fails with exit 2, never falls back to overwriting. This is not a sandbox against concurrent hostile
+filesystem changes. Review baseline diffs in CI as carefully as rule changes.
+
 [ClickGems download analytics](https://clickgems.clickhouse.com/dashboard/archunit) show trends by
 date, gem version, Ruby version, system, and country. Download totals count package fetches rather
 than unique users, so repeated installs and automated clients may contribute to the total. The
