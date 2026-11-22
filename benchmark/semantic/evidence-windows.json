@@ -1,0 +1,598 @@
+{
+  "runtime": {
+    "ruby": "4.0.6",
+    "platform": "x64-mingw-ucrt",
+    "archunit": "1.1.0",
+    "prism": "1.9.0"
+  },
+  "cases": [
+    {
+      "name": "explicit_constant_forbidden_method",
+      "direct_file_boundary_violations": 1,
+      "counters": {
+        "source_files": 4,
+        "malformed_files": 0,
+        "imports": 0,
+        "unresolved_imports": 0,
+        "unresolved_constant_references": 0,
+        "ambiguous_constant_references": 0,
+        "resolution_cache_hits": 0,
+        "resolution_cache_misses": 0,
+        "raw_edges": 7,
+        "merged_edges": 7
+      },
+      "syntax": {
+        "calls": [
+          {
+            "name": "delete_all",
+            "receiver_node": "Prism::ConstantPathNode",
+            "resolved_runtime_receiver": null
+          }
+        ],
+        "declarations": [
+          {
+            "name": "call",
+            "parameters_node": null
+          }
+        ],
+        "superclasses": []
+      },
+      "metric_method_fields": [
+        "name",
+        "accessed_fields"
+      ],
+      "has_semantic_method_edges": false,
+      "archspec": {
+        "policy": "method_name",
+        "selector": null,
+        "rules": [
+          "methods.forbid"
+        ],
+        "version": "1.1.0",
+        "rubydex": "0.4.0"
+      }
+    },
+    {
+      "name": "explicit_constant_allowed_method",
+      "direct_file_boundary_violations": 1,
+      "counters": {
+        "source_files": 4,
+        "malformed_files": 0,
+        "imports": 0,
+        "unresolved_imports": 0,
+        "unresolved_constant_references": 0,
+        "ambiguous_constant_references": 0,
+        "resolution_cache_hits": 0,
+        "resolution_cache_misses": 0,
+        "raw_edges": 7,
+        "merged_edges": 7
+      },
+      "syntax": {
+        "calls": [
+          {
+            "name": "read",
+            "receiver_node": "Prism::ConstantPathNode",
+            "resolved_runtime_receiver": null
+          }
+        ],
+        "declarations": [
+          {
+            "name": "call",
+            "parameters_node": null
+          }
+        ],
+        "superclasses": []
+      },
+      "metric_method_fields": [
+        "name",
+        "accessed_fields"
+      ],
+      "has_semantic_method_edges": false,
+      "archspec": {
+        "policy": "method_name",
+        "selector": null,
+        "rules": [],
+        "version": "1.1.0",
+        "rubydex": "0.4.0"
+      }
+    },
+    {
+      "name": "explicit_constant_receiver_qualified_policy",
+      "direct_file_boundary_violations": 1,
+      "counters": {
+        "source_files": 4,
+        "malformed_files": 0,
+        "imports": 0,
+        "unresolved_imports": 0,
+        "unresolved_constant_references": 0,
+        "ambiguous_constant_references": 0,
+        "resolution_cache_hits": 0,
+        "resolution_cache_misses": 0,
+        "raw_edges": 7,
+        "merged_edges": 7
+      },
+      "syntax": {
+        "calls": [
+          {
+            "name": "delete_all",
+            "receiver_node": "Prism::ConstantPathNode",
+            "resolved_runtime_receiver": null
+          }
+        ],
+        "declarations": [
+          {
+            "name": "call",
+            "parameters_node": null
+          }
+        ],
+        "superclasses": []
+      },
+      "metric_method_fields": [
+        "name",
+        "accessed_fields"
+      ],
+      "has_semantic_method_edges": false,
+      "archspec": {
+        "policy": "method",
+        "selector": null,
+        "rules": [],
+        "version": "1.1.0",
+        "rubydex": "0.4.0"
+      }
+    },
+    {
+      "name": "dynamic_parameter_receiver",
+      "direct_file_boundary_violations": 0,
+      "counters": {
+        "source_files": 4,
+        "malformed_files": 0,
+        "imports": 0,
+        "unresolved_imports": 0,
+        "unresolved_constant_references": 0,
+        "ambiguous_constant_references": 0,
+        "resolution_cache_hits": 0,
+        "resolution_cache_misses": 0,
+        "raw_edges": 6,
+        "merged_edges": 6
+      },
+      "syntax": {
+        "calls": [
+          {
+            "name": "delete_all",
+            "receiver_node": "Prism::LocalVariableReadNode",
+            "resolved_runtime_receiver": null
+          }
+        ],
+        "declarations": [
+          {
+            "name": "call",
+            "parameters_node": "Prism::ParametersNode"
+          }
+        ],
+        "superclasses": []
+      },
+      "metric_method_fields": [
+        "name",
+        "accessed_fields"
+      ],
+      "has_semantic_method_edges": false,
+      "archspec": {
+        "policy": "method",
+        "selector": null,
+        "rules": [],
+        "version": "1.1.0",
+        "rubydex": "0.4.0"
+      }
+    },
+    {
+      "name": "inherited_unqualified_constant",
+      "direct_file_boundary_violations": 0,
+      "counters": {
+        "source_files": 4,
+        "malformed_files": 0,
+        "imports": 0,
+        "unresolved_imports": 0,
+        "unresolved_constant_references": 1,
+        "ambiguous_constant_references": 0,
+        "resolution_cache_hits": 0,
+        "resolution_cache_misses": 0,
+        "raw_edges": 7,
+        "merged_edges": 7
+      },
+      "syntax": {
+        "calls": [
+          {
+            "name": "new",
+            "receiver_node": "Prism::ConstantReadNode",
+            "resolved_runtime_receiver": null
+          }
+        ],
+        "declarations": [
+          {
+            "name": "call",
+            "parameters_node": null
+          }
+        ],
+        "superclasses": [
+          "::Base"
+        ]
+      },
+      "metric_method_fields": [
+        "name",
+        "accessed_fields"
+      ],
+      "has_semantic_method_edges": false,
+      "archspec": {
+        "policy": "dependency",
+        "selector": null,
+        "rules": [],
+        "version": "1.1.0",
+        "rubydex": "0.4.0"
+      }
+    },
+    {
+      "name": "inherited_explicit_root_control",
+      "direct_file_boundary_violations": 1,
+      "counters": {
+        "source_files": 4,
+        "malformed_files": 0,
+        "imports": 0,
+        "unresolved_imports": 0,
+        "unresolved_constant_references": 0,
+        "ambiguous_constant_references": 0,
+        "resolution_cache_hits": 0,
+        "resolution_cache_misses": 0,
+        "raw_edges": 8,
+        "merged_edges": 8
+      },
+      "syntax": {
+        "calls": [
+          {
+            "name": "new",
+            "receiver_node": "Prism::ConstantPathNode",
+            "resolved_runtime_receiver": null
+          }
+        ],
+        "declarations": [
+          {
+            "name": "call",
+            "parameters_node": null
+          }
+        ],
+        "superclasses": [
+          "::Base"
+        ]
+      },
+      "metric_method_fields": [
+        "name",
+        "accessed_fields"
+      ],
+      "has_semantic_method_edges": false,
+      "archspec": {
+        "policy": "dependency",
+        "selector": null,
+        "rules": [
+          "dependencies.forbid"
+        ],
+        "version": "1.1.0",
+        "rubydex": "0.4.0"
+      }
+    },
+    {
+      "name": "alias_member_lookup",
+      "direct_file_boundary_violations": 0,
+      "counters": {
+        "source_files": 4,
+        "malformed_files": 0,
+        "imports": 0,
+        "unresolved_imports": 0,
+        "unresolved_constant_references": 1,
+        "ambiguous_constant_references": 0,
+        "resolution_cache_hits": 0,
+        "resolution_cache_misses": 0,
+        "raw_edges": 6,
+        "merged_edges": 6
+      },
+      "syntax": {
+        "calls": [
+          {
+            "name": "new",
+            "receiver_node": "Prism::ConstantPathNode",
+            "resolved_runtime_receiver": null
+          }
+        ],
+        "declarations": [
+          {
+            "name": "call",
+            "parameters_node": null
+          }
+        ],
+        "superclasses": []
+      },
+      "metric_method_fields": [
+        "name",
+        "accessed_fields"
+      ],
+      "has_semantic_method_edges": false,
+      "archspec": {
+        "policy": "dependency",
+        "selector": null,
+        "rules": [],
+        "version": "1.1.0",
+        "rubydex": "0.4.0"
+      }
+    },
+    {
+      "name": "protocol_explicit_signature",
+      "direct_file_boundary_violations": 0,
+      "counters": {
+        "source_files": 4,
+        "malformed_files": 0,
+        "imports": 0,
+        "unresolved_imports": 0,
+        "unresolved_constant_references": 0,
+        "ambiguous_constant_references": 0,
+        "resolution_cache_hits": 0,
+        "resolution_cache_misses": 0,
+        "raw_edges": 6,
+        "merged_edges": 6
+      },
+      "syntax": {
+        "calls": [],
+        "declarations": [
+          {
+            "name": "call",
+            "parameters_node": "Prism::ParametersNode"
+          }
+        ],
+        "superclasses": []
+      },
+      "metric_method_fields": [
+        "name",
+        "accessed_fields"
+      ],
+      "has_semantic_method_edges": false,
+      "archspec": {
+        "policy": "protocol",
+        "selector": null,
+        "rules": [],
+        "version": "1.1.0",
+        "rubydex": "0.4.0"
+      }
+    },
+    {
+      "name": "protocol_wrong_signature",
+      "direct_file_boundary_violations": 0,
+      "counters": {
+        "source_files": 4,
+        "malformed_files": 0,
+        "imports": 0,
+        "unresolved_imports": 0,
+        "unresolved_constant_references": 0,
+        "ambiguous_constant_references": 0,
+        "resolution_cache_hits": 0,
+        "resolution_cache_misses": 0,
+        "raw_edges": 6,
+        "merged_edges": 6
+      },
+      "syntax": {
+        "calls": [],
+        "declarations": [
+          {
+            "name": "call",
+            "parameters_node": null
+          }
+        ],
+        "superclasses": []
+      },
+      "metric_method_fields": [
+        "name",
+        "accessed_fields"
+      ],
+      "has_semantic_method_edges": false,
+      "archspec": {
+        "policy": "protocol",
+        "selector": null,
+        "rules": [
+          "protocol.must_implement"
+        ],
+        "version": "1.1.0",
+        "rubydex": "0.4.0"
+      }
+    },
+    {
+      "name": "dynamic_method_definition",
+      "direct_file_boundary_violations": 0,
+      "counters": {
+        "source_files": 4,
+        "malformed_files": 0,
+        "imports": 0,
+        "unresolved_imports": 0,
+        "unresolved_constant_references": 0,
+        "ambiguous_constant_references": 0,
+        "resolution_cache_hits": 0,
+        "resolution_cache_misses": 0,
+        "raw_edges": 6,
+        "merged_edges": 6
+      },
+      "syntax": {
+        "calls": [
+          {
+            "name": "define_method",
+            "receiver_node": null,
+            "resolved_runtime_receiver": null
+          }
+        ],
+        "declarations": [],
+        "superclasses": []
+      },
+      "metric_method_fields": [
+        "name",
+        "accessed_fields"
+      ],
+      "has_semantic_method_edges": false,
+      "archspec": {
+        "policy": "protocol",
+        "selector": null,
+        "rules": [
+          "protocol.must_implement"
+        ],
+        "version": "1.1.0",
+        "rubydex": "0.4.0"
+      }
+    },
+    {
+      "name": "descendant_declaration",
+      "direct_file_boundary_violations": 0,
+      "counters": {
+        "source_files": 4,
+        "malformed_files": 0,
+        "imports": 0,
+        "unresolved_imports": 0,
+        "unresolved_constant_references": 0,
+        "ambiguous_constant_references": 0,
+        "resolution_cache_hits": 0,
+        "resolution_cache_misses": 0,
+        "raw_edges": 7,
+        "merged_edges": 7
+      },
+      "syntax": {
+        "calls": [],
+        "declarations": [],
+        "superclasses": [
+          "::Base"
+        ]
+      },
+      "metric_method_fields": [
+        "name",
+        "accessed_fields"
+      ],
+      "has_semantic_method_edges": false,
+      "archspec": {
+        "policy": "protocol",
+        "selector": "descendant",
+        "rules": [
+          "protocol.must_implement"
+        ],
+        "version": "1.1.0",
+        "rubydex": "0.4.0"
+      }
+    },
+    {
+      "name": "namespace_component_selector",
+      "direct_file_boundary_violations": 0,
+      "counters": {
+        "source_files": 4,
+        "malformed_files": 0,
+        "imports": 0,
+        "unresolved_imports": 0,
+        "unresolved_constant_references": 0,
+        "ambiguous_constant_references": 0,
+        "resolution_cache_hits": 0,
+        "resolution_cache_misses": 0,
+        "raw_edges": 6,
+        "merged_edges": 6
+      },
+      "syntax": {
+        "calls": [],
+        "declarations": [],
+        "superclasses": []
+      },
+      "metric_method_fields": [
+        "name",
+        "accessed_fields"
+      ],
+      "has_semantic_method_edges": false,
+      "archspec": {
+        "policy": "protocol",
+        "selector": "namespace",
+        "rules": [
+          "protocol.must_implement"
+        ],
+        "version": "1.1.0",
+        "rubydex": "0.4.0"
+      }
+    },
+    {
+      "name": "constant_component_selector",
+      "direct_file_boundary_violations": 0,
+      "counters": {
+        "source_files": 4,
+        "malformed_files": 0,
+        "imports": 0,
+        "unresolved_imports": 0,
+        "unresolved_constant_references": 0,
+        "ambiguous_constant_references": 0,
+        "resolution_cache_hits": 0,
+        "resolution_cache_misses": 0,
+        "raw_edges": 6,
+        "merged_edges": 6
+      },
+      "syntax": {
+        "calls": [],
+        "declarations": [],
+        "superclasses": []
+      },
+      "metric_method_fields": [
+        "name",
+        "accessed_fields"
+      ],
+      "has_semantic_method_edges": false,
+      "archspec": {
+        "policy": "protocol",
+        "selector": "constant",
+        "rules": [
+          "protocol.must_implement"
+        ],
+        "version": "1.1.0",
+        "rubydex": "0.4.0"
+      }
+    },
+    {
+      "name": "reopened_ambiguous_constant",
+      "direct_file_boundary_violations": 0,
+      "counters": {
+        "source_files": 5,
+        "malformed_files": 0,
+        "imports": 0,
+        "unresolved_imports": 0,
+        "unresolved_constant_references": 0,
+        "ambiguous_constant_references": 3,
+        "resolution_cache_hits": 0,
+        "resolution_cache_misses": 0,
+        "raw_edges": 5,
+        "merged_edges": 5
+      },
+      "syntax": {
+        "calls": [
+          {
+            "name": "new",
+            "receiver_node": "Prism::ConstantPathNode",
+            "resolved_runtime_receiver": null
+          }
+        ],
+        "declarations": [
+          {
+            "name": "call",
+            "parameters_node": null
+          }
+        ],
+        "superclasses": []
+      },
+      "metric_method_fields": [
+        "name",
+        "accessed_fields"
+      ],
+      "has_semantic_method_edges": false,
+      "archspec": {
+        "policy": "dependency",
+        "selector": null,
+        "rules": [
+          "dependencies.forbid"
+        ],
+        "version": "1.1.0",
+        "rubydex": "0.4.0"
+      }
+    }
+  ]
+}

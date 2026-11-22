@@ -1,0 +1,90 @@
+[
+  {
+    "name": "explicit_constant_forbidden_method",
+    "source": "module Api; class Request; def call = ::Db::Store.delete_all; end; end",
+    "expected_direct_db": 1,
+    "comparator_policy": "method_name"
+  },
+  {
+    "name": "explicit_constant_allowed_method",
+    "source": "module Api; class Request; def call = ::Db::Store.read; end; end",
+    "expected_direct_db": 1,
+    "comparator_policy": "method_name"
+  },
+  {
+    "name": "explicit_constant_receiver_qualified_policy",
+    "source": "module Api; class Request; def call = ::Db::Store.delete_all; end; end",
+    "expected_direct_db": 1,
+    "comparator_policy": "method"
+  },
+  {
+    "name": "dynamic_parameter_receiver",
+    "source": "module Api; class Request; def call(store) = store.delete_all; end; end",
+    "expected_direct_db": 0,
+    "comparator_policy": "method"
+  },
+  {
+    "name": "inherited_unqualified_constant",
+    "source": "module Api; class Request < ::Base; def call = Store.new; end; end",
+    "expected_direct_db": 0,
+    "comparator_policy": "dependency"
+  },
+  {
+    "name": "inherited_explicit_root_control",
+    "source": "module Api; class Request < ::Base; def call = ::Db::Store.new; end; end",
+    "expected_direct_db": 1,
+    "comparator_policy": "dependency"
+  },
+  {
+    "name": "alias_member_lookup",
+    "source": "module Api; class Request; def call = ::AliasDb::Store.new; end; end",
+    "expected_direct_db": 0,
+    "comparator_policy": "dependency"
+  },
+  {
+    "name": "protocol_explicit_signature",
+    "source": "module Api; class Request; def call(value, context:); end; end; end",
+    "expected_direct_db": 0,
+    "comparator_policy": "protocol"
+  },
+  {
+    "name": "protocol_wrong_signature",
+    "source": "module Api; class Request; def call; end; end; end",
+    "expected_direct_db": 0,
+    "comparator_policy": "protocol"
+  },
+  {
+    "name": "dynamic_method_definition",
+    "source": "module Api; class Request; define_method(:call) { |value, context:| value }; end; end",
+    "expected_direct_db": 0,
+    "comparator_policy": "protocol"
+  },
+  {
+    "name": "descendant_declaration",
+    "source": "module Api; class Request < ::Base; end; end",
+    "expected_direct_db": 0,
+    "comparator_policy": "protocol",
+    "selector": "descendant"
+  },
+  {
+    "name": "namespace_component_selector",
+    "source": "module Api; class Request; end; end",
+    "expected_direct_db": 0,
+    "comparator_policy": "protocol",
+    "selector": "namespace"
+  },
+  {
+    "name": "constant_component_selector",
+    "source": "module Api; class Request; end; end",
+    "expected_direct_db": 0,
+    "comparator_policy": "protocol",
+    "selector": "constant"
+  },
+  {
+    "name": "reopened_ambiguous_constant",
+    "source": "module Api; class Request; def call = ::Db::Store.new; end; end",
+    "extra_source": "module Db; class Store; end; end",
+    "expected_direct_db": 0,
+    "comparator_policy": "dependency"
+  }
+]

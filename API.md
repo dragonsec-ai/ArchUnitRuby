@@ -301,6 +301,12 @@ mode participates in graph-cache identity, and `clear_cache: true` rebuilds the 
 
 ## Architecture presets (unreleased 1.1)
 
+Method-call restrictions, effective method/signature protocols, and semantic component selectors
+are not provided by the current file graph or metric method facts. The bounded
+[semantic evaluation](https://github.com/dragonsec-ai/ArchUnitRuby/blob/main/design/semantic-boundaries.md)
+records exact comparator pins, executable probes and the compatibility/unknowns required before
+adding such APIs. This is a technical evaluation, not a newly shipped semantic backend.
+
 `ArchUnit.architecture_preset(name, options = nil)` returns an immutable Checkable `PresetRule`.
 `ArchUnit::PresetOptions.new(project_locator: nil, folders: {})` is its options bag. Names are
 `:layered`, `:hexagonal`, or `:rails`; unknown names and malformed/duplicate override layer keys fail
