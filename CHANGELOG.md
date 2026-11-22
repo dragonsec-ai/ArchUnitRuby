@@ -2,6 +2,9 @@
 
 ## 1.1.0 (unreleased)
 
+- Add immutable caller-owned source exclusions and CLI `--exclude-source`, applied consistently
+  to graphs, source/coupling metrics and reports without editing target repositories.
+
 - Add explicit static Rails `require_dependency` imports, separate helper search-root priority,
   and CLI `--rails-imports` / repeatable `--load-path` options without booting Rails.
 

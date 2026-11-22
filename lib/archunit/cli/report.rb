@@ -10,6 +10,13 @@ module ArchUnit
     # Internal presentation adapter reusing the shared violation vocabulary.
     # @api private
     class Report
+      PARSE_GUIDANCE = [
+        'Fix included Ruby syntax errors. If a file is a generator/ERB template rather than Ruby,',
+        'exclude only that known non-source input with --exclude-source GLOB or',
+        'CheckOptions.new(source_exclusions: [...]); selectors do not narrow source discovery.'
+      ].freeze
+      private_constant :PARSE_GUIDANCE
+
       attr_reader :payload
 
       def initialize(options)
@@ -18,6 +25,7 @@ module ArchUnit
           project_root: options.project_root, config_path: options.config_path,
           dependency_analysis: options.dependency_analysis,
           rails_imports: options.rails_imports, load_paths: options.load_paths,
+          source_exclusions: options.source_exclusions,
           status: 'error', rules: []
         }
       end
@@ -42,18 +50,24 @@ module ArchUnit
         payload[:error] = { type: error.class.name, message: error.message, rule_name: }
         if error.is_a?(SourceParseError)
           payload[:error][:diagnostics] = error.diagnostics.map(&:to_h)
+          payload[:error][:guidance] = PARSE_GUIDANCE
         end
         finish('error')
       end
 
       def write(out:, err:, format:)
         return out.puts(JSON.pretty_generate(payload)) if format == 'json'
-        return err.puts("ArchUnit error: #{payload[:error][:message]}") if payload[:error]
+        return write_error(err) if payload[:error]
 
         write_text(out)
       end
 
       private
+
+      def write_error(err)
+        err.puts("ArchUnit error: #{payload[:error][:message]}")
+        payload[:error].fetch(:guidance, []).each { |line| err.puts(line) }
+      end
 
       def rule_status(violations)
         return 'not_checked' unless violations

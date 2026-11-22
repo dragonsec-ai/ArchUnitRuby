@@ -10,12 +10,12 @@ require_relative 'extract_dependencies'
 require_relative 'extraction_profile'
 require_relative 'locate_project'
 require_relative 'resolve_load_paths'
+require_relative 'graph_cache_key'
 
 module ArchUnit
   # Assembles the normalized dependency graph for a Ruby project.
   module Extraction
     GRAPH_CACHE_MUTEX = Mutex.new
-    GRAPH_INDEPENDENT_CHECK_OPTIONS = %i[allow_empty_tests logging clear_cache].freeze
 
     module_function
 
@@ -29,10 +29,7 @@ module ArchUnit
         root = ExtractionProfile.measure(profile, :project_discovery) do
           Pathname.new(locate_project(locator, working_directory:))
         end
-        patterns = resolve_project_exclude_patterns(root, exclude_patterns)
-        key = graph_cache_key(root, exclude_patterns: patterns, options:)
-
-        Common::Logging::Inspection.graph(fetch_graph(root, patterns, options, key, profile), root:)
+        resolved_graph(root, exclude_patterns, options, profile)
       end
     end
 
@@ -40,6 +37,15 @@ module ArchUnit
       GRAPH_CACHE_MUTEX.synchronize { graph_cache.clear }
       nil
     end
+
+    def resolved_graph(root, exclude_patterns, options, profile)
+      patterns = resolve_project_exclude_patterns(
+        root, exclude_patterns, source_exclusions: options.source_exclusions
+      )
+      key = GraphCacheKey.build(root, patterns, options)
+      Common::Logging::Inspection.graph(fetch_graph(root, patterns, options, key, profile), root:)
+    end
+    private_class_method :resolved_graph
 
     def fetch_graph(root, patterns, options, cache_key, profile)
       GRAPH_CACHE_MUTEX.synchronize do
@@ -85,24 +91,6 @@ module ArchUnit
       Common::Extraction::Graph.new(merged)
     end
     private_class_method :graph_from_edges
-
-    def graph_cache_key(project_root, exclude_patterns:, options:)
-      [
-        project_root.to_s.tr('\\', '/').freeze,
-        exclude_patterns.sort.freeze,
-        graph_analysis_toggles(options)
-      ].freeze
-    end
-    private_class_method :graph_cache_key
-
-    def graph_analysis_toggles(options)
-      options.class.members.filter_map do |member|
-        next if GRAPH_INDEPENDENT_CHECK_OPTIONS.include?(member)
-
-        [member, options.public_send(member)].freeze
-      end.freeze
-    end
-    private_class_method :graph_analysis_toggles
 
     def graph_cache
       @graph_cache ||= {}

@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
+require_relative '../../common/fluentapi/check_options'
+
 module ArchUnit
   module Metrics
     # Self-contained metrics report rendering and export.
     module Reporting
       # Immutable options for one metrics HTML report.
       MetricsExportOptions = Data.define(
-        :output_path, :title, :include_timestamp, :custom_css
+        :output_path, :title, :include_timestamp, :custom_css, :check_options
       ) do
         def self.resolve(value)
           return new if value.nil?
@@ -19,7 +21,8 @@ module ArchUnit
           output_path: nil,
           title: 'ArchUnitRuby Metrics Report',
           include_timestamp: true,
-          custom_css: nil
+          custom_css: nil,
+          check_options: nil
         )
           output_path = optional_path(output_path)
           title = immutable_string(title, :title)
@@ -28,6 +31,7 @@ module ArchUnit
           end
 
           custom_css = optional_string(custom_css, :custom_css)
+          check_options = Common::FluentApi::CheckOptions.resolve(check_options)
           super
         end
 

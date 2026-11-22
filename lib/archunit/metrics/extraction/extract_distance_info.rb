@@ -12,7 +12,7 @@ module ArchUnit
 
       # Enriches static file facts with distinct internal incoming/outgoing dependencies.
       def extract_distance_infos(project_locator = nil, options: nil)
-        project = extract_project_info(project_locator)
+        project = extract_project_info(project_locator, options:)
         graph = ArchUnit::Extraction.extract_graph(project.project_root, options:)
         outgoing, incoming = coupling_indexes(graph, project.files.map(&:path))
         build_distance_infos(project, outgoing, incoming)

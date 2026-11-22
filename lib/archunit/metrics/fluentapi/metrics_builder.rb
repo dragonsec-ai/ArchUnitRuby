@@ -69,8 +69,8 @@ module ArchUnit
         end
 
         # @return [MetricProjectInfo] extracted files and classes in this scope
-        def analyze
-          project = Extraction.extract_project_info(project_locator)
+        def analyze(options = nil)
+          project = Extraction.extract_project_info(project_locator, options:)
           selected_files = project.files.filter_map { |file| selected_file_info(file) }
           Common::Logging::Inspection.selection('metric file', selected_files, &:path)
           Extraction::ProjectInfo.new(project_root: project.project_root, files: selected_files)
@@ -85,7 +85,7 @@ module ArchUnit
         def subjects_for(subject_type, options: nil)
           return distance_subjects(options:) if subject_type == Extraction::DistanceInfo
 
-          project = analyze
+          project = analyze(options)
           return project.files if subject_type == Extraction::FileInfo
           return project.classes if subject_type == Extraction::ClassInfo
 
