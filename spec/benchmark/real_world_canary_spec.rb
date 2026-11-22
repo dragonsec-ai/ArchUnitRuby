@@ -61,6 +61,14 @@ RSpec.describe RealWorldCanary::Runner do
     expect(result.fetch(:modes).values).to all(include(expected))
   end
 
+  it 'guards a file-relative witness like the pinned RestClient canary' do
+    source = "require File.dirname(__FILE__) + '/store'\nclass Api; def call = ::Store.new; end\n"
+    File.write(File.join(@root, 'lib/api.rb'), source)
+    project['modes']['imports'] = expected_snapshot(['require'])
+    project['modes']['imports_and_constants'] = expected_snapshot(%w[constant_reference require])
+    expect(run_canary.fetch(:baseline_verified)).to be(true)
+  end
+
   it 'fails on changed counts and missing or changed graph fingerprints' do
     project['modes']['imports']['file_count'] = 3
     expect { run_canary }.to raise_error(/graph changed/)

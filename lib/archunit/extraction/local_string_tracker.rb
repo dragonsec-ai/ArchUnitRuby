@@ -4,12 +4,13 @@ require 'prism'
 
 module ArchUnit
   module Extraction
-    # Conservatively tracks local variables whose current value is a literal String.
+    # Conservatively tracks local variables with a safely known String value.
     class LocalStringTracker
       UNKNOWN = Object.new.freeze
       private_constant :UNKNOWN
 
-      def initialize
+      def initialize(path_resolver: nil)
+        @path_resolver = path_resolver
         @scopes = [{}]
         @captured_scopes = [false]
         @uncertain_depth = 0
@@ -20,7 +21,7 @@ module ArchUnit
         return UNKNOWN if @uncertain_depth.positive? || @captured_scopes.last
         return scope.fetch(node.name, UNKNOWN) if node.is_a?(Prism::LocalVariableReadNode)
 
-        UNKNOWN
+        @path_resolver&.resolve(node) || UNKNOWN
       end
 
       def assign(name, value)

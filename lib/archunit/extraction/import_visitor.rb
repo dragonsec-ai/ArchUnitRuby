@@ -5,6 +5,7 @@ require_relative '../common/extraction/import_kind'
 require_relative 'conservative_local_flow'
 require_relative 'local_string_tracker'
 require_relative 'load_arguments'
+require_relative 'static_import_path'
 
 module ArchUnit
   module Extraction
@@ -21,11 +22,13 @@ module ArchUnit
 
       attr_reader :imports, :unresolved_imports
 
-      def initialize
-        super
+      def initialize(source_path: nil, syntax_tree: nil)
+        super()
         @imports = []
         @unresolved_imports = 0
-        @local_strings = LocalStringTracker.new
+        @local_strings = LocalStringTracker.new(
+          path_resolver: StaticImportPath.new(source_path:, syntax_tree:)
+        )
       end
 
       def visit_call_node(node)
@@ -55,6 +58,7 @@ module ArchUnit
       end
 
       def import_module_name(node, arguments, import_kind)
+        @local_strings.invalidate_all if unsafe_auxiliary_arguments?(node, arguments, import_kind)
         if import_kind == Common::Extraction::ImportKind::LOAD
           # Arguments are evaluated before the call: a wrap expression or & conversion can
           # mutate an earlier path object. Never reuse its pre-call tracked string value.
@@ -63,6 +67,13 @@ module ArchUnit
         end
 
         @local_strings.resolve(import_argument(arguments, import_kind))
+      end
+
+      def unsafe_auxiliary_arguments?(node, arguments, import_kind)
+        return true if node.block.is_a?(Prism::BlockArgumentNode)
+        return false unless import_kind == Common::Extraction::ImportKind::AUTOLOAD
+
+        [Prism::SymbolNode, Prism::StringNode].none? { |type| arguments.first.is_a?(type) }
       end
 
       def located_import(module_name, import_kind, node)

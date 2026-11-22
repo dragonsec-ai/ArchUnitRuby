@@ -56,6 +56,25 @@
           "internal_graph_sha256": "34f388962ada484dc84d055dd261cfadc16f17d5538dec2ea45de821f1ee0a4c"
         }
       }
+    },
+    "rest-client": {
+      "repository": "rest-client/rest-client",
+      "revision": "2c72a2e77e2e87d25ff38feba0cf048d51bd5eca",
+      "witness": { "source": "restclient.rb", "target": "restclient/version.rb" },
+      "modes": {
+        "imports": {
+          "file_count": 16,
+          "internal_dependencies": 15,
+          "external_dependencies": 21,
+          "internal_graph_sha256": "e0a79edb61dfdfddb5db6ee1a67377fff6db661ffd02342ed94f22ee6af57a8c"
+        },
+        "imports_and_constants": {
+          "file_count": 16,
+          "internal_dependencies": 34,
+          "external_dependencies": 21,
+          "internal_graph_sha256": "88669491b1dd332935796c70615b38d0e2816c5cf765bccf15e3a565643ae738"
+        }
+      }
     }
   }
 }
