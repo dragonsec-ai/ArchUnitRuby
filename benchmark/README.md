@@ -1,5 +1,8 @@
 # Extraction performance benchmark
 
+For repeated Linux shared-policy comparisons, fresh-process startup/memory, source changes and
+pinned Rails production-source evidence, see the [representative study](study/README.md).
+
 For pinned production-library compatibility checks, public passing/failing rule witnesses, and
 real-world timing artifacts, see the [static canary guide](canary/README.md).
 

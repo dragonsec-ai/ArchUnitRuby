@@ -1,0 +1,11 @@
+# frozen_string_literal: true
+
+# Isolated research bundle, never evaluated from a target project or shipped as runtime deps.
+source 'https://rubygems.org'
+
+gem 'archspec', '= 1.1.0'
+gem 'archunit', path: '../..'
+gem 'csv', '= 3.3.7'
+gem 'json', '= 2.21.2'
+gem 'prism', '= 1.9.0'
+gem 'rubydex', '= 0.4.0'

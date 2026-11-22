@@ -1,0 +1,88 @@
+name: Representative performance study
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'benchmark/study/**'
+      - 'benchmark/semantic/**'
+      - 'spec/benchmark/performance_study_spec.rb'
+      - '.github/workflows/performance-study.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  study:
+    name: Oracle-checked Linux performance evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: archunit/benchmark/study
+    steps:
+      - name: Check out candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          path: archunit
+          persist-credentials: false
+
+      - name: Check out pinned Rails application as source only
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: discourse/discourse
+          ref: 2de9c9be4f89e392fe500dd27f928d6b1184bf09
+          path: corpus
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /lib/**/*.rb
+            /app/**/*.rb
+            /config/**/*.rb
+            /src/**/*.rb
+            /*.rb
+            /*.gemspec
+            /Gemfile
+            /.archignore
+            /LICENSE*
+            /README*
+            !/**/fixtures/**
+            !/**/spec/**
+            !/**/test/**
+            !/**/tests/**
+
+      - name: Set up isolated checksum-locked research dependencies
+        uses: ruby/setup-ruby@be3c7df29b3349ec6bcfc6b4792f1cf9f5237d18 # v1
+        with:
+          ruby-version: '4.0'
+          bundler-cache: true
+          working-directory: archunit/benchmark/study
+
+      - name: Repeated alternating shared-policy trials and fresh startup
+        run: bundle exec ruby run.rb --archspec ../../pkg/study-linux.json
+        env:
+          STUDY_PAIRS: '100'
+          STUDY_TRIALS: '5'
+
+      - name: Reproduce bounded semantic comparison on Linux
+        run: bundle exec ruby ../semantic/probes.rb --archspec ../../pkg/semantic-linux.json
+
+      - name: Profile real pinned production source without booting it
+        run: bundle exec ruby real_project.rb ../../../corpus ../../pkg/discourse-linux.json
+
+      - name: Retain raw evidence and exact dependency lock
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: performance-study-${{ github.run_id }}
+          path: |
+            archunit/pkg/study-linux.json
+            archunit/pkg/semantic-linux.json
+            archunit/pkg/discourse-linux.json
+            archunit/benchmark/study/Gemfile.lock
+          if-no-files-found: warn
+          retention-days: 14

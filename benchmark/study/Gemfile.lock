@@ -1,0 +1,43 @@
+PATH
+  remote: ../..
+  specs:
+    archunit (1.1.0)
+      csv (>= 3.3, < 4.0)
+      json (>= 2.7, < 3.0)
+      prism (>= 1.0, < 2.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    archspec (1.1.0)
+      prism (>= 1.0)
+      rubydex (~> 0.4.0)
+    csv (3.3.7)
+    json (2.21.2)
+    prism (1.9.0)
+    rubydex (0.4.0-x64-mingw-ucrt)
+    rubydex (0.4.0-x86_64-linux)
+
+PLATFORMS
+  x64-mingw-ucrt
+  x86_64-linux
+
+DEPENDENCIES
+  archspec (= 1.1.0)
+  archunit!
+  csv (= 3.3.7)
+  json (= 2.21.2)
+  prism (= 1.9.0)
+  rubydex (= 0.4.0)
+
+CHECKSUMS
+  archspec (1.1.0) sha256=861d4869c81617139ea9e42e6de1456ba00d0538f3994476073829de223a754d
+  archunit (1.1.0)
+  csv (3.3.7) sha256=15a3f16f6628da8664d455eb634e7f22031bcf53044923caf56975109e71b9f8
+  json (2.21.2) sha256=1f1d3b7cf2b3ba1a69beca0bb6db13d5438b80bff3cd54cdaaa620b9b07c1c6a
+  prism (1.9.0) sha256=7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85
+  rubydex (0.4.0-x64-mingw-ucrt) sha256=7becaee5f1d89bdbea031daecbd46137f03e30e9e218f19cc03a538865830ba5
+  rubydex (0.4.0-x86_64-linux) sha256=75a4e1c6c4691ff815aee820dd26fb080f8053430a0ad248dd9b3125d621df86
+
+BUNDLED WITH
+  4.0.16
