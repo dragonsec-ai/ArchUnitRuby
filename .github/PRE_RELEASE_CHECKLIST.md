@@ -2,8 +2,9 @@
 
 The original feature backlog (#47, #48, #54, #55) and the correctness/QA audit fixes (#63-65) are
 merged. PRs #68-70 were reviewed and merged on 2026-10-26; the resulting `main` passed CI, security
-scanning, and documentation deployment. This checklist tracks the 1.0.0 preparation, not proof that
-RubyGems publication has happened. The preceding published gem is 0.0.1.
+scanning, and documentation deployment. The 1.0.0 preparation and publication below are historical:
+1.0.0 was published and verified in #71. Current main contains unreleased 1.1 development; these
+old evidence counts are not the current suite or authorization to publish a new version.
 
 ## 1.0.0 preparation
 
@@ -29,16 +30,18 @@ refresh, and strict malformed-source diagnostics, plus both dependency-analysis 
 
 ## Publication remains a separate approval
 
-- [ ] Review and merge the preparation PR, then verify the full matrix on that exact `main` revision:
+- [x] Review and merge the preparation PR, then verify the full matrix on that exact `main` revision:
   supported Ruby versions, Windows/Linux, library-only coverage, lint, dogfooding, docs, packaging,
   installed-gem checks, security, and the downstream RAG fixture.
-- [ ] Confirm the changelog date at publication and explicitly authorize the trusted-publisher
+- [x] Confirm the changelog date at publication and explicitly authorize the trusted-publisher
   `Release` workflow for version `1.0.0` on `main`. Verify the RubyGems account and configured release
   environment still belong to the intended maintainers. Never publish merely to run checks.
-- [ ] Verify the published 1.0.0 gem and generated tag, install from RubyGems in a clean project,
+- [x] Verify the published 1.0.0 gem and generated tag, install from RubyGems in a clean project,
   and rerun passing/failing architecture examples before announcing availability.
 
-CLI, richer semantic method/protocol rules, presets, and gradual-adoption baselines remain in #66.
+Publication evidence: #71 (registry checksum, tag and clean-project acceptance verified).
+CLI execution/diagnostics are now merged (#73, #88). Further baselines, presets, bounded semantic
+evaluation and representative Linux performance studies are tracked by #89–92 under #66.
 They are not prerequisites for the initial stable API baseline.
 
 ## Audit coverage added

@@ -2,6 +2,9 @@
 
 ## 1.1.0 (unreleased)
 
+- Add explicit CLI accepted-debt baselines with versioned structured fingerprints, one-to-one
+  occurrence matching, stale-entry failures, strict JSON validation and safe explicit output.
+
 - Expose additive CLI analysis scopes with source/uncertainty counts, truthful warm-cache reuse,
   unavailable values for unperformed/failed analysis, and explicit static-analysis limitations.
 

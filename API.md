@@ -381,6 +381,41 @@ actual work (zero repeated cold counters); diagnostic snapshots are separate fro
 
 ## Errors and support
 
+### Explicit violation baselines (unreleased 1.1)
+
+`archunit baseline --output FILE.json` evaluates every rule and atomically writes an explicitly
+reviewable accepted-debt document. It refuses existing output without `--force`, non-JSON output
+names, empty-selection violations, custom/unknown violation types, and unobserved scopes. No output
+is written until all rules finish; parse/configuration failures never replace existing debt.
+`archunit check --baseline FILE` remains read-only. All sources/rules are still checked; it returns
+0 only when there are no new violations or stale entries. A run with accepted violations has
+`status: accepted`, not `passed`. Baseline creation has `status: baseline_created`, not an
+architecture pass. Without either flag/command normal strict checks are unchanged.
+
+The document has `schema_version: 1`, `fingerprint_version: 1`, and `entries`. Each entry contains
+`fingerprint` (SHA256 of canonical rule/type/data/context), positive occurrence `count`, `rule`,
+`type`, structured `data`, and scope `context`. Input validates schema, duplicate fingerprints,
+counts, fingerprint/data consistency, size (2 MB), nesting (32) and entry limit (10,000). Paths are
+project-relative; regex source/options are data. Line evidence, formatter wording, object identity,
+graph counters/cache state and checkout absolute paths are not identity. Actual source policies and
+dependency-analysis settings are included, so a different mode/policy cannot silently reuse debt.
+Deleted/renamed rules leave stale entries. Counts are matched one-to-one, not set membership.
+
+Built-in file/external dependencies, patterns, simple directed cycles, layer/slice dependencies,
+and numeric metric thresholds have explicit adapters. Metric predicates/zones, custom violations,
+empty selectors and unsupported types are never auto-recorded; under an existing baseline they
+remain new violations. There is no generic `inspect`/formatted-message fallback. Public Checkable
+results are unchanged; this first delivery is CLI-only.
+
+Schema-1 CLI output adds `baseline` metadata. During check it contains `status: checked`, `path`,
+`accepted_count`, `new_count`, `stale_count` and `stale_entries`; every raw violation retains its
+original type/message/details and adds `baseline.status` (`accepted` / `new`) and nullable
+`baseline.fingerprint`. Per-rule status can be `accepted`. Existing summary violation counts remain
+raw counts, not just new debt. Invalid input/IO/analysis exits 2, new/stale debt exits 1. Atomic
+creation uses a same-directory hard link (unsupported filesystems fail closed); force replacement
+uses rename after rejecting non-regular paths. Concurrent hostile filesystem mutation is outside
+this library's isolation guarantees. Do not blindly regenerate baselines in CI.
+
 Invalid API input raises `ArchUnit::UserError` or `ArgumentError`; library or environment failures
 raise `ArchUnit::TechnicalError`. Rule failures remain violation data.
 

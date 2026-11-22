@@ -2,12 +2,15 @@
 
 require 'optparse'
 require_relative '../common/extraction/source_exclusions'
+require_relative 'baseline_options'
 
 module ArchUnit
   module CLI
     # Internal command parsing; does not discover or execute project code.
     # @api private
     class Options
+      include BaselineOptions
+
       attr_reader :command, :project_root, :config_path, :format, :dependency_analysis, :parser,
                   :rails_imports, :load_paths, :source_exclusions
 
@@ -42,10 +45,11 @@ module ArchUnit
       private
 
       def validate_arguments
+        validate_baseline_options
         unless @arguments.empty?
           raise OptionParser::InvalidArgument, "unexpected arguments: #{@arguments.join(' ')}"
         end
-        return if %w[init check explain help version].include?(command)
+        return if %w[init check explain baseline help version].include?(command)
 
         raise OptionParser::InvalidArgument, "unknown command: #{command}"
       end
@@ -57,10 +61,11 @@ module ArchUnit
 
       def build_parser
         OptionParser.new do |options|
-          options.banner = 'Usage: archunit [init|check|explain] [options]'
+          options.banner = 'Usage: archunit [init|check|explain|baseline] [options]'
           project_options(options)
           load_path_option(options)
           source_exclusion_option(options)
+          baseline_options(options)
           output_options(options)
         end
       end

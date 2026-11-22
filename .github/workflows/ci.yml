@@ -65,6 +65,9 @@ jobs:
       - name: Exercise cache-aware analysis diagnostics
         run: bundle exec ruby scripts/check_analysis_diagnostics.rb
 
+      - name: Exercise explicit accepted-debt baselines
+        run: bundle exec ruby scripts/check_baselines.rb
+
   quality:
     name: Quality and package — Ruby 4.0 on Ubuntu
     runs-on: ubuntu-latest
@@ -164,6 +167,7 @@ jobs:
           ruby scripts/check_rails_imports.rb
           ruby scripts/check_source_exclusions.rb
           ruby scripts/check_analysis_diagnostics.rb
+          ruby scripts/check_baselines.rb
           ruby scripts/check_cli.rb
           ruby -e "
             require 'json'

@@ -4,6 +4,7 @@ require_relative 'options'
 require_relative 'configuration'
 require_relative 'report'
 require_relative '../extraction/analysis_observer'
+require_relative 'baseline_run'
 
 module ArchUnit
   module CLI
@@ -83,13 +84,12 @@ module ArchUnit
           source_exclusions: @options.source_exclusions
         )
         check_rules(rules, options)
-        failed = @report.payload[:rules].any? { |rule| rule[:status] == 'failed' }
-        @report.finish(failed ? 'failed' : 'passed')
-        failed ? 1 : 0
+        BaselineRun.new(@options).finish(@report, @evaluations)
       end
 
       def check_rules(rules, options)
         analysis = AnalysisReport.new
+        @evaluations = []
         Extraction::AnalysisObserver.capture(analysis) do
           rules.each { |rule| check_rule(rule, options, analysis) }
         end
@@ -101,6 +101,7 @@ module ArchUnit
         @current_rule = rule
         violations = analysis.for_rule(rule.name) { rule.checkable.check(options) }
         @report.add_rule(rule, violations:, analysis: analysis.for_name(rule.name))
+        @evaluations << [rule.name, violations]
       end
     end
   end
