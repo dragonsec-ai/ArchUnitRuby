@@ -40,6 +40,7 @@ RSpec.describe 'Rule rationale' do
       files.should.adhere_to(->(_file) { true }, 'Ruby files'),
       ArchUnit.project_layers(@root).layer('api').defined_by('app/api/**')
               .where_layer('api').may_only_depend_on_layers,
+      ArchUnit.architecture_preset(:layered, ArchUnit::PresetOptions.new(project_locator: @root)),
       slices.should_not.contain_dependency('api', 'database'),
       slices.should.adhere_to_diagram(slices.to_plantuml),
       metrics.count.classes.should_be_above(0),

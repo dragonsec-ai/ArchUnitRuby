@@ -36,6 +36,7 @@ require_relative 'archunit/extraction/extract_dependencies'
 require_relative 'archunit/extraction/extract_graph'
 require_relative 'archunit/files/fluentapi/files'
 require_relative 'archunit/layers/fluentapi/layers'
+require_relative 'archunit/layers/fluentapi/architecture_preset'
 require_relative 'archunit/slices/fluentapi/slices'
 require_relative 'archunit/graph/fluentapi/graph'
 require_relative 'archunit/metrics/fluentapi/metrics'
@@ -68,6 +69,7 @@ module ArchUnit
   CustomFileViolation = Files::Assertion::CustomFileViolation
   LayerDefinition = Layers::Assertion::LayerDefinition
   LayerDependencyViolation = Layers::Assertion::LayerDependencyViolation
+  PresetOptions = Layers::FluentApi::PresetOptions
   SliceProjection = Slices::Projection::SliceProjection
   SliceProjections = Slices::Projection
   SliceDependencyViolation = Slices::Assertion::SliceDependencyViolation

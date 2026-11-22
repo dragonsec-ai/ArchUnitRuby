@@ -299,6 +299,33 @@ the same file pair merge into one edge. Import-only edge evidence stays empty fo
 `ArchUnit::Extraction.extract_imports` retains import call locations in both modes. The analysis
 mode participates in graph-cache identity, and `clear_cache: true` rebuilds the symbol index.
 
+## Architecture presets (unreleased 1.1)
+
+`ArchUnit.architecture_preset(name, options = nil)` returns an immutable Checkable `PresetRule`.
+`ArchUnit::PresetOptions.new(project_locator: nil, folders: {})` is its options bag. Names are
+`:layered`, `:hexagonal`, or `:rails`; unknown names and malformed/duplicate override layer keys fail
+at construction. Each folder override is a non-empty String or Array of source globs; multiple
+patterns are ORed within one layer. No project reads occur until check.
+
+Layered maps presentation/application/persistence to `app/api/**`, `app/services/**`, `app/db/**`,
+allowing only presentation→application and application→persistence across layers. Hexagonal maps
+domain/application/adapters to `app/domain/**`, `app/application/**`, `app/adapters/**`, allowing
+application→domain and adapters→application/domain. Rails maps controllers/services/models to
+their `app/` folders, allowing controllers→services/models and services→models. Same-layer edges
+are allowed; the innermost layer has no allowed outgoing cross-layer edge. All mappings are
+overridable. Unmapped files/external modules are outside this policy, not excluded from extraction.
+
+Presets construct `LayeredArchitecture` rules and use existing assertion code. The guard rejects
+observed files matching multiple layers with UserError; empty layers use the normal
+EmptyTestViolation defense unless explicitly permitted. CheckOptions controls analysis, exclusions,
+cache and logging as usual; source parse errors remain fatal. `.because` and framework matchers
+work normally. Rails conventions do not boot Rails or automatically turn on expanded/helper modes.
+These presets are not complete architecture/cycle/protocol verification; compose more rules or
+build arbitrary policies with `project_layers`.
+
+Trusted CLI configurations have `architecture_preset(name, options = nil)`, defaulting the locator
+to their selected project root. This preserves the public locator/auto-discovery distinction.
+
 ## CLI contract (unreleased 1.1 milestone)
 
 The new executable is development-only until a 1.1 release; it is not included in 1.0.0. It wraps

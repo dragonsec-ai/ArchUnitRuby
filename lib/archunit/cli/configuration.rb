@@ -3,6 +3,7 @@
 require_relative '../common/fluentapi/checkable'
 require_relative '../files/fluentapi/files'
 require_relative '../layers/fluentapi/layers'
+require_relative '../layers/fluentapi/architecture_preset'
 require_relative '../slices/fluentapi/slices'
 require_relative '../metrics/fluentapi/metrics'
 
@@ -52,6 +53,12 @@ module ArchUnit
         Layers::FluentApi.project_layers(@project_root)
       end
       alias layers project_layers
+
+      def architecture_preset(name, options = nil)
+        options = Layers::FluentApi::PresetOptions.resolve(options)
+        options = options.with(project_locator: options.project_locator || @project_root)
+        Layers::FluentApi::ArchitecturePreset.build(name, options)
+      end
 
       def project_slices
         Slices::FluentApi.project_slices(@project_root)
