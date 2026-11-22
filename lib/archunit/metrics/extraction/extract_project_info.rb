@@ -6,6 +6,7 @@ require_relative '../../error/technical_error'
 require_relative '../../error/source_parse_error'
 require_relative '../../extraction/enumerate_source_files'
 require_relative '../../extraction/locate_project'
+require_relative '../../extraction/source_analysis'
 require_relative 'metric_info'
 require_relative 'source_metrics_visitor'
 
@@ -17,11 +18,13 @@ module ArchUnit
 
       def extract_project_info(project_locator = nil, exclude_patterns: nil, options: nil)
         root = Pathname.new(ArchUnit::Extraction.locate_project(project_locator))
-        sources = ArchUnit::Extraction.enumerate_source_files(root, exclude_patterns:, options:)
-        files = sources.map do |path|
-          extract_file_info(root.join(path), relative_path: path)
+        discovery = ArchUnit::Extraction.discover_source_files(root, exclude_patterns:, options:)
+        ArchUnit::Extraction::SourceAnalysis.observe(discovery) do
+          files = discovery.files.map do |path|
+            extract_file_info(root.join(path), relative_path: path)
+          end
+          ProjectInfo.new(project_root: root.to_s, files:)
         end
-        ProjectInfo.new(project_root: root.to_s, files:)
       end
 
       def extract_file_info(source_file, relative_path: nil)

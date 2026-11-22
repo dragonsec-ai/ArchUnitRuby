@@ -335,14 +335,49 @@ remain violations. Text errors go to stderr; JSON diagnostics go to stdout witho
 format option applies to init/check/explain and errors; help/version remain plain text.
 
 `--format json` produces one document with `schema_version: 1`, `archunit_version`, `command`,
-`project_root`, `config_path`, `dependency_analysis`, `rails_imports`, `load_paths`, `status`, `rules`,
-and `summary`. The new settings are additive schema-1 fields. Rule entries
-carry `name`, nullable `rationale`, `status`, and `violations`; each violation carries its `type`,
+`project_root`, `config_path`, `dependency_analysis`, `rails_imports`, `load_paths`, `source_exclusions`,
+`status`, `rules`, `analysis`, and `summary`. The new settings/diagnostics are additive schema-1 fields.
+Rule entries carry `name`, nullable `rationale`, `status`, `analysis`, and `violations`;
+each violation carries its `type`,
 shared formatter `message`, and `details`. Summary counts describe completed/listed rules and their
 violations; an analysis error may stop later rules, so a partial summary is never a pass. An error
 adds `error.type`, `error.message`, and nullable `error.rule_name`; a `SourceParseError` also adds
 `error.diagnostics` with path, one-based line/column, and message. Messages/details are for people,
 not stable violation fingerprints. The CLI implementation classes are not a new fluent API.
+
+### Analysis diagnostics
+
+`analysis` contains `status` (`available`, `partial`, or `unavailable`), `scopes`, and a limitations
+`notice`. Each scope contains:
+
+- `id`, `project_root`, `kind` (`dependency_graph` or `source_metrics`), and `status`
+  (`analyzed` or `error`). IDs are local to one invocation, not stable fingerprints.
+- The actual `dependency_analysis`, `rails_imports`, explicit `load_paths`, and sorted
+  `effective_source_exclusions` (defaults + repository policy + caller exclusions).
+  Dependency settings are null for source-only metrics, which do not construct a dependency graph.
+- `counters`: `source_files`, `imports`, `unresolved_imports`, `unresolved_constant_references`,
+  and `ambiguous_constant_references`. Constant counters are null in imports-only mode;
+  all counts are null when extraction fails, rather than presenting a partial parse as success.
+- `observations`, `cache_hits`, and the `rule_names` using that snapshot. Cached graphs retain their
+  original measured counts, even if first extracted without a timing profile. Refreshed graphs
+  become separate snapshots; roots, policies, and modes are not conflated.
+
+Each rule's `analysis` contains an availability `status` and its `scope_ids`. `explain`, `init`,
+and custom checks doing no built-in extraction have unavailable diagnostics, not zero counts.
+Mixed measured/unobserved rules produce partial availability. Analysis scopes are not summed:
+multiple roots can overlap, and a metric pass and a graph pass can inspect the same files.
+`source_files` counts all included sources before fluent selectors, not matched rule subjects.
+Scopes describe synchronous built-in extraction in the current check, not arbitrary user work
+started in other threads/fibers.
+
+`imports` counts accepted static import expressions, including external imports.
+Unresolved imports count unsupported/dynamic import expressions; literal external gem imports are
+not counted as unresolved expressions. Unresolved/ambiguous constant observations can include
+external symbols, unsupported Ruby lookup, or definitions reopened across files. They are neither
+proven missed internal dependencies nor a semantic-completeness percentage. They do not change
+exit status; included parse failures remain errors. A passing policy only describes the statically
+resolved graph, not proof of complete runtime architecture. Warm timing profiles still measure
+actual work (zero repeated cold counters); diagnostic snapshots are separate from those profiles.
 
 ## Errors and support
 

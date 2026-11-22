@@ -2,6 +2,9 @@
 
 ## 1.1.0 (unreleased)
 
+- Expose additive CLI analysis scopes with source/uncertainty counts, truthful warm-cache reuse,
+  unavailable values for unperformed/failed analysis, and explicit static-analysis limitations.
+
 - Add immutable caller-owned source exclusions and CLI `--exclude-source`, applied consistently
   to graphs, source/coupling metrics and reports without editing target repositories.
 

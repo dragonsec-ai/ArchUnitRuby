@@ -3,6 +3,7 @@
 require_relative 'options'
 require_relative 'configuration'
 require_relative 'report'
+require_relative '../extraction/analysis_observer'
 
 module ArchUnit
   module CLI
@@ -88,10 +89,18 @@ module ArchUnit
       end
 
       def check_rules(rules, options)
-        rules.each do |rule|
-          @current_rule = rule
-          @report.add_rule(rule, violations: rule.checkable.check(options))
+        analysis = AnalysisReport.new
+        Extraction::AnalysisObserver.capture(analysis) do
+          rules.each { |rule| check_rule(rule, options, analysis) }
         end
+      ensure
+        @report.payload[:analysis] = analysis.to_h
+      end
+
+      def check_rule(rule, options, analysis)
+        @current_rule = rule
+        violations = analysis.for_rule(rule.name) { rule.checkable.check(options) }
+        @report.add_rule(rule, violations:, analysis: analysis.for_name(rule.name))
       end
     end
   end
