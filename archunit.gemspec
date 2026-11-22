@@ -9,19 +9,20 @@ Gem::Specification.new do |spec|
 
   spec.summary = 'Architecture testing for Ruby'
   spec.description = 'Define and enforce software architecture rules as ordinary Ruby tests.'
-  spec.homepage = 'https://github.com/LukasNiessen/ArchUnitRuby'
+  spec.homepage = 'https://github.com/dragonsec-ai/ArchUnitRuby'
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 3.3'
 
   spec.metadata['source_code_uri'] = spec.homepage
-  spec.metadata['documentation_uri'] = 'https://lukasniessen.github.io/ArchUnitRuby/'
+  spec.metadata['documentation_uri'] = 'https://dragonsec-ai.github.io/ArchUnitRuby/'
   spec.metadata['bug_tracker_uri'] = "#{spec.homepage}/issues"
   spec.metadata['changelog_uri'] = "#{spec.homepage}/blob/main/CHANGELOG.md"
   spec.metadata['allowed_push_host'] = 'https://rubygems.org'
   spec.metadata['rubygems_mfa_required'] = 'true'
 
   packaged_files = [
-    'lib/**/*', 'exe/*', 'assets/logo-rounded.png', 'README.md', 'API.md', 'CHANGELOG.md', 'LICENSE'
+    'lib/**/*', 'exe/*', 'assets/logo-rounded.png', 'README.md', 'GUIDE.md', 'API.md',
+    'CHANGELOG.md', 'LICENSE', 'CONTRIBUTING.md', 'SECURITY.md', 'SUPPORT.md', 'CODE_OF_CONDUCT.md'
   ]
   spec.files = Dir[*packaged_files].select { |path| File.file?(path) }
   spec.require_paths = ['lib']

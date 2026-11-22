@@ -2,6 +2,9 @@
 
 ## 1.1.0 (unreleased)
 
+- Rework getting-started documentation with a concise README, preserved user guide, explicit
+  published/development availability, canonical organization URLs and executable example/link checks.
+
 - Compose layered, hexagonal and Rails folder presets from existing layer rules, with immutable
   pattern overrides, CLI integration, overlap errors and unchanged empty/source-analysis defenses.
 

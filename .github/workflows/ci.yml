@@ -71,6 +71,9 @@ jobs:
       - name: Exercise architecture presets
         run: bundle exec ruby scripts/check_presets.rb
 
+      - name: Exercise documented library examples
+        run: bundle exec ruby scripts/check_documentation_examples.rb
+
   quality:
     name: Quality and package — Ruby 4.0 on Ubuntu
     runs-on: ubuntu-latest
@@ -172,6 +175,7 @@ jobs:
           ruby scripts/check_analysis_diagnostics.rb
           ruby scripts/check_baselines.rb
           ruby scripts/check_presets.rb
+          ruby scripts/check_documentation_examples.rb
           ruby scripts/check_cli.rb
           ruby -e "
             require 'json'

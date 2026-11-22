@@ -1,12 +1,15 @@
 # GitHub Pages
 
 ArchUnitRuby publishes its guide and API reference at
-<https://lukasniessen.github.io/ArchUnitRuby/>.
+<https://dragonsec-ai.github.io/ArchUnitRuby/>.
 
-The site is generated from `README.md` and the public Ruby source with YARD. Its custom stylesheet
+The site is generated from `README.md`, `GUIDE.md`, `API.md` and the public Ruby source with YARD.
+The README is the getting-started page; the user guide contains full recipes and analysis details;
+the API guide defines the contract. Its custom stylesheet
 lives in `docs-assets/`; `scripts/prepare_docs.rb` adds shared navigation and the static files that
 GitHub Pages needs. `scripts/check_docs.rb` then checks the complete generated site for missing
-artifacts, missing theme injection, and broken internal links. The generated `docs/` directory is
+artifacts, missing theme injection, broken internal links and guide fragments, and unrendered
+Markdown headings. The generated `docs/` directory is
 intentionally ignored.
 
 Build the exact deployment artifact locally with:
@@ -23,3 +26,7 @@ ruby -run -e httpd docs -p 8000
 
 Every push and pull request validates the build in `ci.yml`. A push to `main` also uploads and
 deploys the result through `docs.yml` using GitHub's official Pages actions.
+
+The deployed site follows `main`, not the latest RubyGems release. Development-only capabilities
+must remain labeled in all three guides until published. CI executes the named README examples
+and its RSpec passing/failing/repaired quickstart to catch documentation drift.

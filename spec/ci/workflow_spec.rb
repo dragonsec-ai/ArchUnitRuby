@@ -52,6 +52,7 @@ RSpec.describe 'the CI workflow' do
       'ruby scripts/check_analysis_diagnostics.rb',
       'ruby scripts/check_baselines.rb',
       'ruby scripts/check_presets.rb',
+      'ruby scripts/check_documentation_examples.rb',
       'ruby scripts/check_cli.rb',
       'depend_on_files', 'depend_on_external_modules', "matching('json')",
       'adhere_to', 'file.extension', 'ArchUnit::Checkable',
@@ -124,6 +125,11 @@ RSpec.describe 'the CI workflow' do
 
   it 'exercises architecture presets on every compatibility platform' do
     expect(steps).to include(include('run' => 'bundle exec ruby scripts/check_presets.rb'))
+  end
+
+  it 'exercises documented examples on every compatibility platform' do
+    command = 'bundle exec ruby scripts/check_documentation_examples.rb'
+    expect(steps).to include(include('run' => command))
   end
 
   it 'keeps the installed-gem smoke program syntactically valid Ruby' do
