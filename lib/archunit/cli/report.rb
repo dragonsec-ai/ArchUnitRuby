@@ -4,6 +4,8 @@ require 'json'
 require_relative '../version'
 require_relative '../testing/violation_factory'
 require_relative '../error/source_parse_error'
+require_relative 'analysis_report'
+require_relative 'analysis_text'
 
 module ArchUnit
   module CLI
@@ -26,13 +28,14 @@ module ArchUnit
           dependency_analysis: options.dependency_analysis,
           rails_imports: options.rails_imports, load_paths: options.load_paths,
           source_exclusions: options.source_exclusions,
-          status: 'error', rules: []
+          status: 'error', rules: [], analysis: AnalysisReport.new.to_h
         }
       end
 
-      def add_rule(rule, violations: nil)
+      def add_rule(rule, violations: nil, analysis: nil)
         payload[:rules] << {
           name: rule.name, rationale: rule.checkable.rationale, status: rule_status(violations),
+          analysis: analysis || { status: 'unavailable', scope_ids: [] },
           violations: (violations || []).map { |violation| violation_payload(violation) }
         }
       end
@@ -67,6 +70,7 @@ module ArchUnit
       def write_error(err)
         err.puts("ArchUnit error: #{payload[:error][:message]}")
         payload[:error].fetch(:guidance, []).each { |line| err.puts(line) }
+        AnalysisText.write(payload[:analysis], err)
       end
 
       def rule_status(violations)
@@ -81,11 +85,16 @@ module ArchUnit
       end
 
       def write_text(out)
+        write_header(out)
+        write_notice(out)
+        payload[:rules].each { |rule| write_rule(rule, out) }
+        AnalysisText.write(payload[:analysis], out)
+      end
+
+      def write_header(out)
         out.puts("ArchUnit #{ArchUnit::VERSION} — #{payload[:status]} " \
                  "(#{payload[:dependency_analysis]})")
         out.puts("Project: #{payload[:project_root]}\nConfiguration: #{payload[:config_path]}")
-        write_notice(out)
-        payload[:rules].each { |rule| write_rule(rule, out) }
       end
 
       def write_notice(out)

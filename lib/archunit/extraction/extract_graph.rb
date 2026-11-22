@@ -11,11 +11,17 @@ require_relative 'extraction_profile'
 require_relative 'locate_project'
 require_relative 'resolve_load_paths'
 require_relative 'graph_cache_key'
+require_relative 'analysis_profile'
+require_relative 'analysis_snapshot'
+require_relative 'analysis_observer'
+require_relative 'graph_assembly'
 
 module ArchUnit
   # Assembles the normalized dependency graph for a Ruby project.
   module Extraction
     GRAPH_CACHE_MUTEX = Mutex.new
+    CachedGraph = Data.define(:graph, :analysis)
+    private_constant :CachedGraph
 
     module_function
 
@@ -43,23 +49,42 @@ module ArchUnit
         root, exclude_patterns, source_exclusions: options.source_exclusions
       )
       key = GraphCacheKey.build(root, patterns, options)
-      Common::Logging::Inspection.graph(fetch_graph(root, patterns, options, key, profile), root:)
+      entry, cache_hit = fetch_graph(root, patterns, options, key, profile)
+      AnalysisObserver.record(entry.analysis, cache_hit:)
+      Common::Logging::Inspection.graph(entry.graph, root:)
     end
     private_class_method :resolved_graph
 
     def fetch_graph(root, patterns, options, cache_key, profile)
       GRAPH_CACHE_MUTEX.synchronize do
-        graph_cache.delete(cache_key) if options.clear_cache?
-        cached = graph_cache[cache_key]
-        if cached
-          profile&.record_cache_hit
-          return cached
-        end
-
-        graph_cache[cache_key] = extract_graph_uncached(root, patterns, options, profile)
+        cached_graph(root, patterns, options, cache_key, profile)
       end
+    rescue StandardError
+      AnalysisObserver.record(AnalysisSnapshot.graph(root, patterns, options, status: 'error'))
+      raise
     end
     private_class_method :fetch_graph
+
+    def cached_graph(root, patterns, options, cache_key, profile)
+      graph_cache.delete(cache_key) if options.clear_cache?
+      if (cached = graph_cache[cache_key])
+        profile&.record_cache_hit
+        return [cached, true]
+      end
+
+      entry = build_graph_entry(root, patterns, options, profile)
+      graph_cache[cache_key] = entry
+      [entry, false]
+    end
+    private_class_method :cached_graph
+
+    def build_graph_entry(root, patterns, options, profile)
+      recorder = AnalysisProfile.new(profile)
+      graph = extract_graph_uncached(root, patterns, options, recorder)
+      analysis = AnalysisSnapshot.graph(root, patterns, options, counters: recorder.counters)
+      CachedGraph.new(graph:, analysis:)
+    end
+    private_class_method :build_graph_entry
 
     def extract_graph_uncached(root, exclude_patterns, options, profile)
       source_files = ExtractionProfile.measure(profile, :source_enumeration) do
@@ -70,7 +95,7 @@ module ArchUnit
         LoadPaths.resolve(root, explicit_paths: options.load_paths, source_files:)
       end
       edges = extraction_edges(root, source_files, load_paths, options, profile)
-      graph_from_edges(edges, profile)
+      GraphAssembly.build(edges, profile)
     end
     private_class_method :extract_graph_uncached
 
@@ -83,15 +108,6 @@ module ArchUnit
     end
     private_class_method :extraction_edges
 
-    def graph_from_edges(edges, profile)
-      merged = ExtractionProfile.measure(profile, :edge_merge) do
-        merge_parallel_edges(edges)
-      end
-      profile&.increment(:merged_edges, merged.length)
-      Common::Extraction::Graph.new(merged)
-    end
-    private_class_method :graph_from_edges
-
     def graph_cache
       @graph_cache ||= {}
     end
@@ -103,19 +119,5 @@ module ArchUnit
       end
     end
     private_class_method :self_edges
-
-    def merge_parallel_edges(edges)
-      edges.group_by { |edge| [edge.source, edge.target] }.values.map do |parallel_edges|
-        first = parallel_edges.first
-        Common::Extraction::Edge.new(
-          source: first.source,
-          target: first.target,
-          external: first.external,
-          import_kinds: parallel_edges.flat_map(&:import_kinds),
-          evidence: parallel_edges.flat_map(&:evidence)
-        )
-      end
-    end
-    private_class_method :merge_parallel_edges
   end
 end

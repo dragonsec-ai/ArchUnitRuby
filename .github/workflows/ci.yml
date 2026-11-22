@@ -62,6 +62,9 @@ jobs:
       - name: Exercise read-only source exclusions
         run: bundle exec ruby scripts/check_source_exclusions.rb
 
+      - name: Exercise cache-aware analysis diagnostics
+        run: bundle exec ruby scripts/check_analysis_diagnostics.rb
+
   quality:
     name: Quality and package — Ruby 4.0 on Ubuntu
     runs-on: ubuntu-latest
@@ -160,6 +163,7 @@ jobs:
           ruby scripts/check_static_paths.rb
           ruby scripts/check_rails_imports.rb
           ruby scripts/check_source_exclusions.rb
+          ruby scripts/check_analysis_diagnostics.rb
           ruby scripts/check_cli.rb
           ruby -e "
             require 'json'

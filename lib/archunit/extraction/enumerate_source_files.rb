@@ -28,16 +28,24 @@ module ArchUnit
       tmp
       vendor
     ].freeze
+    SourceDiscovery = Data.define(:root, :patterns, :files)
+    private_constant :SourceDiscovery
 
     module_function
 
     def enumerate_source_files(project_root, exclude_patterns: nil, options: nil)
+      discover_source_files(project_root, exclude_patterns:, options:).files
+    end
+
+    # @api private
+    def discover_source_files(project_root, exclude_patterns: nil, options: nil)
       options = Common::FluentApi::CheckOptions.resolve(options)
       root = source_root(project_root)
       patterns = resolve_project_exclude_patterns(
         root, exclude_patterns, source_exclusions: options.source_exclusions
       )
-      enumerate_source_files_with_patterns(root, patterns)
+      SourceDiscovery.new(root: root.freeze, patterns:,
+                          files: enumerate_source_files_with_patterns(root, patterns))
     end
 
     def enumerate_source_files_with_patterns(root, patterns)

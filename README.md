@@ -101,6 +101,22 @@ violations, summary counts, and structured parse diagnostics for malformed sourc
 configured rules and settings without checking them: `configured` / `not_checked` is not a passing
 architecture result. It is not yet a semantic dependency trace or focused-path report.
 
+CLI diagnostics (unreleased 1.1) include an additive schema-1 `analysis` section and per-rule
+scope IDs. Each scope reports its project root, effective source exclusions, actual analysis
+mode, source-file count, unresolved imports/constants, and ambiguous constant references.
+Repeated rules sharing a cached graph share its original counts; different roots, policies,
+modes, or refreshed graphs have separate scopes. Counts are not summed across overlapping scopes.
+`null` in JSON / `unavailable` in text means that analysis was not performed or did not finish,
+not a measured zero. Metric-only rules report source counts but no dependency-analysis counts;
+`explain` does not claim to have analyzed sources.
+
+These counters describe observations, **not a semantic-coverage percentage or proven missing
+dependencies**. Unresolved imports count unsupported/dynamic import expressions, not every literal
+external gem import. Unresolved constants can include external symbols and unsupported lookup;
+ambiguity includes constants reopened across files. Unknowns remain nonfatal, while included
+syntax errors still exit 2. Passing a rule means no violations in the statically resolved graph,
+not proof of complete runtime architecture.
+
 Only run configurations you trust: `.archunit.rb` is arbitrary executable Ruby, **not a sandbox**,
 and `explain` also loads it. For an untrusted target repository, provide your own trusted
 configuration via `--config`. The CLI does not automatically load target application source,
