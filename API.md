@@ -1,11 +1,20 @@
 # ArchUnitRuby API Guide
 
 This guide is the stable map of ArchUnitRuby's public fluent API. The
-[class and method reference](class_list.html) is generated from the source, while this page explains
+[class and method reference](https://dragonsec-ai.github.io/ArchUnitRuby/class_list.html)
+is generated from the source, while this page explains
 which entry point to choose and how the stages fit together.
 
 All rule builders are immutable and lazy. Constructing a rule does not read the project; `check`,
 `measure`, `snapshot`, and export methods are the terminals that perform work.
+
+This reference follows `main`. Published 1.0.0 and unreleased 1.1 capabilities are distinct;
+see [release status](README.md#availability) before copying a development-only example.
+For recipes use the [user guide](GUIDE.md); for a first rule use the [quickstart](README.md#quickstart).
+
+[1.x compatibility contract](#compatibility) · [Common rule shape](#grammar) · [File rules](#file-rules) · [Layer rules](#layer-rules) · [Slices and diagrams](#slices) · [Dependency graph reports](#graph-reports) · [Metrics](#metrics) · [Checking and test frameworks](#frameworks) · [Check options and logging](#check-options) · [Architecture presets (unreleased 1.1)](#presets) · [CLI contract (unreleased 1.1 milestone)](#cli) · [Errors and support](#errors)
+
+<a id="compatibility"></a>
 
 ## 1.x compatibility contract
 
@@ -19,7 +28,9 @@ dependencies or misleading clean results.
 Static extraction remains bounded and does not execute the target application's source or gemspecs.
 Import-only is the default; expanded constant analysis is explicit opt-in. The documented unresolved
 lookup cases, project source/exclusion policy, strict parser failures, and explicit cache-clearing
-behavior remain important when upgrading. See the README's migration notes for changes from 0.0.1.
+behavior remain important when upgrading. See the [migration guide](GUIDE.md#migration) for changes from 0.0.1.
+
+<a id="grammar"></a>
 
 ## Common rule shape
 
@@ -47,6 +58,8 @@ are accepted by all pattern selectors except the exact `in_file` selector.
 
 Every pattern selector accepts `except:`. Pass a pattern, an array of patterns, or explicit selector
 keys such as `{ in_folder: 'generated', with_name: '*_spec.rb' }`.
+
+<a id="file-rules"></a>
 
 ## File rules
 
@@ -119,6 +132,8 @@ Cycle projection uses iterative strongly-connected-component and elementary-cycl
 long dependency chains do not consume Ruby's call stack. It still enumerates all elementary cycles;
 dense graphs can have exponentially many results. Scope cycle rules to meaningful components.
 
+<a id="layer-rules"></a>
+
 ## Layer rules
 
 Use `ArchUnit.project_layers(project_locator = nil)` to name architectural layers and then declare
@@ -137,6 +152,8 @@ rule = ArchUnit.project_layers
 `may_only_depend_on_layers` creates an allowlist. Calling it without targets seals the layer.
 `may_not_depend_on_layers` creates a blocklist and requires at least one target. Dependencies inside
 one layer are allowed; edges with an unassigned endpoint are ignored.
+
+<a id="slices"></a>
 
 ## Slices and diagrams
 
@@ -159,6 +176,8 @@ slices.export_as_plantuml('reports/architecture.puml')
 `adhere_to_diagram` accepts inline PlantUML. The supported subset includes components, directed
 dependencies, comments, `@startuml`, and `@enduml`.
 
+<a id="graph-reports"></a>
+
 ## Dependency graph reports
 
 Use `ArchUnit.project_graph(project_locator = nil)` for queryable snapshots and reports.
@@ -180,6 +199,8 @@ Query modifiers are `focus_on(pattern, depth)`, `reachable_from(pattern)`, and
 `dependents_of(pattern)`. Group nodes with `collapse_to_folder_depth` or
 `collapse_by_pattern(pattern, replacement)`. Formats are DOT, Mermaid, D2, CSV, JSON, and
 self-contained HTML; each provides both `to_<format>` and `export_as_<format>`.
+
+<a id="metrics"></a>
 
 ## Metrics
 
@@ -210,6 +231,8 @@ Thresholds use exactly `should_be_below`, `should_be_above`, `should_be`,
 for a calculation over `ClassInfo`; zone guards are `not_in_zone_of_pain` and
 `not_in_zone_of_uselessness`.
 
+<a id="frameworks"></a>
+
 ## Checking and test frameworks
 
 Every architecture rule includes `ArchUnit::Checkable` and exposes `check(options = nil)`. It returns
@@ -227,6 +250,8 @@ ArchUnit.assert_passes(rule) # Framework-neutral
 Use `ArchUnit.format_violations` or `ArchUnit::ResultFactory` when integrating with another test
 framework or command-line interface.
 
+<a id="check-options"></a>
+
 ## Check options and logging
 
 `ArchUnit::CheckOptions` keeps optional execution behavior out of the fluent sentence:
@@ -242,7 +267,6 @@ options = ArchUnit::CheckOptions.new(
   clear_cache: false,
   load_paths: ['components/billing/lib'],
   dependency_analysis: :imports,
-  rails_imports: false,
   logging: logging
 )
 
@@ -258,12 +282,12 @@ gemspecs or running application code.
 literal-string assignments in supported straight-line scopes. Aliases, mutation/escape, closures,
 reflection, and unsupported control flow invalidate inferred values; runtime paths are not guessed.
 
-The bounded file-relative whitelist also accepts `__FILE__`, implicit `__dir__`, literal/static
+In unreleased 1.1, the bounded file-relative whitelist also accepts `__FILE__`, implicit `__dir__`, literal/static
 string `+`, `File.dirname(absolute_expression)` and `File.expand_path(path, absolute_base)`
 (also `::File`, or one absolute operand for `expand_path`). Operands cannot contain local-variable
 reads or arbitrary calls; the completed result may be assigned to a local. No source is evaluated.
 Source-local core overrides/reflection disable affected inference; arbitrary cross-file core
-monkey-patching is not modeled. See the README for the exact limits and unsupported forms.
+monkey-patching is not modeled. See the [resolution guide](GUIDE.md#analysis) for exact limits.
 
 In unreleased 1.1, `rails_imports: true` separately opts into implicit/`self.require_dependency`
 calls. Accepted paths use the same literal/local/static contract, and edges use
@@ -299,13 +323,17 @@ the same file pair merge into one edge. Import-only edge evidence stays empty fo
 `ArchUnit::Extraction.extract_imports` retains import call locations in both modes. The analysis
 mode participates in graph-cache identity, and `clear_cache: true` rebuilds the symbol index.
 
-## Architecture presets (unreleased 1.1)
+### Semantic boundaries
 
 Method-call restrictions, effective method/signature protocols, and semantic component selectors
 are not provided by the current file graph or metric method facts. The bounded
 [semantic evaluation](https://github.com/dragonsec-ai/ArchUnitRuby/blob/main/design/semantic-boundaries.md)
 records exact comparator pins, executable probes and the compatibility/unknowns required before
 adding such APIs. This is a technical evaluation, not a newly shipped semantic backend.
+
+<a id="presets"></a>
+
+## Architecture presets (unreleased 1.1)
 
 `ArchUnit.architecture_preset(name, options = nil)` returns an immutable Checkable `PresetRule`.
 `ArchUnit::PresetOptions.new(project_locator: nil, folders: {})` is its options bag. Names are
@@ -331,6 +359,8 @@ build arbitrary policies with `project_layers`.
 
 Trusted CLI configurations have `architecture_preset(name, options = nil)`, defaulting the locator
 to their selected project root. This preserves the public locator/auto-discovery distinction.
+
+<a id="cli"></a>
 
 ## CLI contract (unreleased 1.1 milestone)
 
@@ -412,7 +442,7 @@ exit status; included parse failures remain errors. A passing policy only descri
 resolved graph, not proof of complete runtime architecture. Warm timing profiles still measure
 actual work (zero repeated cold counters); diagnostic snapshots are separate from those profiles.
 
-## Errors and support
+<a id="baselines"></a>
 
 ### Explicit violation baselines (unreleased 1.1)
 
@@ -449,6 +479,10 @@ creation uses a same-directory hard link (unsupported filesystems fail closed); 
 uses rename after rejecting non-regular paths. Concurrent hostile filesystem mutation is outside
 this library's isolation guarantees. Do not blindly regenerate baselines in CI.
 
+<a id="errors"></a>
+
+## Errors and support
+
 Invalid API input raises `ArchUnit::UserError` or `ArgumentError`; library or environment failures
 raise `ArchUnit::TechnicalError`. Rule failures remain violation data.
 
@@ -459,6 +493,6 @@ each value supports `to_h`. RSpec/Minitest assertions propagate this technical f
 reporting a pass or an ordinary architecture violation. Excluded files are not parsed. The profile's
 `malformed_files` counter records a rejected file; existing cache-clearing rules still apply.
 
-See the [main guide](index.html) for installation and complete examples, [SUPPORT.md](https://github.com/LukasNiessen/ArchUnitRuby/blob/main/SUPPORT.md)
-for help, and [SECURITY.md](https://github.com/LukasNiessen/ArchUnitRuby/blob/main/SECURITY.md) for
+See the [quickstart](README.md#quickstart) and [user guide](GUIDE.md) for complete examples, [SUPPORT.md](https://github.com/dragonsec-ai/ArchUnitRuby/blob/main/SUPPORT.md)
+for help, and [SECURITY.md](https://github.com/dragonsec-ai/ArchUnitRuby/blob/main/SECURITY.md) for
 responsible vulnerability reporting.

@@ -40,9 +40,11 @@ refresh, and strict malformed-source diagnostics, plus both dependency-analysis 
   and rerun passing/failing architecture examples before announcing availability.
 
 Publication evidence: #71 (registry checksum, tag and clean-project acceptance verified).
-CLI execution/diagnostics are now merged (#73, #88). Further baselines, presets, bounded semantic
-evaluation and representative Linux performance studies are tracked by #89–92 under #66.
-They are not prerequisites for the initial stable API baseline.
+CLI execution/diagnostics (#73, #88), baselines (#89), presets (#90), bounded semantic evaluation
+(#91), and representative Linux performance studies (#92) are merged; roadmap #66 is complete.
+These remain unreleased 1.1 work, not prerequisites for the historical 1.0 API baseline or a claim
+that full method/protocol semantics are implemented. A 1.1 release still needs its own explicit
+readiness check, approval, and publication.
 
 ## Audit coverage added
 

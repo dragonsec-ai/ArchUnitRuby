@@ -8,10 +8,13 @@ OUTPUT = ROOT.join('docs')
 STYLESHEET = OUTPUT.join('css', 'archunit.css')
 LOGO = OUTPUT.join('assets', 'logo-rounded.png')
 SOCIAL_PREVIEW = OUTPUT.join('assets', 'social-preview.png')
-SITE_URL = 'https://lukasniessen.github.io/ArchUnitRuby/'
-SOURCE_URL = 'https://github.com/LukasNiessen/ArchUnitRuby/blob/main/'
+SITE_URL = 'https://dragonsec-ai.github.io/ArchUnitRuby/'
+SOURCE_URL = 'https://github.com/dragonsec-ai/ArchUnitRuby/blob/main/'
+DOCUMENT_PAGES = {
+  'README.md' => 'index.html', 'GUIDE.md' => 'file.GUIDE.html', 'API.md' => 'file.API.html'
+}.freeze
 SOURCE_DOCUMENTS = %w[
-  LICENSE AGENTS.md CONTRIBUTING.md SECURITY.md SUPPORT.md CODE_OF_CONDUCT.md
+  LICENSE AGENTS.md CHANGELOG.md CONTRIBUTING.md SECURITY.md SUPPORT.md CODE_OF_CONDUCT.md
 ].freeze
 NAVIGATION = <<~HTML
   <div class="archunit-topbar" role="navigation" aria-label="Documentation">
@@ -19,10 +22,11 @@ NAVIGATION = <<~HTML
       <img src="%<logo>s" alt=""> ArchUnitRuby
     </a>
     <div class="archunit-links">
-      <a href="%<guide>s">Guide</a>
+      <a href="%<guide>s">Start here</a>
+      <a href="%<user_guide>s">User guide</a>
       <a href="%<api_guide>s">API guide</a>
       <a href="%<reference>s">Reference</a>
-      <a href="https://github.com/LukasNiessen/ArchUnitRuby">GitHub</a>
+      <a href="https://github.com/dragonsec-ai/ArchUnitRuby">GitHub</a>
       <a href="https://github.com/TristanKruse/ArchUnitRuby-TestRepo-RAG">Example</a>
     </div>
   </div>
@@ -48,9 +52,10 @@ end
 def navigation(page)
   guide = relative_href(OUTPUT.join('index.html'), page)
   api_guide = relative_href(OUTPUT.join('file.API.html'), page)
+  user_guide = relative_href(OUTPUT.join('file.GUIDE.html'), page)
   reference = relative_href(OUTPUT.join('class_list.html'), page)
   logo = relative_href(LOGO, page)
-  format(NAVIGATION, guide:, api_guide:, reference:, logo:)
+  format(NAVIGATION, guide:, user_guide:, api_guide:, reference:, logo:)
 end
 
 def page_head(page)
@@ -59,7 +64,14 @@ def page_head(page)
   format(PAGE_HEAD, site_url: SITE_URL, logo:, stylesheet:)
 end
 
-def rewrite_source_links(content)
+def rewrite_source_links(content, page)
+  DOCUMENT_PAGES.each do |document, html|
+    pattern = /href="#{Regexp.escape(document)}(#[^"]*)?"/
+    content.gsub!(pattern) do
+      fragment = Regexp.last_match(1)
+      "href=\"#{relative_href(OUTPUT.join(html), page)}#{fragment}\""
+    end
+  end
   SOURCE_DOCUMENTS.each do |document|
     content.gsub!("href=\"#{document}\"", "href=\"#{SOURCE_URL}#{document}\"")
   end
@@ -69,7 +81,7 @@ def prepare_page(path)
   page = Pathname.new(path)
   content = page.binread.force_encoding(Encoding::UTF_8)
 
-  rewrite_source_links(content)
+  rewrite_source_links(content, page)
   if page.basename.to_s.match?(/\A(?:class|method|file)_list\.html\z/)
     content.sub!('<body>', '<body class="archunit-list">')
   end

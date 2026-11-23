@@ -10,7 +10,7 @@ trusted publisher with these exact values:
 | Field | Value |
 | --- | --- |
 | Gem name | `archunit` |
-| Repository owner | `LukasNiessen` |
+| Repository owner | `dragonsec-ai` |
 | Repository name | `ArchUnitRuby` |
 | Workflow filename | `release.yml` |
 | Environment | `release` |
@@ -18,6 +18,11 @@ trusted publisher with these exact values:
 Create it from <https://rubygems.org/profile/oidc/pending_trusted_publishers/new>. After the first
 successful publication, RubyGems converts the pending publisher into the gem's trusted publisher
 and makes that RubyGems account an owner.
+
+The table describes the required current repository identity, not confirmation of the account's
+configuration. If a publisher was created before the organization transfer under `LukasNiessen`,
+verify/update it to `dragonsec-ai` in RubyGems before the next release; do not test publishing
+merely to check this setting.
 
 ## Publishing a version
 

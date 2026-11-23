@@ -2,11 +2,12 @@
 
 require 'pathname'
 require 'uri'
+require_relative 'documentation_links'
 
 ROOT = Pathname.new(__dir__).join('..').expand_path
 OUTPUT = ROOT.join('docs')
 REQUIRED_FILES = %w[
-  index.html file.API.html class_list.html css/archunit.css assets/logo-rounded.png
+  index.html file.API.html file.GUIDE.html class_list.html css/archunit.css assets/logo-rounded.png
   assets/social-preview.png .nojekyll robots.txt sitemap.xml
 ].freeze
 
@@ -40,6 +41,10 @@ broken = pages.flat_map do |page|
 end
 
 raise "Broken documentation links:\n#{broken.join("\n")}" unless broken.empty?
+
+fragments = pages.flat_map { |page| ArchUnitDocumentationLinks.rendered_errors(page) }
+fragments.concat(ArchUnitDocumentationLinks.source_errors(ROOT))
+raise "Broken document anchors:\n#{fragments.join("\n")}" unless fragments.empty?
 
 guide = OUTPUT.join('index.html').binread.force_encoding(Encoding::UTF_8)
 unrendered = {

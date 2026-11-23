@@ -5,7 +5,7 @@ changes with tests are easiest to review.
 
 ## Before opening a change
 
-- Search the [existing issues](https://github.com/LukasNiessen/ArchUnitRuby/issues).
+- Search the [existing issues](https://github.com/dragonsec-ai/ArchUnitRuby/issues).
 - Use an issue for behavior changes or larger additions so the Ruby API can stay aligned with the
   sibling implementations.
 - Read [AGENTS.md](AGENTS.md) for architecture, naming, and fluent-API conventions.
@@ -16,7 +16,7 @@ changes with tests are easiest to review.
 ArchUnitRuby requires Ruby 3.3 or newer.
 
 ~~~bash
-git clone https://github.com/LukasNiessen/ArchUnitRuby.git
+git clone https://github.com/dragonsec-ai/ArchUnitRuby.git
 cd ArchUnitRuby
 bundle install
 bundle exec rake
@@ -59,7 +59,10 @@ a valid dated heading and an installation example targeting the version being pu
   boundary.
 - Add a focused unit test and an end-to-end fluent API test for behavior changes.
 - Keep `# frozen_string_literal: true` in Ruby files and leave RuboCop clean.
-- Update `README.md`, `API.md`, and `CHANGELOG.md` when public behavior changes.
+- Keep `README.md` as a concise starting point; put full workflows in `GUIDE.md` and exact
+  semantics in `API.md`. Label unreleased features and update `CHANGELOG.md` for behavior changes.
+- Mark runnable README snippets with `example:` comments and extend the documentation-example
+  acceptance checks when adding or changing them.
 
 ## Pull requests
 

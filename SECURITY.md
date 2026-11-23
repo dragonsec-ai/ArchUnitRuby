@@ -2,18 +2,19 @@
 
 ## Supported versions
 
-ArchUnitRuby is currently pre-1.0. Security fixes are applied to the latest published gem and the
-`main` branch.
+Security fixes target the latest published release and the `main` branch. The published gem and
+development checkout can differ; see [release status](README.md#availability).
 
 | Version | Supported |
 | --- | --- |
-| Latest `0.0.x` release | Yes |
+| Latest published `1.x` release | Yes |
+| `main` (unreleased development) | Yes |
 | Older releases | No |
 
 ## Reporting a vulnerability
 
 Please do not open a public issue for a suspected vulnerability. Use GitHub's
-[private vulnerability reporting](https://github.com/LukasNiessen/ArchUnitRuby/security/advisories/new)
+[private vulnerability reporting](https://github.com/dragonsec-ai/ArchUnitRuby/security/advisories/new)
 to share the affected version, impact, reproduction steps, and any suggested mitigation.
 
 Do not include real credentials, private source code, or customer data. A minimal synthetic
@@ -27,6 +28,12 @@ analyzed project or evaluate gemspecs. Dynamic import expressions are omitted in
 Run architecture analysis with the same filesystem permissions you would grant any test tool, and
 review exported reports before sharing them because paths and dependency names may reveal project
 structure.
+
+The unreleased CLI evaluates trusted `.archunit.rb` rule configuration as executable Ruby, including
+during `explain`. It is not a sandbox. For an untrusted target, supply your own trusted `--config`
+and do not run its Gemfile, tests or application. Baselines are JSON accepted-debt data, not code,
+but changes to them and source exclusions still require review. Concurrent hostile filesystem
+mutation and the security of your Ruby interpreter are outside this library's isolation guarantees.
 
 ## Locked dependency scanning
 
