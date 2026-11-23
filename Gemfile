@@ -6,7 +6,7 @@ gemspec
 
 gem 'bundler-audit', '~> 0.9.3', require: false
 gem 'irb', '~> 1.19'
-gem 'kramdown', '~> 2.5.2'
+gem 'kramdown', '~> 2.6.1'
 gem 'minitest', '~> 5.25'
 gem 'rake', '~> 13.2'
 gem 'rspec', '~> 3.13'
