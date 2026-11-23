@@ -34,16 +34,16 @@ of the [ArchUnitEverything family](#community), inspired by—but not affiliated
 
 ## Release status
 
-| Track | Available today |
+| Version | Capabilities |
 | --- | --- |
-| Published `archunit 1.0.0` | Fluent file/layer/slice rules, cycles and naming, metrics, graph/diagram exports, RSpec/Minitest integrations, opt-in constant-file analysis |
-| `main` — unreleased 1.1 development | CLI, analysis diagnostics, accepted-debt baselines, architecture presets, Rails helper imports, caller-owned source exclusions, and further extraction fixes |
+| `1.0` | Fluent file/layer/slice rules, cycles and naming, metrics, graph/diagram exports, RSpec/Minitest integrations, opt-in constant-file analysis |
+| `1.1` | Everything in 1.0, plus CLI, analysis diagnostics, accepted-debt baselines, architecture presets, Rails helper imports, caller-owned source exclusions, and further extraction fixes |
 
-Install the published 1.0 series with the quickstart below. The documentation site follows
-`main` and includes explicitly labeled development features; **installing 1.0.0 does not provide
-the CLI or other 1.1 additions**. See [RubyGems](https://rubygems.org/gems/archunit),
-the [changelog](CHANGELOG.md), and the [compatibility contract](API.md#compatibility).
-Nothing on this page implies that 1.1 has been released.
+This guide and its installation example target the **1.1 series**. Check
+[RubyGems](https://rubygems.org/gems/archunit) for published versions; the documentation site
+follows `main` and can be ahead of the registry during release preparation.
+Installing 1.0.0 does not provide the CLI or other 1.1 additions. See the
+[changelog](CHANGELOG.md) and [1.x compatibility contract](API.md#compatibility) before upgrading.
 
 <a id="quickstart"></a>
 
@@ -56,7 +56,7 @@ Ruby 3.3+ is required. Add ArchUnitRuby to your test dependencies:
 ~~~ruby
 # Gemfile
 group :test do
-  gem 'archunit', '~> 1.0.0'
+  gem 'archunit', '~> 1.1.0'
   gem 'rspec' # Omit this line if RSpec is already in your bundle.
 end
 ~~~
@@ -136,7 +136,7 @@ In a long-lived process, clear the graph cache after source edits; separate RSpe
 | Component slices and PlantUML conformance | `project_slices` | [Slices and diagrams](API.md#slices) |
 | Mermaid, DOT, D2, JSON, CSV, and offline HTML reports | `project_graph` | [Graph reports](API.md#graph-reports) |
 | Counts, cohesion, coupling, distance, and custom thresholds | `metrics` | [Metrics](API.md#metrics) |
-| Layered, hexagonal, and Rails presets | `architecture_preset` — **unreleased 1.1** | [Preset contract](API.md#presets) |
+| Layered, hexagonal, and Rails presets | `architecture_preset` — **1.1+** | [Preset contract](API.md#presets) |
 
 Builders are immutable and lazy: assembling a rule does not scan the project. Terminal calls
 such as `check`, `measure`, `snapshot`, and exports perform the work.
@@ -202,10 +202,9 @@ It is still bounded: ambiguous, inherited, or dynamic lookup can remain unresolv
 
 <a id="development-cli"></a>
 
-## CLI and gradual adoption — unreleased 1.1
+## CLI and gradual adoption — 1.1+
 
-These commands require this repository's development checkout and bundle, or a future 1.1 release.
-They are **not available in the published 1.0.0 gem**.
+These commands require ArchUnitRuby 1.1 or newer. They are not available in 1.0.0.
 
 ~~~sh
 bundle exec archunit init

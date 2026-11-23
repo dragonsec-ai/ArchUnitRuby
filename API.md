@@ -8,17 +8,17 @@ which entry point to choose and how the stages fit together.
 All rule builders are immutable and lazy. Constructing a rule does not read the project; `check`,
 `measure`, `snapshot`, and export methods are the terminals that perform work.
 
-This reference follows `main`. Published 1.0.0 and unreleased 1.1 capabilities are distinct;
-see [release status](README.md#availability) before copying a development-only example.
+This reference follows `main` and documents the 1.x API. Additions requiring 1.1 are labeled;
+see [release status](README.md#availability) and check your installed version before copying them.
 For recipes use the [user guide](GUIDE.md); for a first rule use the [quickstart](README.md#quickstart).
 
-[1.x compatibility contract](#compatibility) · [Common rule shape](#grammar) · [File rules](#file-rules) · [Layer rules](#layer-rules) · [Slices and diagrams](#slices) · [Dependency graph reports](#graph-reports) · [Metrics](#metrics) · [Checking and test frameworks](#frameworks) · [Check options and logging](#check-options) · [Architecture presets (unreleased 1.1)](#presets) · [CLI contract (unreleased 1.1 milestone)](#cli) · [Errors and support](#errors)
+[1.x compatibility contract](#compatibility) · [Common rule shape](#grammar) · [File rules](#file-rules) · [Layer rules](#layer-rules) · [Slices and diagrams](#slices) · [Dependency graph reports](#graph-reports) · [Metrics](#metrics) · [Checking and test frameworks](#frameworks) · [Check options and logging](#check-options) · [Architecture presets (1.1+)](#presets) · [CLI contract (1.1+)](#cli) · [Errors and support](#errors)
 
 <a id="compatibility"></a>
 
 ## 1.x compatibility contract
 
-This guide defines the supported 1.0 public surface: documented entry points, fluent methods,
+This guide defines the supported 1.x public surface: documented entry points, fluent methods,
 options, public data/error types, and report formats. Additive capabilities can arrive in minor
 versions; incompatible public API changes require a major version and migration notes. Private
 helpers and classes marked as implementation details are not part of that compatibility promise.
@@ -90,7 +90,7 @@ Changing source contents still requires explicit cache clearing. Reads are bound
 BOMs are accepted and invalid bytes replaced. Symlinks (including project-local ones), non-regular
 files, negation, NUL characters, and a bare `/` are rejected. No Ruby or gemspec code is evaluated.
 
-In unreleased 1.1, `CheckOptions.new(source_exclusions: ['lib/templates/migration.rb'])` adds
+Since 1.1, `CheckOptions.new(source_exclusions: ['lib/templates/migration.rb'])` adds
 immutable caller-owned globs without changing the target repository. These combine with defaults
 and repository policy; legacy `exclude_patterns: []` still disables only defaults. The effective
 normalized set determines graph-cache identity, including when API and legacy inputs express the
@@ -282,14 +282,14 @@ gemspecs or running application code.
 literal-string assignments in supported straight-line scopes. Aliases, mutation/escape, closures,
 reflection, and unsupported control flow invalidate inferred values; runtime paths are not guessed.
 
-In unreleased 1.1, the bounded file-relative whitelist also accepts `__FILE__`, implicit `__dir__`, literal/static
+Since 1.1, the bounded file-relative whitelist also accepts `__FILE__`, implicit `__dir__`, literal/static
 string `+`, `File.dirname(absolute_expression)` and `File.expand_path(path, absolute_base)`
 (also `::File`, or one absolute operand for `expand_path`). Operands cannot contain local-variable
 reads or arbitrary calls; the completed result may be assigned to a local. No source is evaluated.
 Source-local core overrides/reflection disable affected inference; arbitrary cross-file core
 monkey-patching is not modeled. See the [resolution guide](GUIDE.md#analysis) for exact limits.
 
-In unreleased 1.1, `rails_imports: true` separately opts into implicit/`self.require_dependency`
+Since 1.1, `rails_imports: true` separately opts into implicit/`self.require_dependency`
 calls. Accepted paths use the same literal/local/static contract, and edges use
 `:require_dependency`. Explicit `load_paths` are searched first for this helper only; ordinary
 `require` resolution is unchanged. Custom receivers are ignored; local helper overrides/reflection
@@ -333,7 +333,7 @@ adding such APIs. This is a technical evaluation, not a newly shipped semantic b
 
 <a id="presets"></a>
 
-## Architecture presets (unreleased 1.1)
+## Architecture presets (1.1+)
 
 `ArchUnit.architecture_preset(name, options = nil)` returns an immutable Checkable `PresetRule`.
 `ArchUnit::PresetOptions.new(project_locator: nil, folders: {})` is its options bag. Names are
@@ -362,9 +362,9 @@ to their selected project root. This preserves the public locator/auto-discovery
 
 <a id="cli"></a>
 
-## CLI contract (unreleased 1.1 milestone)
+## CLI contract (1.1+)
 
-The new executable is development-only until a 1.1 release; it is not included in 1.0.0. It wraps
+The executable requires 1.1 or newer; it is not included in 1.0.0. It wraps
 Checkable rules without changing RSpec/Minitest or the library's default analysis mode.
 
 ~~~sh
@@ -444,7 +444,7 @@ actual work (zero repeated cold counters); diagnostic snapshots are separate fro
 
 <a id="baselines"></a>
 
-### Explicit violation baselines (unreleased 1.1)
+### Explicit violation baselines (1.1+)
 
 `archunit baseline --output FILE.json` evaluates every rule and atomically writes an explicitly
 reviewable accepted-debt document. It refuses existing output without `--force`, non-JSON output

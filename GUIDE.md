@@ -1,12 +1,13 @@
 # ArchUnitRuby user guide
 
-Recipes and operational details for the published 1.0 API and unreleased 1.1 development.
+Recipes and operational details for the 1.x API, including the additions in 1.1.
 Start with the [README](README.md#quickstart), use this guide for complete workflows, and consult
 the [API contract](API.md) for exact semantics. The documentation site follows `main`, not the
-published gem; CLI, baselines, presets, Rails helper imports and caller-owned exclusions are
-unreleased 1.1 features. They are not included in `archunit` 1.0.0.
+published gem. CLI, baselines, presets, Rails helper imports and caller-owned exclusions require
+1.1 or newer; they are not included in 1.0.0. Check [RubyGems](https://rubygems.org/gems/archunit)
+for published versions.
 
-[Projects, selectors and options](#projects) · [Rule recipes](#recipes) · [Test-framework integration](#frameworks) · [Logging and failure reports](#logging) · [Static analysis and Ruby resolution](#analysis) · [Command line (unreleased 1.1)](#cli) · [Architecture presets (unreleased 1.1)](#presets) · [Example project and dogfooding](#example) · [Development and validation](#development) · [Compatibility and migration](#migration)
+[Projects, selectors and options](#projects) · [Rule recipes](#recipes) · [Test-framework integration](#frameworks) · [Logging and failure reports](#logging) · [Static analysis and Ruby resolution](#analysis) · [Command line (1.1+)](#cli) · [Architecture presets (1.1+)](#presets) · [Example project and dogfooding](#example) · [Development and validation](#development) · [Compatibility and migration](#migration)
 
 <a id="projects"></a>
 
@@ -67,7 +68,7 @@ Source-code edits still require `clear_cache: true` in a long-lived process. The
 Negation (`!pattern`), NUL characters, and a bare `/` are rejected with `ArchUnit::UserError`.
 No configuration or application code is executed.
 
-For read-only audits, unreleased 1.1 also accepts caller-owned exclusions without creating or
+For read-only audits, 1.1 also accepts caller-owned exclusions without creating or
 editing a target `.archignore`:
 
 ~~~ ruby
@@ -443,10 +444,10 @@ Existing exclusions, canonical target matching and symlink boundaries still appl
 [path expansion](https://docs.ruby-lang.org/en/3.3/File.html#method-c-expand_path) and
 [`__dir__`](https://docs.ruby-lang.org/en/3.3/Kernel.html#method-i-__dir__) semantics.
 
-### Rails Helper Imports (Opt-in, unreleased 1.1)
+### Rails Helper Imports (Opt-in, 1.1+)
 
-File-relative expression folding above and the Rails helper option below are unreleased 1.1
-features; published 1.0.0 retains its literal/local-literal import contract.
+File-relative expression folding above and the Rails helper option below require 1.1 or newer;
+1.0.0 retains its literal/local-literal import contract.
 
 Enable static `require_dependency` recognition only for code where that name has Rails semantics:
 
@@ -582,10 +583,10 @@ layout within one process.
 
 <a id="cli"></a>
 
-## Command line (unreleased 1.1)
+## Command line (1.1+)
 
-The development checkout adds an `archunit` executable; the published 1.0.0 gem does **not** include
-it. Use these commands from this checkout with its development bundle, or after a future 1.1 release:
+ArchUnitRuby 1.1 adds an `archunit` executable; 1.0.0 does not include it. Run it through Bundler
+to use the version selected by your project's lockfile:
 
 ~~~sh
 bundle exec archunit init
@@ -617,7 +618,7 @@ violations, summary counts, and structured parse diagnostics for malformed sourc
 configured rules and settings without checking them: `configured` / `not_checked` is not a passing
 architecture result. It is not yet a semantic dependency trace or focused-path report.
 
-CLI diagnostics (unreleased 1.1) include an additive schema-1 `analysis` section and per-rule
+CLI diagnostics (1.1+) include an additive schema-1 `analysis` section and per-rule
 scope IDs. Each scope reports its project root, effective source exclusions, actual analysis
 mode, source-file count, unresolved imports/constants, and ambiguous constant references.
 Repeated rules sharing a cached graph share its original counts; different roots, policies,
@@ -640,7 +641,7 @@ evaluate a target Gemfile/gemspec, install its dependencies, or boot Rails. Invo
 still has Bundler's normal Gemfile behavior. RSpec/Minitest remain fully supported; the CLI composes
 the same Checkable rules and is not a replacement for their integrations.
 
-#### Gradual adoption with explicit accepted debt (unreleased 1.1)
+#### Gradual adoption with explicit accepted debt (1.1+)
 
 ```sh
 # Evaluate all rules and explicitly record current supported violations; review this JSON in Git.
@@ -669,7 +670,7 @@ filesystem changes. Review baseline diffs in CI as carefully as rule changes.
 
 <a id="presets"></a>
 
-## Architecture presets (unreleased 1.1)
+## Architecture presets (1.1+)
 
 Presets compose the existing named-layer rules, preserving CheckOptions, empty-selection failures,
 RSpec/Minitest, CLI, and static-analysis limitations. Construction is lazy; no Rails app is booted.

@@ -3,8 +3,34 @@
 The original feature backlog (#47, #48, #54, #55) and the correctness/QA audit fixes (#63-65) are
 merged. PRs #68-70 were reviewed and merged on 2026-10-26; the resulting `main` passed CI, security
 scanning, and documentation deployment. The 1.0.0 preparation and publication below are historical:
-1.0.0 was published and verified in #71. Current main contains unreleased 1.1 development; these
-old evidence counts are not the current suite or authorization to publish a new version.
+1.0.0 was published and verified in #71. The old evidence counts below are historical, not the
+current suite or authorization to publish a new version.
+
+## 1.1.0 release candidate - 2026-11-23
+
+- [x] Merge the roadmap follow-ups (#93–96) and professional documentation (#97).
+- [x] Keep version and local-gem lock at 1.1.0; date the changelog and target 1.1 in installation
+  instructions. Label additive features as 1.1+ without claiming publication before registry proof.
+- [x] Run strict release metadata validation, full coverage/lint/dogfood checks and documentation.
+- [x] Refresh advisory data and pass the locked dependency scanner and vulnerable-fixture control.
+- [x] Strictly build and install the candidate in an isolated gem home; run the installed API/CLI,
+  baseline, preset and documented-example acceptance scripts.
+- [ ] Pass GitHub's compatibility/package/security and pinned real-world canary checks.
+- [ ] Verify the RubyGems trusted publisher uses `dragonsec-ai/ArchUnitRuby`, `release.yml`,
+  environment `release`; never use a publish attempt merely to inspect credentials.
+- [ ] Merge through the normal PR process and verify the exact release `main` revision is green.
+- [ ] Dispatch `Release` for 1.1.0 with maintainer authorization; verify its tag, registry checksum,
+  and a clean RubyGems installation with passing/failing checks before announcing publication.
+
+Preparation is not publication. Until RubyGems lists 1.1.0, 1.0.0 remains the published version.
+The release environment currently has no required approval rules; do not weaken protections or
+bypass review. Repository write permission and RubyGems ownership are separate permissions.
+
+Local candidate evidence (2026-11-23, Windows/Ruby 4.0.6): 898 examples, zero failures, ten native
+symlink skips; 98.69% library line / 92.16% branch coverage; 342 lint-clean files; 204 validated
+documentation pages; 1,411 refreshed advisories with zero findings and the vulnerable-fixture
+control passing. All twelve installed-gem regression/acceptance scripts pass from a fresh gem
+home, including CLI init/check/explain, diagnostics, baselines, presets and README examples.
 
 ## 1.0.0 preparation
 
@@ -42,9 +68,9 @@ refresh, and strict malformed-source diagnostics, plus both dependency-analysis 
 Publication evidence: #71 (registry checksum, tag and clean-project acceptance verified).
 CLI execution/diagnostics (#73, #88), baselines (#89), presets (#90), bounded semantic evaluation
 (#91), and representative Linux performance studies (#92) are merged; roadmap #66 is complete.
-These remain unreleased 1.1 work, not prerequisites for the historical 1.0 API baseline or a claim
-that full method/protocol semantics are implemented. A 1.1 release still needs its own explicit
-readiness check, approval, and publication.
+These additions belong to 1.1, not the historical 1.0 API baseline, and do not claim that full
+method/protocol semantics are implemented. The 1.1 release has its own readiness and publication
+gates above.
 
 ## Audit coverage added
 

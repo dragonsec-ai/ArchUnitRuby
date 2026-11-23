@@ -14,9 +14,9 @@ For questions, unexpected rule output, or feature ideas, search and then open a
 - the smallest architecture rule and project layout that reproduce the behavior;
 - expected and actual violations, with sensitive paths or code removed.
 
-The documented 1.0 API has a [1.x compatibility contract](API.md#compatibility). Development-only
-1.1 features on `main` are labeled separately; include whether you installed from RubyGems or a
-Git checkout. See [release status](README.md#availability) and [limitations](README.md#limitations).
+The documented API has a [1.x compatibility contract](API.md#compatibility). Features added in
+1.1 are labeled separately; include your exact version and whether you installed from RubyGems or
+a Git checkout. See [release status](README.md#availability) and [limitations](README.md#limitations).
 
 Suspected vulnerabilities belong in a private report following [SECURITY.md](SECURITY.md), never in
 a public support issue.

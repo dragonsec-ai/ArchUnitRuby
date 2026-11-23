@@ -1,6 +1,10 @@
 # Changelog
 
-## 1.1.0 (unreleased)
+## 1.1.0 - 2026-11-23
+
+Additive release over 1.0.0. Import-only analysis remains the default; the CLI and Rails helpers
+are opt-in. Existing RSpec/Minitest rules keep the 1.x API contract. Correctness fixes can reveal
+previously missed dependencies, so review newly detected violations rather than suppressing them.
 
 - Rework getting-started documentation with a concise README, preserved user guide, explicit
   published/development availability, canonical organization URLs and executable example/link checks.
@@ -31,12 +35,15 @@
 
 - Add an opt-in `archunit` executable with non-destructive configuration initialization, named
   Checkable rules, check/explain commands, text or versioned JSON diagnostics, and explicit
-  success/violation/error exit codes. This is development work, not a published 1.1.0 release.
+  success/violation/error exit codes.
+
+- Add isolated Linux performance studies and a bounded semantic evaluation for maintainers;
+  these do not add a runtime analyzer dependency or claim full method/protocol semantics.
 
 ## 1.0.0 - 2026-10-26
 
 First stable API baseline. The previously unreleased 0.0.2 development work is included here;
-0.0.1 remains the preceding published version. See the README's migration notes before upgrading.
+0.0.1 remains the preceding published version. See the user guide's migration notes before upgrading.
 
 - Fail closed on malformed included Ruby in dependency graphs and AST metrics, with structured
   source diagnostics and profile counters instead of silently treating incomplete analysis as clean.
