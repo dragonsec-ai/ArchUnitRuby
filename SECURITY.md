@@ -29,7 +29,7 @@ Run architecture analysis with the same filesystem permissions you would grant a
 review exported reports before sharing them because paths and dependency names may reveal project
 structure.
 
-The unreleased CLI evaluates trusted `.archunit.rb` rule configuration as executable Ruby, including
+The CLI (1.1+) evaluates trusted `.archunit.rb` rule configuration as executable Ruby, including
 during `explain`. It is not a sandbox. For an untrusted target, supply your own trusted `--config`
 and do not run its Gemfile, tests or application. Baselines are JSON accepted-debt data, not code,
 but changes to them and source exclusions still require review. Concurrent hostile filesystem
