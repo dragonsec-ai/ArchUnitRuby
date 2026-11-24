@@ -103,7 +103,7 @@ module ExtractionBenchmark
   # Runs one cold graph build and one same-process graph-cache lookup.
   class Runner
     RunValues = Data.define(
-      :cold_graph, :cold_profile, :warm_graph, :warm_profile, :before, :after_cold
+      :cold_graph, :cold_profile, :warm_graph, :warm_profile, :before, :after_cold, :after_gc
     )
     private_constant :RunValues
 
@@ -129,7 +129,8 @@ module ExtractionBenchmark
       after_cold = memory_snapshot
       warm_graph, warm_profile = extract_profiled
       RunValues.new(
-        cold_graph:, cold_profile:, warm_graph:, warm_profile:, before:, after_cold:
+        cold_graph:, cold_profile:, warm_graph:, warm_profile:, before:, after_cold:,
+        after_gc: retained_snapshot
       )
     end
 
@@ -144,13 +145,13 @@ module ExtractionBenchmark
 
     def benchmark_result(values)
       {
-        corpus: @configuration.slice(:files, :gems, :imports_per_file, :excluded_files,
-                                     :dependency_analysis),
+        corpus: corpus_description,
         graph_edges: values.cold_graph.length,
         graph_sha256: graph_digest(values.cold_graph),
         graph_cache_reused: values.cold_graph.equal?(values.warm_graph),
         cold: values.cold_profile.to_h.merge(memory_delta(values.before, values.after_cold)),
         warm: values.warm_profile.to_h,
+        retained: retained_memory(values),
         runtime: { ruby: RUBY_VERSION, platform: RUBY_PLATFORM }
       }
     end
@@ -158,6 +159,24 @@ module ExtractionBenchmark
     def graph_digest(graph)
       edges = graph.map { |edge| edge.to_h.merge(evidence: edge.evidence.map(&:to_h)) }
       Digest::SHA256.hexdigest(JSON.generate(edges))
+    end
+
+    def corpus_description
+      @configuration.slice(:files, :gems, :imports_per_file, :excluded_files, :dependency_analysis)
+    end
+
+    def retained_snapshot
+      GC.start
+      memory_snapshot
+    end
+
+    def retained_memory(values)
+      {
+        ruby_heap_bytes: values.after_gc[:ruby_heap_bytes],
+        ruby_heap_growth_bytes: values.after_gc[:ruby_heap_bytes] - values.before[:ruby_heap_bytes],
+        heap_live_slots_growth: values.after_gc[:heap_live_slots] - values.before[:heap_live_slots],
+        process_peak_rss_kb: values.after_gc[:process_peak_rss_kb]
+      }
     end
 
     def memory_snapshot

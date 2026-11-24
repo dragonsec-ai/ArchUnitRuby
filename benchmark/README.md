@@ -14,6 +14,10 @@ are work performed during cold analysis, not retained-memory measurements. `--ex
 adds a deliberately malformed `vendor/` tree; source counts must still be requested files + 1
 (the generator's shared source), and no excluded file may be parsed.
 
+`retained` reports Ruby-heap growth after an explicit GC following both timed operations; this
+extra GC is outside the cold/warm timers. Peak RSS remains a whole-process high-water mark,
+including fixture generation, and pre-GC cold heap growth can vary with collection timing.
+
 For example:
 
 ```sh

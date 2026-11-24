@@ -53,6 +53,8 @@ RSpec.describe ExtractionBenchmark do
     expect(report.dig('cold', 'memory', 'ruby_heap_bytes')).to be_positive
     expect(report.dig('cold', 'memory_growth', 'allocated_objects')).to be_positive
     expect(report.fetch('graph_sha256')).to match(/\A[0-9a-f]{64}\z/)
+    expect(report.dig('retained', 'ruby_heap_bytes')).to be_positive
+    expect(report.dig('retained', 'ruby_heap_growth_bytes')).to be_a(Integer)
   end
 
   it 'prunes malformed excluded trees while keeping the exact graph and evidence digest' do
