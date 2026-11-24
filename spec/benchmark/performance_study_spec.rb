@@ -6,6 +6,13 @@ require 'yaml'
 require_relative '../../benchmark/study/run'
 
 RSpec.describe PerformanceStudy::Runner do
+  it 'keeps the isolated path-gem lock synchronized with the candidate version' do
+    lock = File.read(File.expand_path('../../benchmark/study/Gemfile.lock', __dir__))
+    version = Regexp.escape(ArchUnit::VERSION)
+    expect(lock).to match(/^    archunit \(#{version}\)$/)
+    expect(lock).to match(/^  archunit \(#{version}\)$/)
+  end
+
   it 'checks permitted, forbidden and changed-source policies across all shapes and densities' do
     results = described_class.run(pairs: 4, trials: 1, compare: false, startup: false)
     expect(results.length).to eq(8)
