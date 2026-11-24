@@ -1,0 +1,1109 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-24",
+  "run_url": "https://github.com/dragonsec-ai/ArchUnitRuby/actions/runs/45391662012",
+  "baseline_ref": "v1.1.0",
+  "baseline_commit": "3dd615305b30428be7b5205cf396d360bb0833b4",
+  "candidate_commit": "78653585f47c72a487687e6df210149c8646e643",
+  "method": "Three alternating baseline/candidate fresh processes per case using the identical updated extraction benchmark. Sample-array indexes correspond to trials 1, 2 and 3. Fixture generation is outside profiled cold analysis; file caches are not flushed. Cold allocations are work, heap_growth_bytes is a pre-GC snapshot, retained_heap_growth_bytes/slots follow explicit GC after both timed operations, and process peak RSS includes fixture generation. Windows RSS is unavailable (null). No portable timing gate or competitor speed claim.",
+  "platforms": [
+    {
+      "platform": "ubuntu-latest",
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux"
+      },
+      "cases": [
+        {
+          "name": "excluded-1000",
+          "corpus": {
+            "files": 1000,
+            "gems": 2,
+            "imports_per_file": 0,
+            "excluded_files": 3000,
+            "dependency_analysis": "imports_and_constants"
+          },
+          "source_files": 1001,
+          "graph_edges": 2001,
+          "graph_sha256": "5774d7f750a28a281d9cfabbcc866f62ea47fc7c58ea15aa076ed42b7327f2e2",
+          "all_graphs_and_evidence_equal": true,
+          "all_warm_graphs_reused": true,
+          "samples": {
+            "baseline": {
+              "cold_seconds": [
+                0.179575,
+                0.181208,
+                0.185437
+              ],
+              "discovery_seconds": [
+                0.068841,
+                0.068878,
+                0.072601
+              ],
+              "warm_seconds": [
+                0.000113,
+                0.000117,
+                0.000139
+              ],
+              "allocated_objects": [
+                848960,
+                848960,
+                848960
+              ],
+              "heap_growth_bytes": [
+                3076117,
+                3076277,
+                3072277
+              ],
+              "peak_rss_kb": [
+                40200,
+                40476,
+                40456
+              ],
+              "retained_heap_growth_bytes": [
+                857117,
+                857117,
+                857117
+              ],
+              "retained_heap_slots_growth": [
+                13602,
+                13603,
+                13603
+              ],
+              "retained_peak_rss_kb": [
+                40200,
+                40476,
+                40456
+              ]
+            },
+            "candidate": {
+              "cold_seconds": [
+                0.103522,
+                0.102535,
+                0.100945
+              ],
+              "discovery_seconds": [
+                0.003035,
+                0.003,
+                0.002965
+              ],
+              "warm_seconds": [
+                0.000933,
+                0.000902,
+                0.000102
+              ],
+              "allocated_objects": [
+                490918,
+                490918,
+                490918
+              ],
+              "heap_growth_bytes": [
+                6319773,
+                6320293,
+                3210741
+              ],
+              "peak_rss_kb": [
+                40840,
+                40860,
+                40904
+              ],
+              "retained_heap_growth_bytes": [
+                854189,
+                854189,
+                854189
+              ],
+              "retained_heap_slots_growth": [
+                13593,
+                13593,
+                13593
+              ],
+              "retained_peak_rss_kb": [
+                40840,
+                40860,
+                40904
+              ]
+            }
+          },
+          "medians": {
+            "baseline": {
+              "cold_seconds": 0.181208,
+              "discovery_seconds": 0.068878,
+              "warm_seconds": 0.000117,
+              "allocated_objects": 848960,
+              "heap_growth_bytes": 3076117,
+              "peak_rss_kb": 40456,
+              "retained_heap_growth_bytes": 857117,
+              "retained_heap_slots_growth": 13603,
+              "retained_peak_rss_kb": 40456
+            },
+            "candidate": {
+              "cold_seconds": 0.102535,
+              "discovery_seconds": 0.003,
+              "warm_seconds": 0.000902,
+              "allocated_objects": 490918,
+              "heap_growth_bytes": 6319773,
+              "peak_rss_kb": 40860,
+              "retained_heap_growth_bytes": 854189,
+              "retained_heap_slots_growth": 13593,
+              "retained_peak_rss_kb": 40860
+            }
+          }
+        },
+        {
+          "name": "imports-1000",
+          "corpus": {
+            "files": 1000,
+            "gems": 2,
+            "imports_per_file": 3,
+            "excluded_files": 0,
+            "dependency_analysis": "imports_and_constants"
+          },
+          "source_files": 1001,
+          "graph_edges": 4001,
+          "graph_sha256": "3c8f2a84037a035f4a08fb7cf9c4eaf3b685f4b63c9ef52a25f868b3df3aed26",
+          "all_graphs_and_evidence_equal": true,
+          "all_warm_graphs_reused": true,
+          "samples": {
+            "baseline": {
+              "cold_seconds": [
+                0.296839,
+                0.297147,
+                0.299422
+              ],
+              "discovery_seconds": [
+                0.070016,
+                0.069896,
+                0.070007
+              ],
+              "warm_seconds": [
+                0.000122,
+                0.000124,
+                0.000119
+              ],
+              "allocated_objects": [
+                1180391,
+                1180391,
+                1180391
+              ],
+              "heap_growth_bytes": [
+                5318037,
+                10880641,
+                5322717
+              ],
+              "peak_rss_kb": [
+                44784,
+                45684,
+                44520
+              ],
+              "retained_heap_growth_bytes": [
+                2179181,
+                2179181,
+                2179181
+              ],
+              "retained_heap_slots_growth": [
+                32693,
+                32693,
+                32692
+              ],
+              "retained_peak_rss_kb": [
+                44784,
+                45684,
+                44520
+              ]
+            },
+            "candidate": {
+              "cold_seconds": [
+                0.233317,
+                0.227768,
+                0.220467
+              ],
+              "discovery_seconds": [
+                0.002944,
+                0.002889,
+                0.00292
+              ],
+              "warm_seconds": [
+                0.000122,
+                0.000114,
+                0.000132
+              ],
+              "allocated_objects": [
+                822523,
+                822523,
+                822523
+              ],
+              "heap_growth_bytes": [
+                5471989,
+                4789349,
+                10909153
+              ],
+              "peak_rss_kb": [
+                43720,
+                44672,
+                45828
+              ],
+              "retained_heap_growth_bytes": [
+                2176253,
+                2176253,
+                2176253
+              ],
+              "retained_heap_slots_growth": [
+                32687,
+                32688,
+                32688
+              ],
+              "retained_peak_rss_kb": [
+                43720,
+                44672,
+                45828
+              ]
+            }
+          },
+          "medians": {
+            "baseline": {
+              "cold_seconds": 0.297147,
+              "discovery_seconds": 0.070007,
+              "warm_seconds": 0.000122,
+              "allocated_objects": 1180391,
+              "heap_growth_bytes": 5322717,
+              "peak_rss_kb": 44784,
+              "retained_heap_growth_bytes": 2179181,
+              "retained_heap_slots_growth": 32693,
+              "retained_peak_rss_kb": 44784
+            },
+            "candidate": {
+              "cold_seconds": 0.227768,
+              "discovery_seconds": 0.00292,
+              "warm_seconds": 0.000122,
+              "allocated_objects": 822523,
+              "heap_growth_bytes": 5471989,
+              "peak_rss_kb": 44672,
+              "retained_heap_growth_bytes": 2176253,
+              "retained_heap_slots_growth": 32688,
+              "retained_peak_rss_kb": 44672
+            }
+          }
+        },
+        {
+          "name": "sparse-10000",
+          "corpus": {
+            "files": 10000,
+            "gems": 2,
+            "imports_per_file": 0,
+            "excluded_files": 0,
+            "dependency_analysis": "imports_and_constants"
+          },
+          "source_files": 10001,
+          "graph_edges": 20001,
+          "graph_sha256": "e6030df42463fb67069568d3753ee1ab73041ab37d90c23b8d196250c403b75e",
+          "all_graphs_and_evidence_equal": true,
+          "all_warm_graphs_reused": true,
+          "samples": {
+            "baseline": {
+              "cold_seconds": [
+                1.750284,
+                1.742093,
+                1.787126
+              ],
+              "discovery_seconds": [
+                0.720229,
+                0.707029,
+                0.716253
+              ],
+              "warm_seconds": [
+                0.000156,
+                0.000179,
+                0.000239
+              ],
+              "allocated_objects": [
+                8453786,
+                8453786,
+                8453786
+              ],
+              "heap_growth_bytes": [
+                28868765,
+                61247741,
+                61009221
+              ],
+              "peak_rss_kb": [
+                82824,
+                97928,
+                97212
+              ],
+              "retained_heap_growth_bytes": [
+                8417117,
+                8417117,
+                8417117
+              ],
+              "retained_heap_slots_growth": [
+                130598,
+                130599,
+                130598
+              ],
+              "retained_peak_rss_kb": [
+                82824,
+                97808,
+                97108
+              ]
+            },
+            "candidate": {
+              "cold_seconds": [
+                1.078077,
+                1.049611,
+                1.085911
+              ],
+              "discovery_seconds": [
+                0.030216,
+                0.030404,
+                0.030774
+              ],
+              "warm_seconds": [
+                0.000178,
+                0.000147,
+                0.000191
+              ],
+              "allocated_objects": [
+                4891912,
+                4891912,
+                4891912
+              ],
+              "heap_growth_bytes": [
+                28470717,
+                29771517,
+                26913357
+              ],
+              "peak_rss_kb": [
+                83144,
+                82520,
+                90892
+              ],
+              "retained_heap_growth_bytes": [
+                8414189,
+                8414189,
+                8414189
+              ],
+              "retained_heap_slots_growth": [
+                130593,
+                130594,
+                130593
+              ],
+              "retained_peak_rss_kb": [
+                83072,
+                82356,
+                90772
+              ]
+            }
+          },
+          "medians": {
+            "baseline": {
+              "cold_seconds": 1.750284,
+              "discovery_seconds": 0.716253,
+              "warm_seconds": 0.000179,
+              "allocated_objects": 8453786,
+              "heap_growth_bytes": 61009221,
+              "peak_rss_kb": 97212,
+              "retained_heap_growth_bytes": 8417117,
+              "retained_heap_slots_growth": 130598,
+              "retained_peak_rss_kb": 97108
+            },
+            "candidate": {
+              "cold_seconds": 1.078077,
+              "discovery_seconds": 0.030404,
+              "warm_seconds": 0.000178,
+              "allocated_objects": 4891912,
+              "heap_growth_bytes": 28470717,
+              "peak_rss_kb": 83144,
+              "retained_heap_growth_bytes": 8414189,
+              "retained_heap_slots_growth": 130593,
+              "retained_peak_rss_kb": 83072
+            }
+          }
+        },
+        {
+          "name": "sparse-5000",
+          "corpus": {
+            "files": 5000,
+            "gems": 2,
+            "imports_per_file": 0,
+            "excluded_files": 0,
+            "dependency_analysis": "imports_and_constants"
+          },
+          "source_files": 5001,
+          "graph_edges": 10001,
+          "graph_sha256": "124950cdd40283daaad7784b48515256398efb305d91350b4113bb233217c0b3",
+          "all_graphs_and_evidence_equal": true,
+          "all_warm_graphs_reused": true,
+          "samples": {
+            "baseline": {
+              "cold_seconds": [
+                0.879333,
+                0.872425,
+                0.872172
+              ],
+              "discovery_seconds": [
+                0.345165,
+                0.345136,
+                0.344143
+              ],
+              "warm_seconds": [
+                0.000153,
+                0.000169,
+                0.000145
+              ],
+              "allocated_objects": [
+                4228784,
+                4228784,
+                4228784
+              ],
+              "heap_growth_bytes": [
+                14526157,
+                26349069,
+                14447197
+              ],
+              "peak_rss_kb": [
+                58760,
+                64808,
+                58496
+              ],
+              "retained_heap_growth_bytes": [
+                4217117,
+                4217117,
+                4217117
+              ],
+              "retained_heap_slots_growth": [
+                65599,
+                65598,
+                65598
+              ],
+              "retained_peak_rss_kb": [
+                58692,
+                64644,
+                58364
+              ]
+            },
+            "candidate": {
+              "cold_seconds": [
+                0.523664,
+                0.519039,
+                0.516518
+              ],
+              "discovery_seconds": [
+                0.015293,
+                0.015066,
+                0.015477
+              ],
+              "warm_seconds": [
+                0.000192,
+                0.000159,
+                0.000157
+              ],
+              "allocated_objects": [
+                2446912,
+                2446912,
+                2446912
+              ],
+              "heap_growth_bytes": [
+                29636461,
+                26407045,
+                29953301
+              ],
+              "peak_rss_kb": [
+                64408,
+                62772,
+                64588
+              ],
+              "retained_heap_growth_bytes": [
+                4214189,
+                4214189,
+                4214189
+              ],
+              "retained_heap_slots_growth": [
+                65594,
+                65593,
+                65593
+              ],
+              "retained_peak_rss_kb": [
+                64384,
+                62632,
+                64456
+              ]
+            }
+          },
+          "medians": {
+            "baseline": {
+              "cold_seconds": 0.872425,
+              "discovery_seconds": 0.345136,
+              "warm_seconds": 0.000153,
+              "allocated_objects": 4228784,
+              "heap_growth_bytes": 14526157,
+              "peak_rss_kb": 58760,
+              "retained_heap_growth_bytes": 4217117,
+              "retained_heap_slots_growth": 65598,
+              "retained_peak_rss_kb": 58692
+            },
+            "candidate": {
+              "cold_seconds": 0.519039,
+              "discovery_seconds": 0.015293,
+              "warm_seconds": 0.000159,
+              "allocated_objects": 2446912,
+              "heap_growth_bytes": 29636461,
+              "peak_rss_kb": 64408,
+              "retained_heap_growth_bytes": 4214189,
+              "retained_heap_slots_growth": 65593,
+              "retained_peak_rss_kb": 64384
+            }
+          }
+        }
+      ]
+    },
+    {
+      "platform": "windows-latest",
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt"
+      },
+      "cases": [
+        {
+          "name": "excluded-1000",
+          "corpus": {
+            "files": 1000,
+            "gems": 2,
+            "imports_per_file": 0,
+            "excluded_files": 3000,
+            "dependency_analysis": "imports_and_constants"
+          },
+          "source_files": 1001,
+          "graph_edges": 2001,
+          "graph_sha256": "5774d7f750a28a281d9cfabbcc866f62ea47fc7c58ea15aa076ed42b7327f2e2",
+          "all_graphs_and_evidence_equal": true,
+          "all_warm_graphs_reused": true,
+          "samples": {
+            "baseline": {
+              "cold_seconds": [
+                0.628046,
+                0.603181,
+                0.617796
+              ],
+              "discovery_seconds": [
+                0.317824,
+                0.316312,
+                0.315977
+              ],
+              "warm_seconds": [
+                0.001286,
+                0.001236,
+                0.001406
+              ],
+              "allocated_objects": [
+                910278,
+                910278,
+                910278
+              ],
+              "heap_growth_bytes": [
+                4025253,
+                6673909,
+                6671749
+              ],
+              "peak_rss_kb": [
+                null,
+                null,
+                null
+              ],
+              "retained_heap_growth_bytes": [
+                854189,
+                854189,
+                854189
+              ],
+              "retained_heap_slots_growth": [
+                13601,
+                13601,
+                13601
+              ],
+              "retained_peak_rss_kb": [
+                null,
+                null,
+                null
+              ]
+            },
+            "candidate": {
+              "cold_seconds": [
+                0.366345,
+                0.365392,
+                0.364036
+              ],
+              "discovery_seconds": [
+                0.096164,
+                0.095895,
+                0.096541
+              ],
+              "warm_seconds": [
+                0.001267,
+                0.001252,
+                0.001276
+              ],
+              "allocated_objects": [
+                512016,
+                512016,
+                512016
+              ],
+              "heap_growth_bytes": [
+                5433349,
+                2249485,
+                2356405
+              ],
+              "peak_rss_kb": [
+                null,
+                null,
+                null
+              ],
+              "retained_heap_growth_bytes": [
+                854077,
+                854157,
+                854157
+              ],
+              "retained_heap_slots_growth": [
+                13592,
+                13593,
+                13593
+              ],
+              "retained_peak_rss_kb": [
+                null,
+                null,
+                null
+              ]
+            }
+          },
+          "medians": {
+            "baseline": {
+              "cold_seconds": 0.617796,
+              "discovery_seconds": 0.316312,
+              "warm_seconds": 0.001286,
+              "allocated_objects": 910278,
+              "heap_growth_bytes": 6671749,
+              "peak_rss_kb": null,
+              "retained_heap_growth_bytes": 854189,
+              "retained_heap_slots_growth": 13601,
+              "retained_peak_rss_kb": null
+            },
+            "candidate": {
+              "cold_seconds": 0.365392,
+              "discovery_seconds": 0.096164,
+              "warm_seconds": 0.001267,
+              "allocated_objects": 512016,
+              "heap_growth_bytes": 2356405,
+              "peak_rss_kb": null,
+              "retained_heap_growth_bytes": 854157,
+              "retained_heap_slots_growth": 13593,
+              "retained_peak_rss_kb": null
+            }
+          }
+        },
+        {
+          "name": "imports-1000",
+          "corpus": {
+            "files": 1000,
+            "gems": 2,
+            "imports_per_file": 3,
+            "excluded_files": 0,
+            "dependency_analysis": "imports_and_constants"
+          },
+          "source_files": 1001,
+          "graph_edges": 4001,
+          "graph_sha256": "3c8f2a84037a035f4a08fb7cf9c4eaf3b685f4b63c9ef52a25f868b3df3aed26",
+          "all_graphs_and_evidence_equal": true,
+          "all_warm_graphs_reused": true,
+          "samples": {
+            "baseline": {
+              "cold_seconds": [
+                0.971425,
+                0.984057,
+                0.992683
+              ],
+              "discovery_seconds": [
+                0.33084,
+                0.335338,
+                0.334054
+              ],
+              "warm_seconds": [
+                0.001278,
+                0.001209,
+                0.001308
+              ],
+              "allocated_objects": [
+                1285693,
+                1285692,
+                1285693
+              ],
+              "heap_growth_bytes": [
+                5487301,
+                5483301,
+                5550453
+              ],
+              "peak_rss_kb": [
+                null,
+                null,
+                null
+              ],
+              "retained_heap_growth_bytes": [
+                2176381,
+                2176381,
+                2176253
+              ],
+              "retained_heap_slots_growth": [
+                32691,
+                32691,
+                32691
+              ],
+              "retained_peak_rss_kb": [
+                null,
+                null,
+                null
+              ]
+            },
+            "candidate": {
+              "cold_seconds": [
+                0.742433,
+                0.724763,
+                0.729895
+              ],
+              "discovery_seconds": [
+                0.102825,
+                0.096019,
+                0.095302
+              ],
+              "warm_seconds": [
+                0.001276,
+                0.001261,
+                0.001241
+              ],
+              "allocated_objects": [
+                887626,
+                887621,
+                887622
+              ],
+              "heap_growth_bytes": [
+                9597951,
+                9530151,
+                12075143
+              ],
+              "peak_rss_kb": [
+                null,
+                null,
+                null
+              ],
+              "retained_heap_growth_bytes": [
+                2176269,
+                2176269,
+                2176269
+              ],
+              "retained_heap_slots_growth": [
+                32686,
+                32686,
+                32686
+              ],
+              "retained_peak_rss_kb": [
+                null,
+                null,
+                null
+              ]
+            }
+          },
+          "medians": {
+            "baseline": {
+              "cold_seconds": 0.984057,
+              "discovery_seconds": 0.334054,
+              "warm_seconds": 0.001278,
+              "allocated_objects": 1285693,
+              "heap_growth_bytes": 5487301,
+              "peak_rss_kb": null,
+              "retained_heap_growth_bytes": 2176381,
+              "retained_heap_slots_growth": 32691,
+              "retained_peak_rss_kb": null
+            },
+            "candidate": {
+              "cold_seconds": 0.729895,
+              "discovery_seconds": 0.096019,
+              "warm_seconds": 0.001261,
+              "allocated_objects": 887622,
+              "heap_growth_bytes": 9597951,
+              "peak_rss_kb": null,
+              "retained_heap_growth_bytes": 2176269,
+              "retained_heap_slots_growth": 32686,
+              "retained_peak_rss_kb": null
+            }
+          }
+        },
+        {
+          "name": "sparse-10000",
+          "corpus": {
+            "files": 10000,
+            "gems": 2,
+            "imports_per_file": 0,
+            "excluded_files": 0,
+            "dependency_analysis": "imports_and_constants"
+          },
+          "source_files": 10001,
+          "graph_edges": 20001,
+          "graph_sha256": "e6030df42463fb67069568d3753ee1ab73041ab37d90c23b8d196250c403b75e",
+          "all_graphs_and_evidence_equal": true,
+          "all_warm_graphs_reused": true,
+          "samples": {
+            "baseline": {
+              "cold_seconds": [
+                6.515925,
+                5.921527,
+                5.918766
+              ],
+              "discovery_seconds": [
+                3.209089,
+                3.241515,
+                3.228196
+              ],
+              "warm_seconds": [
+                0.001263,
+                0.001257,
+                0.001337
+              ],
+              "allocated_objects": [
+                9064087,
+                9064085,
+                9064085
+              ],
+              "heap_growth_bytes": [
+                55033381,
+                49918317,
+                50397477
+              ],
+              "peak_rss_kb": [
+                null,
+                null,
+                null
+              ],
+              "retained_heap_growth_bytes": [
+                8414189,
+                8414189,
+                8414189
+              ],
+              "retained_heap_slots_growth": [
+                130597,
+                130597,
+                130597
+              ],
+              "retained_peak_rss_kb": [
+                null,
+                null,
+                null
+              ]
+            },
+            "candidate": {
+              "cold_seconds": [
+                3.688421,
+                3.695359,
+                3.659328
+              ],
+              "discovery_seconds": [
+                0.951477,
+                0.96397,
+                0.962094
+              ],
+              "warm_seconds": [
+                0.001338,
+                0.001252,
+                0.001237
+              ],
+              "allocated_objects": [
+                5102011,
+                5102013,
+                5102011
+              ],
+              "heap_growth_bytes": [
+                55645629,
+                55831749,
+                49947005
+              ],
+              "peak_rss_kb": [
+                null,
+                null,
+                null
+              ],
+              "retained_heap_growth_bytes": [
+                8414077,
+                8414077,
+                8414077
+              ],
+              "retained_heap_slots_growth": [
+                130592,
+                130592,
+                130592
+              ],
+              "retained_peak_rss_kb": [
+                null,
+                null,
+                null
+              ]
+            }
+          },
+          "medians": {
+            "baseline": {
+              "cold_seconds": 5.921527,
+              "discovery_seconds": 3.228196,
+              "warm_seconds": 0.001263,
+              "allocated_objects": 9064085,
+              "heap_growth_bytes": 50397477,
+              "peak_rss_kb": null,
+              "retained_heap_growth_bytes": 8414189,
+              "retained_heap_slots_growth": 130597,
+              "retained_peak_rss_kb": null
+            },
+            "candidate": {
+              "cold_seconds": 3.688421,
+              "discovery_seconds": 0.962094,
+              "warm_seconds": 0.001252,
+              "allocated_objects": 5102011,
+              "heap_growth_bytes": 55645629,
+              "peak_rss_kb": null,
+              "retained_heap_growth_bytes": 8414077,
+              "retained_heap_slots_growth": 130592,
+              "retained_peak_rss_kb": null
+            }
+          }
+        },
+        {
+          "name": "sparse-5000",
+          "corpus": {
+            "files": 5000,
+            "gems": 2,
+            "imports_per_file": 0,
+            "excluded_files": 0,
+            "dependency_analysis": "imports_and_constants"
+          },
+          "source_files": 5001,
+          "graph_edges": 10001,
+          "graph_sha256": "124950cdd40283daaad7784b48515256398efb305d91350b4113bb233217c0b3",
+          "all_graphs_and_evidence_equal": true,
+          "all_warm_graphs_reused": true,
+          "samples": {
+            "baseline": {
+              "cold_seconds": [
+                3.103572,
+                2.946973,
+                2.93277
+              ],
+              "discovery_seconds": [
+                1.691806,
+                1.629993,
+                1.631308
+              ],
+              "warm_seconds": [
+                0.001258,
+                0.001236,
+                0.001256
+              ],
+              "allocated_objects": [
+                4534083,
+                4534085,
+                4534083
+              ],
+              "heap_growth_bytes": [
+                30523909,
+                30524989,
+                30526109
+              ],
+              "peak_rss_kb": [
+                null,
+                null,
+                null
+              ],
+              "retained_heap_growth_bytes": [
+                4214189,
+                4214189,
+                4214189
+              ],
+              "retained_heap_slots_growth": [
+                65597,
+                65597,
+                65597
+              ],
+              "retained_peak_rss_kb": [
+                null,
+                null,
+                null
+              ]
+            },
+            "candidate": {
+              "cold_seconds": [
+                1.809236,
+                1.802747,
+                1.821017
+              ],
+              "discovery_seconds": [
+                0.476424,
+                0.470249,
+                0.482749
+              ],
+              "warm_seconds": [
+                0.00128,
+                0.001289,
+                0.001301
+              ],
+              "allocated_objects": [
+                2552011,
+                2552011,
+                2552011
+              ],
+              "heap_growth_bytes": [
+                23998093,
+                23963933,
+                24006573
+              ],
+              "peak_rss_kb": [
+                null,
+                null,
+                null
+              ],
+              "retained_heap_growth_bytes": [
+                4214077,
+                4214077,
+                4214077
+              ],
+              "retained_heap_slots_growth": [
+                65592,
+                65592,
+                65592
+              ],
+              "retained_peak_rss_kb": [
+                null,
+                null,
+                null
+              ]
+            }
+          },
+          "medians": {
+            "baseline": {
+              "cold_seconds": 2.946973,
+              "discovery_seconds": 1.631308,
+              "warm_seconds": 0.001256,
+              "allocated_objects": 4534083,
+              "heap_growth_bytes": 30524989,
+              "peak_rss_kb": null,
+              "retained_heap_growth_bytes": 4214189,
+              "retained_heap_slots_growth": 65597,
+              "retained_peak_rss_kb": null
+            },
+            "candidate": {
+              "cold_seconds": 1.809236,
+              "discovery_seconds": 0.476424,
+              "warm_seconds": 0.001289,
+              "allocated_objects": 2552011,
+              "heap_growth_bytes": 23998093,
+              "peak_rss_kb": null,
+              "retained_heap_growth_bytes": 4214077,
+              "retained_heap_slots_growth": 65592,
+              "retained_peak_rss_kb": null
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

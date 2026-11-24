@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
-require 'find'
 require 'pathname'
 require_relative '../error/technical_error'
 require_relative '../error/user_error'
 require_relative 'arch_ignore'
+require_relative 'source_walker'
 require_relative '../common/fluentapi/check_options'
 
 module ArchUnit
   # Ruby-specific project discovery and source extraction.
-  # rubocop:disable-next Metrics/ModuleLength -- One source policy keeps graphs and metrics aligned.
   module Extraction
     DEFAULT_EXCLUDED_DIRECTORIES = %w[
       .bundle
@@ -64,16 +63,7 @@ module ArchUnit
     private_class_method :resolve_project_exclude_patterns
 
     def source_files_under(root, exclude_patterns)
-      Find.find(root.to_s).filter_map do |entry|
-        stat = File.lstat(entry)
-        next if stat.symlink?
-
-        if stat.directory?
-          Find.prune if excluded_path?(entry, root, exclude_patterns)
-        elsif ruby_source_file?(entry, stat) && !excluded_path?(entry, root, exclude_patterns)
-          relative_identifier(entry, root).freeze
-        end
-      end
+      SourceWalker.new(root, exclude_patterns).files
     end
     private_class_method :source_files_under
 
@@ -110,11 +100,6 @@ module ArchUnit
     end
     private_class_method :normalize_exclude_pattern
 
-    def ruby_source_file?(entry, stat)
-      stat.file? && File.extname(entry) == '.rb'
-    end
-    private_class_method :ruby_source_file?
-
     def source_root(value)
       value = value.to_path if value.respond_to?(:to_path)
       unless value.is_a?(String) && !value.empty?
@@ -129,30 +114,5 @@ module ArchUnit
       raise TechnicalError, "could not enumerate Ruby source files: #{e.message}"
     end
     private_class_method :source_root
-
-    def excluded_path?(entry, root, exclude_patterns)
-      return false if entry == root.to_s
-
-      relative = relative_identifier(entry, root)
-      exclude_patterns.any? do |pattern|
-        exclude_pattern_matches?(pattern, relative, File.basename(entry))
-      end
-    end
-    private_class_method :excluded_path?
-
-    def exclude_pattern_matches?(pattern, relative, basename)
-      flags = File::FNM_DOTMATCH | File::FNM_PATHNAME
-      anchored = pattern.start_with?('/')
-      candidate = pattern.delete_prefix('/')
-      target = anchored || candidate.include?('/') ? relative : basename
-
-      File.fnmatch?(candidate, target, flags)
-    end
-    private_class_method :exclude_pattern_matches?
-
-    def relative_identifier(entry, root)
-      Pathname.new(entry).relative_path_from(root).to_s.tr('\\', '/')
-    end
-    private_class_method :relative_identifier
   end
 end

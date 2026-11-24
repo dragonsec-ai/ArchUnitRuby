@@ -1,0 +1,633 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-24",
+  "baseline_ref": "v1.1.0",
+  "baseline_commit": "3dd615305b30428be7b5205cf396d360bb0833b4",
+  "candidate_branch": "perf/source-walk-100",
+  "candidate_version": "1.1.1 (unreleased)",
+  "method": "Three alternating baseline/candidate fresh processes per shape, same benchmark/extraction.rb harness. Fixture generation is outside profiled analysis. Full graph/evidence digests and cache/source counts checked per pair. Windows exposes no process peak RSS here. Timing samples are machine- and load-dependent; allocation counts are cold-analysis totals, not retained memory.",
+  "summary": [
+    {
+      "name": "excluded-1000",
+      "pairs": 3,
+      "before_cold": 1.420008,
+      "after_cold": 0.831067,
+      "before_discovery": 0.773813,
+      "after_discovery": 0.199927,
+      "before_objects": 1046126,
+      "after_objects": 527204,
+      "digest_equal": true
+    },
+    {
+      "name": "imports-1000",
+      "pairs": 3,
+      "before_cold": 2.221244,
+      "after_cold": 1.489974,
+      "before_discovery": 0.424598,
+      "after_discovery": 0.125774,
+      "before_objects": 1466479,
+      "after_objects": 947810,
+      "digest_equal": true
+    },
+    {
+      "name": "sparse-10000",
+      "pairs": 3,
+      "before_cold": 13.830182,
+      "after_cold": 7.838517,
+      "before_discovery": 7.252739,
+      "after_discovery": 1.948354,
+      "before_objects": 10414873,
+      "after_objects": 5252199,
+      "digest_equal": true
+    },
+    {
+      "name": "sparse-5000",
+      "pairs": 3,
+      "before_cold": 6.891356,
+      "after_cold": 4.262591,
+      "before_discovery": 3.493604,
+      "after_discovery": 1.172176,
+      "before_objects": 5209871,
+      "after_objects": 2627199,
+      "digest_equal": true
+    }
+  ],
+  "samples": [
+    {
+      "file": "excluded-1000-1-baseline.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 1000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 3000,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "5774d7f750a28a281d9cfabbcc866f62ea47fc7c58ea15aa076ed42b7327f2e2",
+      "graph_edges": 2001,
+      "source_files": 1001,
+      "cache_reused": true,
+      "cold_seconds": 1.420008,
+      "discovery_seconds": 0.773813,
+      "warm_seconds": 0.004125,
+      "allocated_objects": 1046126,
+      "heap_growth_bytes": 2066483,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "excluded-1000-1-candidate.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 1000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 3000,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "5774d7f750a28a281d9cfabbcc866f62ea47fc7c58ea15aa076ed42b7327f2e2",
+      "graph_edges": 2001,
+      "source_files": 1001,
+      "cache_reused": true,
+      "cold_seconds": 0.671696,
+      "discovery_seconds": 0.199927,
+      "warm_seconds": 0.00365,
+      "allocated_objects": 527204,
+      "heap_growth_bytes": 6324475,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "excluded-1000-2-baseline.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 1000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 3000,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "5774d7f750a28a281d9cfabbcc866f62ea47fc7c58ea15aa076ed42b7327f2e2",
+      "graph_edges": 2001,
+      "source_files": 1001,
+      "cache_reused": true,
+      "cold_seconds": 1.081957,
+      "discovery_seconds": 0.556284,
+      "warm_seconds": 0.004239,
+      "allocated_objects": 1046126,
+      "heap_growth_bytes": 2258323,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "excluded-1000-2-candidate.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 1000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 3000,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "5774d7f750a28a281d9cfabbcc866f62ea47fc7c58ea15aa076ed42b7327f2e2",
+      "graph_edges": 2001,
+      "source_files": 1001,
+      "cache_reused": true,
+      "cold_seconds": 0.831067,
+      "discovery_seconds": 0.229944,
+      "warm_seconds": 0.006048,
+      "allocated_objects": 527204,
+      "heap_growth_bytes": 6201435,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "excluded-1000-3-baseline.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 1000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 3000,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "5774d7f750a28a281d9cfabbcc866f62ea47fc7c58ea15aa076ed42b7327f2e2",
+      "graph_edges": 2001,
+      "source_files": 1001,
+      "cache_reused": true,
+      "cold_seconds": 1.678368,
+      "discovery_seconds": 0.891528,
+      "warm_seconds": 0.007522,
+      "allocated_objects": 1046126,
+      "heap_growth_bytes": 2066723,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "excluded-1000-3-candidate.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 1000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 3000,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "5774d7f750a28a281d9cfabbcc866f62ea47fc7c58ea15aa076ed42b7327f2e2",
+      "graph_edges": 2001,
+      "source_files": 1001,
+      "cache_reused": true,
+      "cold_seconds": 0.838681,
+      "discovery_seconds": 0.177938,
+      "warm_seconds": 0.003793,
+      "allocated_objects": 527204,
+      "heap_growth_bytes": 6426715,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "imports-1000-1-baseline.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 1000,
+        "gems": 2,
+        "imports_per_file": 3,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "3c8f2a84037a035f4a08fb7cf9c4eaf3b685f4b63c9ef52a25f868b3df3aed26",
+      "graph_edges": 4001,
+      "source_files": 1001,
+      "cache_reused": true,
+      "cold_seconds": 2.545284,
+      "discovery_seconds": 0.714036,
+      "warm_seconds": 0.00304,
+      "allocated_objects": 1466479,
+      "heap_growth_bytes": 14208693,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "imports-1000-1-candidate.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 1000,
+        "gems": 2,
+        "imports_per_file": 3,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "3c8f2a84037a035f4a08fb7cf9c4eaf3b685f4b63c9ef52a25f868b3df3aed26",
+      "graph_edges": 4001,
+      "source_files": 1001,
+      "cache_reused": true,
+      "cold_seconds": 1.376539,
+      "discovery_seconds": 0.115167,
+      "warm_seconds": 0.00355,
+      "allocated_objects": 947810,
+      "heap_growth_bytes": 14378021,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "imports-1000-2-baseline.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 1000,
+        "gems": 2,
+        "imports_per_file": 3,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "3c8f2a84037a035f4a08fb7cf9c4eaf3b685f4b63c9ef52a25f868b3df3aed26",
+      "graph_edges": 4001,
+      "source_files": 1001,
+      "cache_reused": true,
+      "cold_seconds": 2.221244,
+      "discovery_seconds": 0.383856,
+      "warm_seconds": 0.00691,
+      "allocated_objects": 1466478,
+      "heap_growth_bytes": 12696717,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "imports-1000-2-candidate.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 1000,
+        "gems": 2,
+        "imports_per_file": 3,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "3c8f2a84037a035f4a08fb7cf9c4eaf3b685f4b63c9ef52a25f868b3df3aed26",
+      "graph_edges": 4001,
+      "source_files": 1001,
+      "cache_reused": true,
+      "cold_seconds": 1.489974,
+      "discovery_seconds": 0.134539,
+      "warm_seconds": 0.006134,
+      "allocated_objects": 947808,
+      "heap_growth_bytes": 14379021,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "imports-1000-3-baseline.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 1000,
+        "gems": 2,
+        "imports_per_file": 3,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "3c8f2a84037a035f4a08fb7cf9c4eaf3b685f4b63c9ef52a25f868b3df3aed26",
+      "graph_edges": 4001,
+      "source_files": 1001,
+      "cache_reused": true,
+      "cold_seconds": 2.052125,
+      "discovery_seconds": 0.424598,
+      "warm_seconds": 0.004758,
+      "allocated_objects": 1466482,
+      "heap_growth_bytes": 14213693,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "imports-1000-3-candidate.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 1000,
+        "gems": 2,
+        "imports_per_file": 3,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "3c8f2a84037a035f4a08fb7cf9c4eaf3b685f4b63c9ef52a25f868b3df3aed26",
+      "graph_edges": 4001,
+      "source_files": 1001,
+      "cache_reused": true,
+      "cold_seconds": 2.090173,
+      "discovery_seconds": 0.125774,
+      "warm_seconds": 0.00483,
+      "allocated_objects": 947811,
+      "heap_growth_bytes": 14378981,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "sparse-10000-1-baseline.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 10000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "e6030df42463fb67069568d3753ee1ab73041ab37d90c23b8d196250c403b75e",
+      "graph_edges": 20001,
+      "source_files": 10001,
+      "cache_reused": true,
+      "cold_seconds": 15.3068,
+      "discovery_seconds": 8.06588,
+      "warm_seconds": 0.005482,
+      "allocated_objects": 10414873,
+      "heap_growth_bytes": 57596347,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "sparse-10000-1-candidate.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 10000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "e6030df42463fb67069568d3753ee1ab73041ab37d90c23b8d196250c403b75e",
+      "graph_edges": 20001,
+      "source_files": 10001,
+      "cache_reused": true,
+      "cold_seconds": 7.646296,
+      "discovery_seconds": 1.736898,
+      "warm_seconds": 0.008675,
+      "allocated_objects": 5252201,
+      "heap_growth_bytes": 57355435,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "sparse-10000-2-baseline.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 10000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "e6030df42463fb67069568d3753ee1ab73041ab37d90c23b8d196250c403b75e",
+      "graph_edges": 20001,
+      "source_files": 10001,
+      "cache_reused": true,
+      "cold_seconds": 13.743879,
+      "discovery_seconds": 7.252739,
+      "warm_seconds": 0.005185,
+      "allocated_objects": 10414873,
+      "heap_growth_bytes": 53560507,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "sparse-10000-2-candidate.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 10000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "e6030df42463fb67069568d3753ee1ab73041ab37d90c23b8d196250c403b75e",
+      "graph_edges": 20001,
+      "source_files": 10001,
+      "cache_reused": true,
+      "cold_seconds": 7.838517,
+      "discovery_seconds": 1.948354,
+      "warm_seconds": 0.00574,
+      "allocated_objects": 5252199,
+      "heap_growth_bytes": 53483875,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "sparse-10000-3-baseline.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 10000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "e6030df42463fb67069568d3753ee1ab73041ab37d90c23b8d196250c403b75e",
+      "graph_edges": 20001,
+      "source_files": 10001,
+      "cache_reused": true,
+      "cold_seconds": 13.830182,
+      "discovery_seconds": 6.83966,
+      "warm_seconds": 0.004264,
+      "allocated_objects": 10414873,
+      "heap_growth_bytes": 54961067,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "sparse-10000-3-candidate.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 10000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "e6030df42463fb67069568d3753ee1ab73041ab37d90c23b8d196250c403b75e",
+      "graph_edges": 20001,
+      "source_files": 10001,
+      "cache_reused": true,
+      "cold_seconds": 9.575185,
+      "discovery_seconds": 2.298649,
+      "warm_seconds": 0.004332,
+      "allocated_objects": 5252199,
+      "heap_growth_bytes": 54647235,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "sparse-5000-1-baseline.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 5000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "124950cdd40283daaad7784b48515256398efb305d91350b4113bb233217c0b3",
+      "graph_edges": 10001,
+      "source_files": 5001,
+      "cache_reused": true,
+      "cold_seconds": 8.373332,
+      "discovery_seconds": 4.146034,
+      "warm_seconds": 0.004838,
+      "allocated_objects": 5209871,
+      "heap_growth_bytes": 23956611,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "sparse-5000-1-candidate.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 5000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "124950cdd40283daaad7784b48515256398efb305d91350b4113bb233217c0b3",
+      "graph_edges": 10001,
+      "source_files": 5001,
+      "cache_reused": true,
+      "cold_seconds": 4.245376,
+      "discovery_seconds": 0.963274,
+      "warm_seconds": 0.00651,
+      "allocated_objects": 2627199,
+      "heap_growth_bytes": 29459619,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "sparse-5000-2-baseline.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 5000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "124950cdd40283daaad7784b48515256398efb305d91350b4113bb233217c0b3",
+      "graph_edges": 10001,
+      "source_files": 5001,
+      "cache_reused": true,
+      "cold_seconds": 6.560909,
+      "discovery_seconds": 3.493604,
+      "warm_seconds": 0.006888,
+      "allocated_objects": 5209871,
+      "heap_growth_bytes": 29776691,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "sparse-5000-2-candidate.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 5000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "124950cdd40283daaad7784b48515256398efb305d91350b4113bb233217c0b3",
+      "graph_edges": 10001,
+      "source_files": 5001,
+      "cache_reused": true,
+      "cold_seconds": 4.856391,
+      "discovery_seconds": 1.172176,
+      "warm_seconds": 0.005832,
+      "allocated_objects": 2627199,
+      "heap_growth_bytes": 29436899,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "sparse-5000-3-baseline.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 5000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "124950cdd40283daaad7784b48515256398efb305d91350b4113bb233217c0b3",
+      "graph_edges": 10001,
+      "source_files": 5001,
+      "cache_reused": true,
+      "cold_seconds": 6.891356,
+      "discovery_seconds": 3.49325,
+      "warm_seconds": 0.002475,
+      "allocated_objects": 5209871,
+      "heap_growth_bytes": 30283315,
+      "peak_rss_kb": null
+    },
+    {
+      "file": "sparse-5000-3-candidate.json",
+      "runtime": {
+        "ruby": "4.0.6",
+        "platform": "x64-mingw-ucrt"
+      },
+      "corpus": {
+        "files": 5000,
+        "gems": 2,
+        "imports_per_file": 0,
+        "excluded_files": 0,
+        "dependency_analysis": "imports_and_constants"
+      },
+      "graph_sha256": "124950cdd40283daaad7784b48515256398efb305d91350b4113bb233217c0b3",
+      "graph_edges": 10001,
+      "source_files": 5001,
+      "cache_reused": true,
+      "cold_seconds": 4.262591,
+      "discovery_seconds": 1.222559,
+      "warm_seconds": 0.004828,
+      "allocated_objects": 2627199,
+      "heap_growth_bytes": 26715499,
+      "peak_rss_kb": null
+    }
+  ]
+}

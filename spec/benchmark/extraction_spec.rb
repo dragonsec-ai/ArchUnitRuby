@@ -51,6 +51,21 @@ RSpec.describe ExtractionBenchmark do
     expect(report).to include('graph_cache_reused' => true)
     expect(report.fetch('corpus')).to include('dependency_analysis' => 'imports_and_constants')
     expect(report.dig('cold', 'memory', 'ruby_heap_bytes')).to be_positive
+    expect(report.dig('cold', 'memory_growth', 'allocated_objects')).to be_positive
+    expect(report.fetch('graph_sha256')).to match(/\A[0-9a-f]{64}\z/)
+    expect(report.dig('retained', 'ruby_heap_bytes')).to be_positive
+    expect(report.dig('retained', 'ruby_heap_growth_bytes')).to be_a(Integer)
+  end
+
+  it 'prunes malformed excluded trees while keeping the exact graph and evidence digest' do
+    configuration = described_class::DEFAULTS.merge(files: 6, gems: 2)
+    described_class::Corpus.new(@root, **corpus_configuration).generate
+    original = described_class::Runner.new(@root, configuration).run
+    described_class::Corpus.new(@root, **corpus_configuration, excluded_file_count: 20).generate
+    excluded = described_class::Runner.new(@root, configuration).run
+    expect(excluded.fetch(:graph_sha256)).to eq(original.fetch(:graph_sha256))
+    expect(excluded.dig(:cold, :counters, :source_files)).to eq(7)
+    expect(excluded.fetch(:graph_cache_reused)).to be(true)
   end
 
   it 'supports an output-free run without threshold limits' do

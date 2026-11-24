@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'fileutils'
+require 'digest'
 require 'json'
 require 'objspace'
 require 'optparse'
@@ -13,6 +14,7 @@ module ExtractionBenchmark
     files: 1_000,
     gems: 10,
     imports_per_file: 3,
+    excluded_files: 0,
     dependency_analysis: :imports,
     max_cold_seconds: nil,
     max_warm_seconds: nil,
@@ -21,19 +23,23 @@ module ExtractionBenchmark
 
   # Deterministic multi-gem Ruby corpus with both repeated and cross-gem requires.
   class Corpus
-    attr_reader :root, :file_count, :gem_count, :imports_per_file
+    attr_reader :root, :file_count, :gem_count, :imports_per_file, :excluded_file_count
 
-    def initialize(root, file_count:, gem_count:, imports_per_file:)
+    def initialize(root, file_count:, gem_count:, imports_per_file:, excluded_file_count: 0)
       @root = root
       @file_count = positive_integer(file_count, :files)
       @gem_count = positive_integer(gem_count, :gems)
       @imports_per_file = non_negative_integer(imports_per_file, :imports_per_file)
+      @excluded_file_count = non_negative_integer(excluded_file_count, :excluded_files)
     end
 
     def generate
       gem_count.times { |index| write_gemspec(index) }
       file_count.times { |index| write_source(index) }
       write('packages/gem_00/lib/shared/common.rb', "# shared benchmark dependency\n")
+      excluded_file_count.times do |index|
+        write("vendor/generated/deep/file_#{index}.rb", "# excluded malformed generator\nclass <")
+      end
       root
     end
 
@@ -97,7 +103,7 @@ module ExtractionBenchmark
   # Runs one cold graph build and one same-process graph-cache lookup.
   class Runner
     RunValues = Data.define(
-      :cold_graph, :cold_profile, :warm_graph, :warm_profile, :before, :after_cold
+      :cold_graph, :cold_profile, :warm_graph, :warm_profile, :before, :after_cold, :after_gc
     )
     private_constant :RunValues
 
@@ -123,7 +129,8 @@ module ExtractionBenchmark
       after_cold = memory_snapshot
       warm_graph, warm_profile = extract_profiled
       RunValues.new(
-        cold_graph:, cold_profile:, warm_graph:, warm_profile:, before:, after_cold:
+        cold_graph:, cold_profile:, warm_graph:, warm_profile:, before:, after_cold:,
+        after_gc: retained_snapshot
       )
     end
 
@@ -138,18 +145,44 @@ module ExtractionBenchmark
 
     def benchmark_result(values)
       {
-        corpus: @configuration.slice(:files, :gems, :imports_per_file, :dependency_analysis),
+        corpus: corpus_description,
         graph_edges: values.cold_graph.length,
+        graph_sha256: graph_digest(values.cold_graph),
         graph_cache_reused: values.cold_graph.equal?(values.warm_graph),
         cold: values.cold_profile.to_h.merge(memory_delta(values.before, values.after_cold)),
         warm: values.warm_profile.to_h,
+        retained: retained_memory(values),
         runtime: { ruby: RUBY_VERSION, platform: RUBY_PLATFORM }
+      }
+    end
+
+    def graph_digest(graph)
+      edges = graph.map { |edge| edge.to_h.merge(evidence: edge.evidence.map(&:to_h)) }
+      Digest::SHA256.hexdigest(JSON.generate(edges))
+    end
+
+    def corpus_description
+      @configuration.slice(:files, :gems, :imports_per_file, :excluded_files, :dependency_analysis)
+    end
+
+    def retained_snapshot
+      GC.start
+      memory_snapshot
+    end
+
+    def retained_memory(values)
+      {
+        ruby_heap_bytes: values.after_gc[:ruby_heap_bytes],
+        ruby_heap_growth_bytes: values.after_gc[:ruby_heap_bytes] - values.before[:ruby_heap_bytes],
+        heap_live_slots_growth: values.after_gc[:heap_live_slots] - values.before[:heap_live_slots],
+        process_peak_rss_kb: values.after_gc[:process_peak_rss_kb]
       }
     end
 
     def memory_snapshot
       {
         ruby_heap_bytes: ObjectSpace.memsize_of_all,
+        allocated_objects: GC.stat(:total_allocated_objects),
         heap_live_slots: GC.stat(:heap_live_slots),
         process_peak_rss_kb: linux_peak_rss_kb
       }
@@ -166,6 +199,7 @@ module ExtractionBenchmark
       {
         memory: after,
         memory_growth: {
+          allocated_objects: after[:allocated_objects] - before[:allocated_objects],
           ruby_heap_bytes: after[:ruby_heap_bytes] - before[:ruby_heap_bytes],
           heap_live_slots: after[:heap_live_slots] - before[:heap_live_slots]
         }
@@ -210,6 +244,7 @@ module ExtractionBenchmark
     parser.on('--files N', Integer) { |value| options[:files] = value }
     parser.on('--gems N', Integer) { |value| options[:gems] = value }
     parser.on('--imports-per-file N', Integer) { |value| options[:imports_per_file] = value }
+    parser.on('--excluded-files N', Integer) { |value| options[:excluded_files] = value }
   end
 
   def configure_threshold_options(parser, options)
@@ -229,7 +264,8 @@ module ExtractionBenchmark
       directory,
       file_count: options.fetch(:files),
       gem_count: options.fetch(:gems),
-      imports_per_file: options.fetch(:imports_per_file)
+      imports_per_file: options.fetch(:imports_per_file),
+      excluded_file_count: options.fetch(:excluded_files)
     ).generate
     payload = JSON.pretty_generate(Runner.new(directory, options).run)
     write_payload(options[:output], payload)

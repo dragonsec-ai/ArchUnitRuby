@@ -75,7 +75,12 @@ Without a locator, ArchUnitRuby searches upward for a `Gemfile` or gemspec.
 
 Discovery skips symlinked source files and directories, including aliases inside the project root.
 Direct `FileInfo` extraction validates canonical as well as lexical containment before reading.
-The source walker reuses a single file-status result per entry for type and symlink decisions.
+The source walker owns a pruned iterative traversal and reuses one status per entry. Identifiers
+come from directory child components under the canonical root, not unchecked absolute-prefix
+slicing; the final source list is sorted once. Included entry/listing failures raise
+`TechnicalError`, including unreadable or disappearing directories; they are not silently skipped.
+This stricter listing-error handling is part of unreleased 1.1.1. Excluded directories are pruned
+before their children are listed. Concurrent hostile filesystem mutation is not sandboxed.
 
 The detected root's `.archignore` is applied centrally to graphs and file-based metrics. It accepts
 blank lines, full-line `#` comments, basename globs, root-relative path globs, leading `/` anchors,
