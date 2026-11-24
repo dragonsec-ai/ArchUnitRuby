@@ -59,7 +59,7 @@ Hosted Linux/Windows verification (Ruby 4.0.10, three pairs per case) is retaine
 Post-GC Ruby-heap growth for this case is essentially unchanged: Linux 8,417,117 to 8,414,189
 bytes; Windows 8,414,189 to 8,414,077 bytes. This supports lower transient work, not a new claim
 that every memory measure improves. Linux whole-process peak RSS drops from 97,212 to 83,144 KiB
-at 10k, but rises from 58,760 to 64,408 KiB at 5k as GC scheduling changes. Pre-GC heap growth is
+at 10k, but rises from 58,760 to 64,408 KiB at 5k despite similar retained heap. Pre-GC growth is
 similarly mixed; Windows RSS is unavailable. Warm lookup medians remain below 1.3 ms in these
 samples, with one small Linux excluded-tree case increasing from 0.117 to 0.902 ms despite
 confirmed graph reuse. Keep these tradeoffs visible rather than optimizing to a single number.
