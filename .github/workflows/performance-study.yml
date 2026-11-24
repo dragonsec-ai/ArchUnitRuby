@@ -86,3 +86,69 @@ jobs:
             archunit/benchmark/study/Gemfile.lock
           if-no-files-found: warn
           retention-days: 14
+
+  discovery:
+    if: github.event_name == 'workflow_dispatch'
+    name: Paired discovery — ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          path: candidate
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: v1.1.0
+          path: baseline
+          persist-credentials: false
+      - uses: ruby/setup-ruby@be3c7df29b3349ec6bcfc6b4792f1cf9f5237d18 # v1
+        with:
+          ruby-version: '4.0'
+          bundler-cache: true
+          working-directory: candidate
+      - name: Run alternating fresh-process pairs with the existing extraction benchmark
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $candidate = Join-Path $env:GITHUB_WORKSPACE 'candidate'
+          $baseline = Join-Path $env:GITHUB_WORKSPACE 'baseline'
+          $reports = Join-Path $env:GITHUB_WORKSPACE 'reports'
+          New-Item -ItemType Directory -Path $reports -Force | Out-Null
+          Copy-Item -LiteralPath (Join-Path $candidate 'benchmark/extraction.rb') -Destination (Join-Path $baseline 'benchmark/extraction.rb')
+          $env:BUNDLE_PATH = Join-Path $candidate 'vendor/bundle'
+          $cases = @(
+            @{name='sparse-5000'; files=5000; imports=0; excluded=0},
+            @{name='sparse-10000'; files=10000; imports=0; excluded=0},
+            @{name='imports-1000'; files=1000; imports=3; excluded=0},
+            @{name='excluded-1000'; files=1000; imports=0; excluded=3000}
+          )
+          foreach ($case in $cases) {
+            foreach ($trial in 1..3) {
+              $results = @{}
+              foreach ($side in 'baseline','candidate') {
+                $checkout = if ($side -eq 'baseline') { $baseline } else { $candidate }
+                $env:BUNDLE_GEMFILE = Join-Path $checkout 'Gemfile'
+                $output = Join-Path $reports "$($case.name)-$trial-$side.json"
+                bundle exec ruby (Join-Path $checkout 'benchmark/extraction.rb') --files $case.files --gems 2 --imports-per-file $case.imports --excluded-files $case.excluded --constants --output $output | Out-Null
+                if ($LASTEXITCODE -ne 0) { throw "Failed $($case.name) / $side" }
+                $results[$side] = Get-Content -LiteralPath $output -Raw | ConvertFrom-Json
+                if (-not $results[$side].graph_cache_reused) { throw 'Graph cache was not reused' }
+                if ($results[$side].cold.counters.source_files -ne ($case.files + 1)) { throw 'Wrong source inventory' }
+                Write-Output "$($case.name) trial=$trial side=$side cold=$($results[$side].cold.stage_seconds.total) discovery=$($results[$side].cold.stage_seconds.source_enumeration) allocated=$($results[$side].cold.memory_growth.allocated_objects)"
+              }
+              if ($results.baseline.graph_sha256 -ne $results.candidate.graph_sha256) { throw 'Graph or retained evidence changed' }
+            }
+          }
+      - name: Retain raw paired measurements
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: discovery-${{ matrix.os }}-${{ github.run_id }}
+          path: reports/*.json
+          if-no-files-found: error
+          retention-days: 14

@@ -5,6 +5,11 @@ RubyDEX 0.4.0, Prism 1.9.0, JSON 2.21.2 and CSV 3.3.7. Its lock contains Linux/W
 package checksums without changing root dependencies. The candidate is the checkout revision,
 not necessarily the published gem.
 
+For the separate source-discovery optimization follow-up (#100), see the
+[root extraction benchmark](../README.md#source-discovery-follow-up-100) and its paired-sample
+JSON. The manual performance workflow also runs that unchanged generator/harness against the
+v1.1.0 and candidate libraries on Linux/Windows, using only the normal production bundle.
+
 ## Shared-policy study
 
 `run.rb` generates Rails-like and four-engine layouts with 200 Ruby files by default. Density

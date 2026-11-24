@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.1 (unreleased)
+
+- Reuse one source-entry status, compile exclusion matching once, and build relative identifiers
+  from directory children in a pruned iterative source walker, preserving sorted graph inputs.
+- Fail closed on unreadable/disappearing included directory listings instead of inheriting Find's
+  silent listing-error skip. Excluded trees are still pruned without opening their descendants.
+- Extend the existing extraction benchmark with allocation counts, full graph/evidence digests,
+  and excluded-tree workloads; retain generous CI timing ceilings.
+
 ## 1.1.0 - 2026-11-23
 
 Additive release over 1.0.0. Import-only analysis remains the default; the CLI and Rails helpers

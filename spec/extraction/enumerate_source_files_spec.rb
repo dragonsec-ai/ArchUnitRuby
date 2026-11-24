@@ -165,10 +165,39 @@ RSpec.describe ArchUnit::Extraction, '.enumerate_source_files' do
   end
 
   it 'wraps filesystem failures as technical errors' do
-    allow(Find).to receive(:find).and_raise(Errno::EACCES, @project_root.to_s)
+    allow(Dir).to receive(:children).and_raise(Errno::EACCES, @project_root.to_s)
 
     expect { described_class.enumerate_source_files(@project_root) }
       .to raise_error(ArchUnit::TechnicalError, /could not enumerate Ruby source files/)
+  end
+
+  it 'reads each included entry status once, without a second traversal metadata pass' do
+    source = create_file('lib/source.rb')
+    directory = source.dirname.to_s
+    allow(File).to receive(:lstat).and_call_original
+    expect(File).to receive(:lstat).with(source.to_s).once.and_call_original
+    expect(File).to receive(:lstat).with(directory).once.and_call_original
+
+    expect(described_class.enumerate_source_files(@project_root)).to eq(['lib/source.rb'])
+  end
+
+  it 'constructs child identifiers without repeated relative-path calculations' do
+    create_file('lib/nested/source.rb')
+    expect_any_instance_of(Pathname).not_to receive(:relative_path_from)
+
+    expect(described_class.enumerate_source_files(@project_root)).to eq(['lib/nested/source.rb'])
+  end
+
+  it 'does not open or stat descendants of an excluded tree' do
+    create_file('vendor/deep/hidden.rb')
+    create_file('keep.rb')
+    allow(Dir).to receive(:children).and_call_original
+    allow(File).to receive(:lstat).and_call_original
+    expect(Dir).not_to receive(:children).with(@project_root.join('vendor').to_s, any_args)
+    expect(File).not_to receive(:lstat).with(@project_root.join('vendor/deep').to_s)
+    expect(File).not_to receive(:lstat).with(@project_root.join('vendor/deep/hidden.rb').to_s)
+
+    expect(described_class.enumerate_source_files(@project_root)).to eq(['keep.rb'])
   end
 
   it 'exposes a frozen default exclusion vocabulary' do
