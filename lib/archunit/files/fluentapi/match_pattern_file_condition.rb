@@ -44,8 +44,8 @@ module ArchUnit
         end
 
         def perform_check(options)
-          graph = ArchUnit::Extraction.extract_graph(project_locator, options:)
-          nodes = FileRuleSupport.selected_nodes(graph, filters)
+          views = ArchUnit::Extraction.extract_graph_views(project_locator, options:)
+          nodes = FileRuleSupport.selected_nodes(views, filters)
           empty_test = empty_test_violation(
             nodes, filters:, negated: is_negated, options:
           )

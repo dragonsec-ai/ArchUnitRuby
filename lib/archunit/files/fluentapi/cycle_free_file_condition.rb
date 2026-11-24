@@ -30,21 +30,20 @@ module ArchUnit
         private
 
         def perform_check(options)
-          graph = ArchUnit::Extraction.extract_graph(project_locator, options:)
-          nodes = FileRuleSupport.selected_nodes(graph, filters)
+          views = ArchUnit::Extraction.extract_graph_views(project_locator, options:)
+          nodes = FileRuleSupport.selected_nodes(views, filters)
           empty_test = empty_test_violation(
             nodes, filters:, negated: false, options:
           )
           return empty_test if empty_test
 
-          cycles = cycles_within(graph, nodes)
+          cycles = cycles_within(views.internal_edges, nodes)
           Assertion.gather_cycle_violations(cycles)
         end
 
-        def cycles_within(graph, nodes)
+        def cycles_within(internal_edges, nodes)
           selected_labels = nodes.to_h { |node| [node.label, true] }
-          edges = Common::Projection.project_edges(graph, Common::Projection.per_internal_edge)
-                                    .select do |edge|
+          edges = internal_edges.select do |edge|
             selected_labels[edge.source_label] && selected_labels[edge.target_label]
           end
           Common::Projection.project_cycles(edges)

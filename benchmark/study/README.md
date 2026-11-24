@@ -10,6 +10,55 @@ For the separate source-discovery optimization follow-up (#100), see the
 JSON. The manual performance workflow also runs that unchanged generator/harness against the
 v1.1.0 and candidate libraries on Linux/Windows, using only the normal production bundle.
 
+## Repeated-rule follow-up (#101)
+
+`rule_suite.rb` reuses this study's generated four-engine fixture, oracle, clock and memory helpers.
+It needs only the root production bundle; it does not install or execute any target dependencies.
+Run each workload in a fresh process, alternating baseline/candidate order across at least three
+trials. Compare against `e2d347e14e0f8d06489582bcb7c5473295a7df4b` (merged #100), copying only
+`fixture.rb`, `rule_policies.rb`, `rule_samples.rb` and `rule_suite.rb` into the baseline's study
+directory so both runtime libraries receive the identical measurement harness.
+
+```sh
+STUDY_PAIRS=5000 bundle exec ruby benchmark/study/rule_suite.rb graph pkg/rules-graph.json
+STUDY_PAIRS=5000 bundle exec ruby benchmark/study/rule_suite.rb one pkg/rules-one.json
+STUDY_PAIRS=5000 bundle exec ruby benchmark/study/rule_suite.rb identical pkg/rules-identical.json
+STUDY_PAIRS=5000 bundle exec ruby benchmark/study/rule_suite.rb varied pkg/rules-varied.json
+```
+
+Workloads use 10,000 sources and 5,000 independently known API-to-database dependencies.
+`one` checks one nonempty passing boundary; `identical` repeats it twenty times; `varied` runs
+seven file, seven layer and six different slice policies. All must pass, while separate forbidden
+dependency and empty-selector controls must fail with the expected data/counts. The ordered graph
+and evidence digest must match across checkouts. A fast incorrect check aborts the run.
+
+- `cold_graph`: actual graph extraction only, after explicit clearing.
+- `cold_plus_suite`: a separate cold graph plus the entire policy suite. Cache clearing and GC
+  occur before, outside the timer. This does not include Ruby startup, fixture generation or cold disk.
+- `warm_rules`: individual public checks after that complete suite; include normal graph lookup,
+  rule-specific selection and assertion. Their sum is warm suite time, not CLI/process startup.
+- Every timed stage records allocated objects. Post-GC Ruby heap is recorded before analysis, after
+  graph extraction, and after the cold suite. It excludes native memory; Linux peak RSS is a
+  process-lifetime high-water mark (including both cold stages), not an individual stage's peak.
+  Windows unavailable RSS is null. Controls run after retained-memory measurements.
+
+Only three built-in graph-invariant views are lazy/shared per existing cached analysis entry:
+nodes, internal edges and external edges. Storage grows with that analysis's graph, not the number
+of rules. This adds retained O(V+E) memory when requested; raw graph consumers do not eagerly build
+indexes. There is no new graph-keyed global query cache. The existing graph snapshot cache still
+retains entries until explicit clearing; it is not a content-watching or LRU cache. Per-entry/global
+clearing drops the associated views. Rules already running may finish on their original snapshot.
+
+Selectors, callbacks, FileInfo reads, cycle enumeration, logging and arbitrary custom projections
+still run per check. Slice labeler closures may capture mutable state, even when the Proc is frozen;
+their outputs are intentionally not memoized. Thus varied-suite measurements include unchanged
+slice work and do not imply that all policy types benefit equally.
+
+The manual workflow runs three alternating paired trials for all four workloads on Linux/Windows
+with pinned actions, read-only permissions, a 25-minute timeout and raw JSON artifacts. Ordinary PR
+tests run a four-pair correctness version without speed gates. Timings are observations, not promises
+or grounds for changing the existing correctness/coverage thresholds.
+
 ## Shared-policy study
 
 `run.rb` generates Rails-like and four-engine layouts with 200 Ruby files by default. Density

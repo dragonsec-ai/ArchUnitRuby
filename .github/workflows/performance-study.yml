@@ -7,6 +7,7 @@ on:
       - 'benchmark/study/**'
       - 'benchmark/semantic/**'
       - 'spec/benchmark/performance_study_spec.rb'
+      - 'spec/benchmark/rule_suite_spec.rb'
       - '.github/workflows/performance-study.yml'
 
 permissions:
@@ -85,6 +86,69 @@ jobs:
             archunit/pkg/discourse-linux.json
             archunit/benchmark/study/Gemfile.lock
           if-no-files-found: warn
+          retention-days: 14
+
+  rule-suite:
+    if: github.event_name == 'workflow_dispatch'
+    name: Paired rule suites — ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          path: candidate
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          # #100 is already merged; isolate #101 rather than including walker gains.
+          ref: e2d347e14e0f8d06489582bcb7c5473295a7df4b
+          path: baseline
+          persist-credentials: false
+      - uses: ruby/setup-ruby@be3c7df29b3349ec6bcfc6b4792f1cf9f5237d18 # v1
+        with:
+          ruby-version: '4.0'
+          bundler-cache: true
+          working-directory: candidate
+      - name: Compare identical harnesses in alternating fresh processes
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $candidate = Join-Path $env:GITHUB_WORKSPACE 'candidate'
+          $baseline = Join-Path $env:GITHUB_WORKSPACE 'baseline'
+          $reports = Join-Path $env:GITHUB_WORKSPACE 'reports'
+          New-Item -ItemType Directory -Path $reports -Force | Out-Null
+          foreach ($file in 'fixture.rb','rule_policies.rb','rule_samples.rb','rule_suite.rb') {
+            Copy-Item -LiteralPath (Join-Path $candidate "benchmark/study/$file") -Destination (Join-Path $baseline "benchmark/study/$file")
+          }
+          $env:BUNDLE_PATH = Join-Path $candidate 'vendor/bundle'
+          $env:STUDY_PAIRS = '5000'
+          foreach ($workload in 'graph','one','identical','varied') {
+            foreach ($trial in 1..3) {
+              $order = if ($trial % 2) { @('baseline','candidate') } else { @('candidate','baseline') }
+              $results = @{}
+              foreach ($side in $order) {
+                $checkout = if ($side -eq 'baseline') { $baseline } else { $candidate }
+                $env:BUNDLE_GEMFILE = Join-Path $checkout 'Gemfile'
+                $env:STUDY_REVISION = git -C $checkout rev-parse HEAD
+                $output = Join-Path $reports "$workload-$trial-$side.json"
+                bundle exec ruby (Join-Path $checkout 'benchmark/study/rule_suite.rb') $workload $output
+                if ($LASTEXITCODE -ne 0) { throw "Failed $workload / $side" }
+                $results[$side] = Get-Content -LiteralPath $output -Raw | ConvertFrom-Json
+              }
+              if ($results.baseline.result.graph_sha256 -ne $results.candidate.result.graph_sha256) { throw 'Graph or evidence changed' }
+            }
+          }
+      - name: Retain raw rule-suite measurements
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: rule-suite-${{ matrix.os }}-${{ github.run_id }}
+          path: reports/*.json
+          if-no-files-found: error
           retention-days: 14
 
   discovery:

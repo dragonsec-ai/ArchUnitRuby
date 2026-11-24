@@ -11,8 +11,8 @@ module ArchUnit
       module FileRuleSupport
         module_function
 
-        def selected_nodes(graph, filters)
-          nodes = Common::Projection.project_to_nodes(graph)
+        def selected_nodes(views, filters)
+          nodes = views.nodes
           selected = filters.empty? ? nodes : matching_nodes(nodes, filters)
           Common::Logging::Inspection.selection(
             'selected file', selected, &:label

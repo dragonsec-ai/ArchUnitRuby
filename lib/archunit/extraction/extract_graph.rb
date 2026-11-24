@@ -15,12 +15,13 @@ require_relative 'analysis_profile'
 require_relative 'analysis_snapshot'
 require_relative 'analysis_observer'
 require_relative 'graph_assembly'
+require_relative 'graph_views'
 
 module ArchUnit
   # Assembles the normalized dependency graph for a Ruby project.
   module Extraction
     GRAPH_CACHE_MUTEX = Mutex.new
-    CachedGraph = Data.define(:graph, :analysis)
+    CachedGraph = Data.define(:graph, :analysis, :views)
     private_constant :CachedGraph
 
     module_function
@@ -28,6 +29,17 @@ module ArchUnit
     def extract_graph(
       locator = nil, exclude_patterns: nil, options: nil, working_directory: Dir.pwd,
       profile: nil
+    )
+      extract_graph_entry(locator, exclude_patterns:, options:, working_directory:, profile:).graph
+    end
+
+    # @api private
+    def extract_graph_views(locator = nil, options: nil, exclude_patterns: nil)
+      extract_graph_entry(locator, options:, exclude_patterns:).views
+    end
+
+    def extract_graph_entry(
+      locator = nil, exclude_patterns: nil, options: nil, working_directory: Dir.pwd, profile: nil
     )
       ExtractionProfile.validate(profile)
       options = Common::FluentApi::CheckOptions.resolve(options)
@@ -38,6 +50,7 @@ module ArchUnit
         resolved_graph(root, exclude_patterns, options, profile)
       end
     end
+    private_class_method :extract_graph_entry
 
     def clear_graph_cache
       GRAPH_CACHE_MUTEX.synchronize { graph_cache.clear }
@@ -52,6 +65,7 @@ module ArchUnit
       entry, cache_hit = fetch_graph(root, patterns, options, key, profile)
       AnalysisObserver.record(entry.analysis, cache_hit:)
       Common::Logging::Inspection.graph(entry.graph, root:)
+      entry
     end
     private_class_method :resolved_graph
 
@@ -82,7 +96,7 @@ module ArchUnit
       recorder = AnalysisProfile.new(profile)
       graph = extract_graph_uncached(root, patterns, options, recorder)
       analysis = AnalysisSnapshot.graph(root, patterns, options, counters: recorder.counters)
-      CachedGraph.new(graph:, analysis:)
+      CachedGraph.new(graph:, analysis:, views: GraphViews.new(graph))
     end
     private_class_method :build_graph_entry
 
