@@ -48,6 +48,22 @@ load; fixtures are freshly generated outside profiled analysis, not a cold-disk 
 Windows peak RSS is unavailable, not zero. Heap snapshots are not post-GC retained memory.
 Do not turn these local medians into portable timing gates or a universal speed claim.
 
+Hosted Linux/Windows verification (Ruby 4.0.10, three pairs per case) is retained in
+[discovery-ci.json](study/discovery-ci.json), including separate post-GC measurements:
+
+| 10,000-file case | Before cold | After cold | Before discovery | After discovery | Before allocations | After allocations |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Linux | 1.750 s | 1.078 s | 0.716 s | 0.030 s | 8,453,786 | 4,891,912 |
+| Windows | 5.922 s | 3.688 s | 3.228 s | 0.962 s | 9,064,085 | 5,102,011 |
+
+Post-GC Ruby-heap growth for this case is essentially unchanged: Linux 8,417,117 to 8,414,189
+bytes; Windows 8,414,189 to 8,414,077 bytes. This supports lower transient work, not a new claim
+that every memory measure improves. Linux whole-process peak RSS drops from 97,212 to 83,144 KiB
+at 10k, but rises from 58,760 to 64,408 KiB at 5k as GC scheduling changes. Pre-GC heap growth is
+similarly mixed; Windows RSS is unavailable. Warm lookup medians remain below 1.3 ms in these
+samples, with one small Linux excluded-tree case increasing from 0.117 to 0.902 ms despite
+confirmed graph reuse. Keep these tradeoffs visible rather than optimizing to a single number.
+
 The benchmark generates a deterministic multi-gem Ruby repository, then measures one cold graph
 build and one same-process cached lookup. Target application code and generated gemspecs are never
 executed.

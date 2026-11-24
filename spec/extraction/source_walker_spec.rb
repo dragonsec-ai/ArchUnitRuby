@@ -154,9 +154,10 @@ end
 
 RSpec.describe 'Compiled source exclusion matching' do
   it 'matches legacy literal, anchored, recursive, Unicode and malformed globs' do
-    patterns = %w[vendor /vendor **/generated/** *.rb .hidden lib/[ab]?.rb lib/ümlaut.rb
+    patterns = %w[vendor Vendor /vendor **/generated/** *.rb .hidden lib/[ab]?.rb lib/ümlaut.rb
                   a{b,c} bad[ x] /lib/**/*]
-    paths = %w[vendor nested/vendor keep.rb .hidden lib/ab.rb lib/ümlaut.rb a{b,c} bad[ x]]
+    paths = %w[vendor Vendor VENDOR nested/vendor keep.rb .hidden lib/ab.rb lib/ümlaut.rb
+               lib/Upper.rb a{b,c} bad[ x]]
     patterns.each do |pattern|
       matcher = ArchUnit::Extraction.const_get(:SourcePatternMatcher).new([pattern])
       paths.each do |path|
