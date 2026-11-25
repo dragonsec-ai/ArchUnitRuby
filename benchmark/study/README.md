@@ -10,6 +10,86 @@ For the separate source-discovery optimization follow-up (#100), see the
 JSON. The manual performance workflow also runs that unchanged generator/harness against the
 v1.1.0 and candidate libraries on Linux/Windows, using only the normal production bundle.
 
+## Repeated-rule follow-up (#101)
+
+`rule_suite.rb` reuses this study's generated four-engine fixture, oracle, clock and memory helpers.
+It needs only the root production bundle; it does not install or execute any target dependencies.
+Run each workload in a fresh process, alternating baseline/candidate order across at least three
+trials. Compare against `e2d347e14e0f8d06489582bcb7c5473295a7df4b` (merged #100), copying only
+`fixture.rb`, `rule_policies.rb`, `rule_samples.rb` and `rule_suite.rb` into the baseline's study
+directory so both runtime libraries receive the identical measurement harness.
+
+```sh
+STUDY_PAIRS=5000 bundle exec ruby benchmark/study/rule_suite.rb graph pkg/rules-graph.json
+STUDY_PAIRS=5000 bundle exec ruby benchmark/study/rule_suite.rb one pkg/rules-one.json
+STUDY_PAIRS=5000 bundle exec ruby benchmark/study/rule_suite.rb identical pkg/rules-identical.json
+STUDY_PAIRS=5000 bundle exec ruby benchmark/study/rule_suite.rb varied pkg/rules-varied.json
+```
+
+Workloads use 10,000 sources and 5,000 independently known API-to-database dependencies.
+`one` checks one nonempty passing boundary; `identical` repeats it twenty times; `varied` runs
+seven file, seven layer and six different slice policies. All must pass, while separate forbidden
+dependency and empty-selector controls must fail with the expected data/counts. The ordered graph
+and evidence digest must match across checkouts. A fast incorrect check aborts the run.
+
+- `cold_graph`: actual graph extraction only, after explicit clearing.
+- `cold_plus_suite`: a separate cold graph plus the entire policy suite. Cache clearing and GC
+  occur before, outside the timer. This does not include Ruby startup, fixture generation or cold disk.
+- `warm_rules`: individual public checks after that complete suite; include normal graph lookup,
+  rule-specific selection and assertion. Their sum is warm suite time, not CLI/process startup.
+- Every timed stage records allocated objects. Post-GC Ruby heap is recorded before analysis, after
+  graph extraction, and after the cold suite. It excludes native memory; Linux peak RSS is a
+  process-lifetime high-water mark (including both cold stages), not an individual stage's peak.
+  Windows unavailable RSS is null. Controls run after retained-memory measurements.
+
+Only three built-in graph-invariant views are lazy/shared per existing cached analysis entry:
+nodes, internal edges and external edges. Storage grows with that analysis's graph, not the number
+of rules. This adds retained O(V+E) memory when requested; raw graph consumers do not eagerly build
+indexes. There is no new graph-keyed global query cache. The existing graph snapshot cache still
+retains entries until explicit clearing; it is not a content-watching or LRU cache. Per-entry/global
+clearing drops the associated views. Rules already running may finish on their original snapshot.
+
+Selectors, callbacks, FileInfo reads, cycle enumeration, logging and arbitrary custom projections
+still run per check. Slice labeler closures may capture mutable state, even when the Proc is frozen;
+their outputs are intentionally not memoized. Thus varied-suite measurements include unchanged
+slice work and do not imply that all policy types benefit equally.
+
+The manual workflow runs three alternating paired trials for all four workloads on Linux/Windows
+with pinned actions, read-only permissions, a 25-minute timeout and raw JSON artifacts. Ordinary PR
+tests run a four-pair correctness version without speed gates. Timings are observations, not promises
+or grounds for changing the existing correctness/coverage thresholds.
+
+### Recorded results
+
+[Run 45446554405](https://github.com/dragonsec-ai/ArchUnitRuby/actions/runs/45446554405)
+passed all five jobs. [Raw samples and medians](rule-views-ci.json) preserve all 48 paired samples,
+exact revisions, Ruby 4.0.10 platforms, controls and ordered graph/evidence digests. Candidate
+`7d73b3e` contains the runtime/harness change; later evidence/documentation commits do not change it.
+Three-trial medians at 10,000 sources (seconds; allocations are summed over the warm suite):
+
+| Host / suite | Cold graph + suite, old → new | Warm suite, old → new | Warm allocations, old → new |
+|---|---:|---:|---:|
+| Linux / one | 1.983 → 2.010 | 0.0767 → 0.0255 | 255,209 → 70,193 |
+| Linux / 20 identical | 3.637 → 2.552 | 1.765 → 0.530 | 5,104,180 → 1,403,860 |
+| Linux / 20 varied | 3.669 → 2.995 | 1.815 → 0.939 | 5,541,790 → 3,236,581 |
+| Windows / one | 5.183 → 5.136 | 0.0867 → 0.0317 | 255,235 → 70,219 |
+| Windows / 20 identical | 7.041 → 5.790 | 1.915 → 0.643 | 5,104,700 → 1,404,380 |
+| Windows / 20 varied | 7.205 → 6.124 | 1.889 → 1.084 | 5,542,310 → 3,237,101 |
+
+Warm varied suites improve ~48% on Linux / ~43% on Windows, with ~42% fewer allocations; twenty
+identical checks improve ~70% / ~66%, with ~72% fewer allocations. Cold varied suites improve
+~18% / ~15%. These are three shared-runner trials, not universal promises or competitor rankings.
+Cold single-rule timing is ~1.3% higher on Linux and ~0.9% lower on Windows; its allocations are
+essentially unchanged. Raw graph-only cold timings also remain similar, with only five extra
+allocations in the Linux second cold stage and one extra in Windows.
+
+The cost is retained memory: indexed suites grow post-GC Ruby heap by ~9.83 MiB versus ~6.66 MiB
+before (~3.17 MiB extra). Graph-only retained growth differs by only a few hundred bytes. Peak RSS
+is not uniformly lower: Linux identical-suite medians rise 139,448 → 154,672 KiB, while varied-suite
+medians are 150,124 → 148,852 KiB. Even graph-only RSS varies 118,360 → 128,600 KiB despite nearly
+identical retained Ruby heap; do not attribute every high-water change to the indexes. Windows RSS
+remains unavailable/null. There is no memory-reduction claim.
+
 ## Shared-policy study
 
 `run.rb` generates Rails-like and four-engine layouts with 200 Ruby files by default. Density

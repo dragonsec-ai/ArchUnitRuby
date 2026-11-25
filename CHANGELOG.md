@@ -2,6 +2,9 @@
 
 ## 1.1.1 (unreleased)
 
+- Lazily reuse immutable node/internal/external-edge views within each cached graph analysis
+  across file and layer checks. Invalidation, per-rule filtering, callbacks and logging stay intact;
+  views trade additional retained memory for less repeated projection work.
 - Reuse one source-entry status, compile exclusion matching once, and build relative identifiers
   from directory children in a pruned iterative source walker, preserving sorted graph inputs.
 - Fail closed on unreadable/disappearing included directory listings instead of inheriting Find's

@@ -72,9 +72,9 @@ module ArchUnit
         end
 
         def perform_check(options)
-          graph = ArchUnit::Extraction.extract_graph(project_locator, options:)
-          nodes = Common::Projection.project_to_nodes(graph)
-          edges = Common::Projection.project_edges(graph, Common::Projection.per_internal_edge)
+          views = ArchUnit::Extraction.extract_graph_views(project_locator, options:)
+          nodes = views.nodes
+          edges = views.internal_edges
           Common::Logging::Inspection.projection(edges)
 
           empty_policy_violations(nodes, options) +

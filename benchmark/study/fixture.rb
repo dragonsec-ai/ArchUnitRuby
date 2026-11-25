@@ -9,8 +9,8 @@ module PerformanceStudy
     attr_reader :root, :pairs, :density, :shape
 
     def initialize(root:, pairs:, density:, shape:)
-      unless pairs.is_a?(Integer) && pairs.between?(4, 1000) && [1, 3].include?(density)
-        raise ArgumentError, 'study requires 4..1000 pairs and density 1 or 3'
+      unless pairs.is_a?(Integer) && pairs.between?(4, 5000) && [1, 3].include?(density)
+        raise ArgumentError, 'study requires 4..5000 pairs and density 1 or 3'
       end
       raise ArgumentError, 'unknown study shape' unless %w[rails engines].include?(shape)
 
