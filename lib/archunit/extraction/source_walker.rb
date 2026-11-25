@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'source_pattern_matcher'
+require_relative 'source_identifier'
 
 module ArchUnit
   module Extraction
@@ -53,7 +54,6 @@ module ArchUnit
       end
 
       def child_identifier(prefix, name)
-        name = name.tr('\\', '/')
         prefix.empty? ? name : "#{prefix}/#{name}"
       end
 
@@ -61,7 +61,7 @@ module ArchUnit
         if kind == :directory
           pending << [path, identifier]
         else
-          files << identifier.freeze
+          files << SourceIdentifier.validate(identifier).freeze
         end
       end
     end

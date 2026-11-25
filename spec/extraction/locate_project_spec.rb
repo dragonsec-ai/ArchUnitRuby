@@ -23,6 +23,16 @@ RSpec.describe ArchUnit::Extraction, '.locate_project' do
     path.realpath.to_s.tr('\\', '/')
   end
 
+  it 'does not substitute a different directory for a POSIX root containing a backslash' do
+    skip 'backslash is a native path separator' if File::ALT_SEPARATOR
+
+    original = create_file('one\\two/Gemfile').dirname
+    create_file('one/two/Gemfile')
+    expect { described_class.locate_project(original) }.to raise_error(ArchUnit::TechnicalError)
+    expect { described_class.enumerate_source_files(original) }
+      .to raise_error(ArchUnit::TechnicalError, /literal backslash/)
+  end
+
   it 'uses an explicit directory even when it has no project marker' do
     project = @temporary_root.join('explicit-project')
     project.mkdir
