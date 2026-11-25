@@ -19,7 +19,7 @@ module ArchUnit
 
         def call(edge)
           validate_edge(edge)
-          return if edge.source == edge.target
+          return if edge.self_dependency?
 
           source_label = label_for(edge.source)
           return unless source_label

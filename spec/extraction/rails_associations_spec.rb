@@ -207,4 +207,28 @@ RSpec.describe 'Explicit Rails associations' do
     expect(association_edges(edges)).to be_empty
     expect(counters).to include(unresolved_rails_associations: 1)
   end
+
+  it 'enforces both rules when an excluded import and an included model share a label' do
+    write('app/models/client.rb', <<~RUBY)
+      require_relative 'db/store.rb'
+      class Client < ApplicationRecord
+        belongs_to :store, class_name: '::Store'
+      end
+    RUBY
+    write('app/models/db/store.rb', '# excluded')
+    write('db/store.rb', 'class Store < ApplicationRecord; end')
+    options = ArchUnit::CheckOptions.new(rails_associations: true,
+                                         source_exclusions: ['app/models/db/**'])
+    rule = ArchUnit.files(@root).in_path('app/models/client.rb').should_not
+    internal = rule.depend_on_files.in_path('db/**')
+    external = rule.depend_on_external_modules.matching('db/store.rb')
+    { internal => :rails_association, external => :require_relative }.each do |check, kind|
+      violations = check.check(options)
+      expect(violations.size).to eq(1)
+      raw = violations.first.dependency.cumulated_edges
+      expect(raw.size).to eq(1)
+      expect(raw.first.import_kinds).to eq([kind])
+      expect(raw.first.evidence.map(&:kind)).to eq([kind])
+    end
+  end
 end

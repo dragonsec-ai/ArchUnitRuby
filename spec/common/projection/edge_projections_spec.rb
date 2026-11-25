@@ -45,7 +45,9 @@ RSpec.describe ArchUnit::Common::Projection, 'built-in edge projections' do
         source_label: 'source.rb', target_label: 'json'
       )
       expect(mapper.call(edge('source.rb', 'target.rb'))).to be_nil
-      expect(mapper.call(edge('source.rb', 'source.rb', external: true))).to be_nil
+      expect(mapper.call(edge('source.rb', 'source.rb', external: true))).to have_attributes(
+        source_label: 'source.rb', target_label: 'source.rb'
+      )
     end
   end
 

@@ -44,6 +44,16 @@ RSpec.describe 'Immutable graph views' do
     expect(results.map(&:object_id).uniq.length).to eq(1)
   end
 
+  it 'keeps a same-spelled external import without inventing an incoming edge' do
+    dependency = ArchUnit::Edge.new(source: 'a.rb', target: 'a.rb', external: true)
+    edges << dependency
+    node = views.nodes.find { |item| item.label == 'a.rb' }
+    expect(node.outgoing).to include(dependency)
+    expect(node.incoming).to be_empty
+    expect(views.external_edges.flat_map(&:cumulated_edges)).to include(dependency)
+    expect(views.internal_edges.flat_map(&:cumulated_edges)).not_to include(dependency)
+  end
+
   it 'does not retain a failed projection as a successful empty view' do
     calls = 0
     allow(projection).to receive(:project_to_nodes).and_wrap_original do |original, *args|

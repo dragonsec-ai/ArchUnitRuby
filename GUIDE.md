@@ -232,7 +232,9 @@ report.export_as_html('reports/services.html')
 
 Queries include `focus_on`, `reachable_from`, and `dependents_of`. Collapse by folder depth or a
 regular-expression replacement. Every format has an in-memory `to_<format>` and an
-`export_as_<format>(path)` terminal.
+`export_as_<format>(path)` terminal. External imports are leaves: a query never follows an import
+into an unrelated project file just because their names match. If two displayed labels collide,
+the external label gets a ` [external]` suffix (repeated if needed). Filters use the original names.
 
 ### Code Metrics
 

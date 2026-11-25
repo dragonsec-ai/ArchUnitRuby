@@ -16,7 +16,8 @@ module ArchUnit
       end
 
       def self.merge_parallel_edges(edges)
-        edges.group_by { |edge| [edge.source, edge.target] }.values.map do |parallel_edges|
+        groups = edges.group_by { |edge| [edge.source, edge.target, edge.external] }
+        groups.each_value.map do |parallel_edges|
           first = parallel_edges.first
           Common::Extraction::Edge.new(
             source: first.source, target: first.target, external: first.external,

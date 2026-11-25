@@ -33,7 +33,7 @@ module ArchUnit
 
       def collect_node_edge(edge, labels, incoming, outgoing, include_externals)
         labels[edge.source] = true
-        return if self_edge?(edge)
+        return if edge.self_dependency?
 
         outgoing[edge.source] << edge
         return if edge.external && !include_externals
@@ -42,11 +42,6 @@ module ArchUnit
         incoming[edge.target] << edge
       end
       private_class_method :collect_node_edge
-
-      def self_edge?(edge)
-        edge.source == edge.target
-      end
-      private_class_method :self_edge?
 
       def validate_include_externals(value)
         return if [true, false].include?(value)
