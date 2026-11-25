@@ -6,6 +6,7 @@
 --no-private
 --no-stats
 --asset docs-assets/custom.css:css/archunit.css
+--asset docs-assets/custom.js:js/archunit.js
 lib/**/*.rb
 -
 README.md

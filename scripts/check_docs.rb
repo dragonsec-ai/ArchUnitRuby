@@ -7,8 +7,8 @@ require_relative 'documentation_links'
 ROOT = Pathname.new(__dir__).join('..').expand_path
 OUTPUT = ROOT.join('docs')
 REQUIRED_FILES = %w[
-  index.html file.API.html file.GUIDE.html class_list.html css/archunit.css assets/logo-rounded.png
-  assets/social-preview.png .nojekyll robots.txt sitemap.xml
+  index.html file.API.html file.GUIDE.html _index.html class_list.html css/archunit.css
+  js/archunit.js assets/logo-rounded.png assets/social-preview.png .nojekyll robots.txt sitemap.xml
 ].freeze
 
 def internal_target(page, href)
@@ -20,6 +20,15 @@ def internal_target(page, href)
   page.dirname.join(URI::DEFAULT_PARSER.unescape(relative)).cleanpath
 end
 
+def check_reference_navigation(page, content)
+  return unless content.include?('class="archunit-topbar"')
+
+  href = content[%r{<a href="([^"]+)">Reference</a>}, 1]
+  return if href && internal_target(page, href) == OUTPUT.join('_index.html')
+
+  raise "Reference must link to the full API index from #{page.relative_path_from(OUTPUT)}"
+end
+
 missing = REQUIRED_FILES.reject { |relative| OUTPUT.join(relative).exist? }
 raise "Documentation build is missing: #{missing.join(', ')}" unless missing.empty?
 
@@ -29,6 +38,8 @@ broken = pages.flat_map do |page|
   unless content.include?('data-archunit-theme')
     raise "Custom theme is missing from #{page.relative_path_from(OUTPUT)}"
   end
+
+  check_reference_navigation(page, content)
   if page.basename.to_s.match?(/\A(?:class|method|file)_list\.html\z/) &&
      !content.include?('<body class="archunit-list">')
     raise "Navigation theme hook is missing from #{page.relative_path_from(OUTPUT)}"
@@ -38,6 +49,12 @@ broken = pages.flat_map do |page|
     target = internal_target(page, href)
     "#{page.relative_path_from(OUTPUT)} -> #{href}" if target && !target.exist?
   end
+end
+
+reference = OUTPUT.join('_index.html').binread.force_encoding(Encoding::UTF_8)
+unless reference.include?('class="archunit-topbar"') &&
+       reference.include?('href="ArchUnit.html"') && reference.include?('href="ArchUnit/CLI.html"')
+  raise 'The full API index must keep site navigation and link to ArchUnit and CLI'
 end
 
 raise "Broken documentation links:\n#{broken.join("\n")}" unless broken.empty?

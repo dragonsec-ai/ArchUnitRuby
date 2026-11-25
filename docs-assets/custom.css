@@ -60,7 +60,9 @@ a:hover,
 
 a:focus-visible,
 button:focus-visible,
-input:focus-visible {
+input:focus-visible,
+summary:focus-visible,
+pre:focus-visible {
   outline: 3px solid var(--au-gold);
   outline-offset: 3px;
 }
@@ -70,6 +72,7 @@ input:focus-visible {
     radial-gradient(circle at 78% -10%, rgb(228 73 63 / 14%), transparent 34rem),
     var(--au-bg);
   color: var(--au-text);
+  min-width: 0;
   padding: 0 3rem 4rem;
 }
 
@@ -391,6 +394,7 @@ pre,
   font-family: var(--au-mono) !important;
   line-height: 1.65;
   margin: 1.5rem 0;
+  max-width: 100%;
   overflow-x: auto;
   padding: 1.35rem !important;
 }
@@ -551,6 +555,10 @@ h2 small a:hover,
   text-transform: uppercase;
 }
 
+#toc > summary {
+  cursor: pointer;
+}
+
 #toc li {
   line-height: 1.5;
 }
@@ -678,6 +686,10 @@ pre.code .rubyid_include {
     position: static;
     width: 100%;
   }
+
+  #content {
+    overflow-wrap: anywhere;
+  }
 }
 
 @media (max-width: 620px) {
@@ -702,7 +714,6 @@ pre.code .rubyid_include {
   pre {
     border-radius: 8px !important;
     font-size: 0.78rem;
-    margin-inline: -0.5rem;
     padding: 1rem !important;
   }
 }

@@ -503,8 +503,17 @@ puts ArchUnit.project_slices.defined_by('app/(**)/').to_plantuml(options)
 values = ArchUnit.metrics.distance.instability.measure(options)
 ~~~
 
-The default remains `dependency_analysis: :imports`. Expanded mode indexes declarations from the
-same included source files, then resolves references to definition files. Files remain graph nodes.
+The default remains `dependency_analysis: :imports` to preserve the meaning of existing rules and
+keep cold checks focused on explicit imports. Start there for gems and apps that declare their
+dependencies with `require` or `require_relative`. Start with `:imports_and_constants` for
+Rails/Zeitwerk or other autoloaded applications: a green imports-only check may simply mean the
+dependency was not represented in the import graph. `rails_imports: true` is a separate setting for
+legacy `require_dependency` calls, not a substitute for constant analysis.
+
+Expanded mode indexes declarations from the same included source files, then resolves references
+to definition files. This adds cold-check time and memory, especially in larger projects; later
+checks with the same extraction options can reuse the cached graph. Measure on your own code and
+verify a known violating reference before enabling a rule in CI. Files remain graph nodes.
 It supports lexical nesting, compact namespaces, root-qualified names, and explicit superclass,
 `include`, `prepend`, and `extend` references. Nested `module A; module B` includes `A` in lexical
 lookup; top-level `module A::B` does not. A nearer namespace shadows a root namespace even when its
@@ -698,6 +707,16 @@ patterns can be overridden with `PresetOptions.folders` (String or Array of sour
 Unknown/duplicate keys and empty patterns are errors. For arbitrary policies use `project_layers`.
 The Rails preset is opinionated and expects a services layer; it is not full Rails/DDD verification
 and does not automatically enable `rails_imports` or constant analysis.
+For a Zeitwerk app, pass expanded analysis at check time:
+
+~~~ruby
+rule = ArchUnit.architecture_preset(:rails)
+options = ArchUnit::CheckOptions.new(dependency_analysis: :imports_and_constants)
+ArchUnit.assert_passes(rule, options)
+~~~
+
+For a CLI-configured preset use `bundle exec archunit check --dependency-analysis imports_and_constants`.
+Neither option boots Rails or reproduces its runtime autoloading.
 
 In trusted CLI configuration use `rule('Core independent') { architecture_preset(:hexagonal) }`;
 the helper defaults to the CLI's selected project root. Public `ArchUnit.architecture_preset` uses

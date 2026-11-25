@@ -279,6 +279,8 @@ jobs:
     name: RAG fixture on Ruby 4.0
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      ARCHUNIT_RUBY_PATH: ../ArchUnitRuby
 
     steps:
       - name: Check out ArchUnitRuby
@@ -299,8 +301,7 @@ jobs:
           bundler-cache: true
           working-directory: ArchUnitRuby-TestRepo-RAG
         env:
-          # The fixture locks an older version of the adjacent, checked-out path gem.
-          # Refresh that entry for this revision while retaining its locked dependencies.
+          # Switch the fixture's locked release to the adjacent revision in this disposable job.
           BUNDLE_FROZEN: "false"
 
       - name: Verify the fixture loads this checkout

@@ -359,6 +359,10 @@ observed files matching multiple layers with UserError; empty layers use the nor
 EmptyTestViolation defense unless explicitly permitted. CheckOptions controls analysis, exclusions,
 cache and logging as usual; source parse errors remain fatal. `.because` and framework matchers
 work normally. Rails conventions do not boot Rails or automatically turn on expanded/helper modes.
+For an autoloaded Rails app, pass
+`CheckOptions.new(dependency_analysis: :imports_and_constants)` to `check` or `assert_passes`
+(CLI: `--dependency-analysis imports_and_constants`). Otherwise, a check can pass without seeing
+references between mapped layers that have no imports. See [choosing a mode](README.md#analysis).
 These presets are not complete architecture/cycle/protocol verification; compose more rules or
 build arbitrary policies with `project_layers`.
 
