@@ -6,6 +6,7 @@ require 'pathname'
 ROOT = Pathname.new(__dir__).join('..').expand_path
 OUTPUT = ROOT.join('docs')
 STYLESHEET = OUTPUT.join('css', 'archunit.css')
+THEME_SCRIPT = OUTPUT.join('js', 'archunit.js')
 LOGO = OUTPUT.join('assets', 'logo-rounded.png')
 SOCIAL_PREVIEW = OUTPUT.join('assets', 'social-preview.png')
 SITE_URL = 'https://dragonsec-ai.github.io/ArchUnitRuby/'
@@ -32,7 +33,6 @@ NAVIGATION = <<~HTML
   </div>
 HTML
 PAGE_HEAD = <<~HTML
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b0e14">
   <meta name="description" content="ArchUnitRuby architecture testing documentation and API reference">
   <meta property="og:title" content="ArchUnitRuby — Architecture testing for Ruby">
@@ -43,7 +43,9 @@ PAGE_HEAD = <<~HTML
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="%<logo>s">
   <link rel="stylesheet" href="%<stylesheet>s" data-archunit-theme>
+  <script defer src="%<theme_script>s"></script>
 HTML
+VIEWPORT = %(<meta name="viewport" content="width=device-width, initial-scale=1">\n)
 
 def relative_href(target, page)
   target.relative_path_from(page.dirname).to_s.tr('\\', '/')
@@ -53,15 +55,17 @@ def navigation(page)
   guide = relative_href(OUTPUT.join('index.html'), page)
   api_guide = relative_href(OUTPUT.join('file.API.html'), page)
   user_guide = relative_href(OUTPUT.join('file.GUIDE.html'), page)
-  reference = relative_href(OUTPUT.join('class_list.html'), page)
+  reference = relative_href(OUTPUT.join('_index.html'), page)
   logo = relative_href(LOGO, page)
   format(NAVIGATION, guide:, user_guide:, api_guide:, reference:, logo:)
 end
 
-def page_head(page)
+def page_head(page, content)
   stylesheet = relative_href(STYLESHEET, page)
+  theme_script = relative_href(THEME_SCRIPT, page)
   logo = relative_href(LOGO, page)
-  format(PAGE_HEAD, site_url: SITE_URL, logo:, stylesheet:)
+  viewport = content.include?('name="viewport"') ? '' : VIEWPORT
+  viewport + format(PAGE_HEAD, site_url: SITE_URL, logo:, stylesheet:, theme_script:)
 end
 
 def rewrite_source_links(content, page)
@@ -85,7 +89,7 @@ def prepare_page(path)
   if page.basename.to_s.match?(/\A(?:class|method|file)_list\.html\z/)
     content.sub!('<body>', '<body class="archunit-list">')
   end
-  content.sub!('</head>', "#{page_head(page)}</head>")
+  content.sub!('</head>', "#{page_head(page, content)}</head>")
   content.sub!(/(<div id="main"[^>]*>)/, "\\1#{navigation(page)}")
   page.binwrite(content)
 end
@@ -95,6 +99,7 @@ FileUtils.cp(ROOT.join('assets', 'logo-rounded.png'), LOGO)
 FileUtils.cp(ROOT.join('assets', 'social-preview.png'), SOCIAL_PREVIEW)
 
 raise 'YARD did not generate the documentation stylesheet' unless STYLESHEET.file?
+raise 'YARD did not copy the documentation theme script' unless THEME_SCRIPT.file?
 raise 'YARD did not copy the documentation logo' unless LOGO.file?
 
 pages = Dir[OUTPUT.join('**', '*.html')]

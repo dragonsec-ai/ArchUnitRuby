@@ -183,10 +183,17 @@ report queries, and complete examples.
 
 ## Choosing the analysis mode
 
-The default `:imports` mode recognizes supported static `require`, `require_relative`,
-`autoload`, and `load` calls. It does not infer the runtime behavior of Ruby.
+The default `:imports` mode checks supported static `require`, `require_relative`,
+`autoload`, and `load` calls. It keeps existing rules compatible and avoids the cost and
+uncertainty of inferring dependencies from constant names.
 
-For autoloaded code, explicitly add the supported static constant-reference model:
+| Your project | Start with | Why |
+| --- | --- | --- |
+| Rails/Zeitwerk or another autoloaded app | `:imports_and_constants` | Cross-layer constant uses often have no explicit import. |
+| Gem or app with explicit imports | `:imports` | Checks the declared dependencies without building a constant index. |
+
+The Rails preset defines folder boundaries; it does **not** switch analysis modes. In imports-only
+mode, a green check can miss an autoloaded dependency. Opt in when checking autoloaded code:
 
 <!-- example:expanded-options -->
 ~~~ruby
@@ -196,8 +203,10 @@ options = ArchUnit::CheckOptions.new(dependency_analysis: :imports_and_constants
 violations = rule.check(options)
 ~~~
 
-Expanded analysis maps known project constants to definition files and retains evidence.
-It is still bounded: ambiguous, inherited, or dynamic lookup can remain unresolved.
+Expanded analysis builds a project-wide constant index and resolves references on a cold check.
+Expect extra time and memory, especially on large projects; repeated checks can reuse the cached
+graph. A green result still is not proof of runtime behavior: ambiguous, inherited, and dynamic
+lookups can remain unresolved. Verify your rule against a known violation before relying on it in CI.
 [Resolution details](GUIDE.md#analysis) · [Options and caching](API.md#check-options)
 
 <a id="development-cli"></a>
