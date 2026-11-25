@@ -1,0 +1,4334 @@
+{
+  "schema_version": 1,
+  "run": "https://github.com/dragonsec-ai/ArchUnitRuby/actions/runs/45446554405",
+  "baseline": "e2d347e14e0f8d06489582bcb7c5473295a7df4b",
+  "candidate": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6",
+  "summary": [
+    {
+      "host": "ubuntu",
+      "workload": "graph",
+      "side": "baseline",
+      "cold_graph_seconds": 1.9218647449999935,
+      "cold_suite_seconds": 1.848795059000004,
+      "cold_suite_allocations": 5110600,
+      "warm_suite_seconds": 0,
+      "warm_suite_allocations": 0,
+      "retained_graph_bytes": 7057224,
+      "retained_suite_bytes": 6977848,
+      "peak_rss_kb": 118360
+    },
+    {
+      "host": "ubuntu",
+      "workload": "graph",
+      "side": "candidate",
+      "cold_graph_seconds": 1.9093094179999994,
+      "cold_suite_seconds": 1.8656661440000022,
+      "cold_suite_allocations": 5110605,
+      "warm_suite_seconds": 0,
+      "warm_suite_allocations": 0,
+      "retained_graph_bytes": 7057488,
+      "retained_suite_bytes": 6978112,
+      "peak_rss_kb": 128600
+    },
+    {
+      "host": "ubuntu",
+      "workload": "identical",
+      "side": "baseline",
+      "cold_graph_seconds": 1.8958234740000108,
+      "cold_suite_seconds": 3.6369293049999953,
+      "cold_suite_allocations": 10214732,
+      "warm_suite_seconds": 1.7647523210000031,
+      "warm_suite_allocations": 5104180,
+      "retained_graph_bytes": 7057008,
+      "retained_suite_bytes": 6980771,
+      "peak_rss_kb": 139448
+    },
+    {
+      "host": "ubuntu",
+      "workload": "identical",
+      "side": "candidate",
+      "cold_graph_seconds": 1.9466522029999993,
+      "cold_suite_seconds": 2.552193186000011,
+      "cold_suite_allocations": 6699438,
+      "warm_suite_seconds": 0.529792920999995,
+      "warm_suite_allocations": 1403860,
+      "retained_graph_bytes": 7057272,
+      "retained_suite_bytes": 10301115,
+      "peak_rss_kb": 154672
+    },
+    {
+      "host": "ubuntu",
+      "workload": "one",
+      "side": "baseline",
+      "cold_graph_seconds": 1.9094020090000043,
+      "cold_suite_seconds": 1.983308889,
+      "cold_suite_allocations": 5365760,
+      "warm_suite_seconds": 0.07674520599999823,
+      "warm_suite_allocations": 255209,
+      "retained_graph_bytes": 7057008,
+      "retained_suite_bytes": 6980771,
+      "peak_rss_kb": 136184
+    },
+    {
+      "host": "ubuntu",
+      "workload": "one",
+      "side": "candidate",
+      "cold_graph_seconds": 1.9164365749999916,
+      "cold_suite_seconds": 2.0097295700000046,
+      "cold_suite_allocations": 5365771,
+      "warm_suite_seconds": 0.025472491999991576,
+      "warm_suite_allocations": 70193,
+      "retained_graph_bytes": 7057272,
+      "retained_suite_bytes": 10301115,
+      "peak_rss_kb": 127824
+    },
+    {
+      "host": "ubuntu",
+      "workload": "varied",
+      "side": "baseline",
+      "cold_graph_seconds": 1.9163497590000134,
+      "cold_suite_seconds": 3.6686920230000055,
+      "cold_suite_allocations": 10652534,
+      "warm_suite_seconds": 1.8154181459999847,
+      "warm_suite_allocations": 5541790,
+      "retained_graph_bytes": 7057904,
+      "retained_suite_bytes": 6983291,
+      "peak_rss_kb": 150124
+    },
+    {
+      "host": "ubuntu",
+      "workload": "varied",
+      "side": "candidate",
+      "cold_graph_seconds": 1.9077070349999872,
+      "cold_suite_seconds": 2.995096063999995,
+      "cold_suite_allocations": 8532348,
+      "warm_suite_seconds": 0.9386799760000883,
+      "warm_suite_allocations": 3236581,
+      "retained_graph_bytes": 7058296,
+      "retained_suite_bytes": 10303443,
+      "peak_rss_kb": 148852
+    },
+    {
+      "host": "windows",
+      "workload": "graph",
+      "side": "baseline",
+      "cold_graph_seconds": 4.947828900000047,
+      "cold_suite_seconds": 5.073824200000047,
+      "cold_suite_allocations": 5505648,
+      "warm_suite_seconds": 0,
+      "warm_suite_allocations": 0,
+      "retained_graph_bytes": 7056882,
+      "retained_suite_bytes": 6977106,
+      "peak_rss_kb": null
+    },
+    {
+      "host": "windows",
+      "workload": "graph",
+      "side": "candidate",
+      "cold_graph_seconds": 4.971423799999968,
+      "cold_suite_seconds": 4.966438299999993,
+      "cold_suite_allocations": 5505649,
+      "warm_suite_seconds": 0,
+      "warm_suite_allocations": 0,
+      "retained_graph_bytes": 7056826,
+      "retained_suite_bytes": 6977370,
+      "peak_rss_kb": null
+    },
+    {
+      "host": "windows",
+      "workload": "identical",
+      "side": "baseline",
+      "cold_graph_seconds": 5.0427517000000535,
+      "cold_suite_seconds": 7.040679999999952,
+      "cold_suite_allocations": 10610267,
+      "warm_suite_seconds": 1.9151043000001664,
+      "warm_suite_allocations": 5104700,
+      "retained_graph_bytes": 7056410,
+      "retained_suite_bytes": 6978186,
+      "peak_rss_kb": null
+    },
+    {
+      "host": "windows",
+      "workload": "identical",
+      "side": "candidate",
+      "cold_graph_seconds": 5.020239700000047,
+      "cold_suite_seconds": 5.789539499999933,
+      "cold_suite_allocations": 7094983,
+      "warm_suite_seconds": 0.6431811999999582,
+      "warm_suite_allocations": 1404380,
+      "retained_graph_bytes": 7056674,
+      "retained_suite_bytes": 10298530,
+      "peak_rss_kb": null
+    },
+    {
+      "host": "windows",
+      "workload": "one",
+      "side": "baseline",
+      "cold_graph_seconds": 5.000407600000017,
+      "cold_suite_seconds": 5.1833904000000075,
+      "cold_suite_allocations": 5760805,
+      "warm_suite_seconds": 0.08667239999999765,
+      "warm_suite_allocations": 255235,
+      "retained_graph_bytes": 7056410,
+      "retained_suite_bytes": 6978186,
+      "peak_rss_kb": null
+    },
+    {
+      "host": "windows",
+      "workload": "one",
+      "side": "candidate",
+      "cold_graph_seconds": 4.969672100000025,
+      "cold_suite_seconds": 5.136223400000063,
+      "cold_suite_allocations": 5760815,
+      "warm_suite_seconds": 0.03173509999999169,
+      "warm_suite_allocations": 70219,
+      "retained_graph_bytes": 7056674,
+      "retained_suite_bytes": 10298530,
+      "peak_rss_kb": null
+    },
+    {
+      "host": "windows",
+      "workload": "varied",
+      "side": "baseline",
+      "cold_graph_seconds": 5.13949260000004,
+      "cold_suite_seconds": 7.204906299999948,
+      "cold_suite_allocations": 11048077,
+      "warm_suite_seconds": 1.8887220999996543,
+      "warm_suite_allocations": 5542310,
+      "retained_graph_bytes": 7056858,
+      "retained_suite_bytes": 6980706,
+      "peak_rss_kb": null
+    },
+    {
+      "host": "windows",
+      "workload": "varied",
+      "side": "candidate",
+      "cold_graph_seconds": 5.117124500000045,
+      "cold_suite_seconds": 6.124021200000016,
+      "cold_suite_allocations": 8927887,
+      "warm_suite_seconds": 1.084040499999901,
+      "warm_suite_allocations": 3237101,
+      "retained_graph_bytes": 7057250,
+      "retained_suite_bytes": 10300858,
+      "peak_rss_kb": null
+    }
+  ],
+  "samples": [
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.9218647449999935,
+          "allocated_objects": 5111222
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10853261,
+          "peak_rss_kb": 118360
+        },
+        "cold_plus_suite": {
+          "seconds": 1.848795059000004,
+          "allocated_objects": 5110600
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10773885,
+          "peak_rss_kb": 118360
+        },
+        "warm_rules": [],
+        "retained_before": {
+          "ruby_heap_bytes": 3796037,
+          "peak_rss_kb": 35668
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "graph",
+        "files": 10000,
+        "rule_count": 0
+      },
+      "host": "ubuntu",
+      "workload": "graph",
+      "trial": 1,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.896441768999999,
+          "allocated_objects": 5111233
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10863605,
+          "peak_rss_kb": 129788
+        },
+        "cold_plus_suite": {
+          "seconds": 1.8656661440000022,
+          "allocated_objects": 5110605
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10784229,
+          "peak_rss_kb": 129788
+        },
+        "warm_rules": [],
+        "retained_before": {
+          "ruby_heap_bytes": 3806117,
+          "peak_rss_kb": 35644
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "graph",
+        "files": 10000,
+        "rule_count": 0
+      },
+      "host": "ubuntu",
+      "workload": "graph",
+      "trial": 1,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.910675967000003,
+          "allocated_objects": 5111222
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10853261,
+          "peak_rss_kb": 118396
+        },
+        "cold_plus_suite": {
+          "seconds": 1.8557526410000094,
+          "allocated_objects": 5110602
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10773885,
+          "peak_rss_kb": 118396
+        },
+        "warm_rules": [],
+        "retained_before": {
+          "ruby_heap_bytes": 3796037,
+          "peak_rss_kb": 35636
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "graph",
+        "files": 10000,
+        "rule_count": 0
+      },
+      "host": "ubuntu",
+      "workload": "graph",
+      "trial": 2,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.9093094179999994,
+          "allocated_objects": 5111233
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10863605,
+          "peak_rss_kb": 128200
+        },
+        "cold_plus_suite": {
+          "seconds": 1.8604743699999986,
+          "allocated_objects": 5110605
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10784229,
+          "peak_rss_kb": 128200
+        },
+        "warm_rules": [],
+        "retained_before": {
+          "ruby_heap_bytes": 3806117,
+          "peak_rss_kb": 35716
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "graph",
+        "files": 10000,
+        "rule_count": 0
+      },
+      "host": "ubuntu",
+      "workload": "graph",
+      "trial": 2,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.9222181150000068,
+          "allocated_objects": 5111222
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10853261,
+          "peak_rss_kb": 118152
+        },
+        "cold_plus_suite": {
+          "seconds": 1.845372396000002,
+          "allocated_objects": 5110600
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10773885,
+          "peak_rss_kb": 118152
+        },
+        "warm_rules": [],
+        "retained_before": {
+          "ruby_heap_bytes": 3796037,
+          "peak_rss_kb": 35660
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "graph",
+        "files": 10000,
+        "rule_count": 0
+      },
+      "host": "ubuntu",
+      "workload": "graph",
+      "trial": 3,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.909699248999999,
+          "allocated_objects": 5111233
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10863605,
+          "peak_rss_kb": 128600
+        },
+        "cold_plus_suite": {
+          "seconds": 1.8847764340000026,
+          "allocated_objects": 5110606
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10784229,
+          "peak_rss_kb": 128600
+        },
+        "warm_rules": [],
+        "retained_before": {
+          "ruby_heap_bytes": 3806117,
+          "peak_rss_kb": 35688
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "graph",
+        "files": 10000,
+        "rule_count": 0
+      },
+      "host": "ubuntu",
+      "workload": "graph",
+      "trial": 3,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.8958234740000108,
+          "allocated_objects": 5111220
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10856713,
+          "peak_rss_kb": 128572
+        },
+        "cold_plus_suite": {
+          "seconds": 3.7031027720000083,
+          "allocated_objects": 10214732
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10780477,
+          "peak_rss_kb": 139448
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.07821692699999971,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.07706127800000218,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.07689965699999846,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.08784331900000097,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.08733574699999735,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.07695945500000789,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.08829159700000844,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.08365600000000484,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.0890826929999946,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.08695762099999627,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.09122326199999975,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.08917935799999555,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.08939430600000264,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.09021541799999966,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.08873222999999086,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.08874824099999046,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.09139167399999337,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.08925178799999856,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.08930697999998927,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.0892176340000077,
+            "allocated_objects": 255209
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3799705,
+          "peak_rss_kb": 35500
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "identical",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "ubuntu",
+      "workload": "identical",
+      "trial": 1,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.9466522029999993,
+          "allocated_objects": 5111230
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10867057,
+          "peak_rss_kb": 129452
+        },
+        "cold_plus_suite": {
+          "seconds": 2.5723091090000025,
+          "allocated_objects": 6699438
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14110900,
+          "peak_rss_kb": 131668
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.025280343999995125,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.024321255000003816,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.0247931130000012,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.024620145000000093,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.025040309999994292,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.024646931999996013,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.025189863999997897,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.024949837999997726,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.025474178999999708,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02518962599999952,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.025037544999989336,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02543692499999395,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.027834377000004906,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02733126600000446,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.027715237999998976,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.03634130099999311,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.027309080999998514,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02450483900000222,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02480192999999531,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02482408499999167,
+            "allocated_objects": 70193
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3809785,
+          "peak_rss_kb": 35672
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "identical",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "ubuntu",
+      "workload": "identical",
+      "trial": 1,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.8898207860000014,
+          "allocated_objects": 5111220
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10856713,
+          "peak_rss_kb": 128088
+        },
+        "cold_plus_suite": {
+          "seconds": 3.63389369799998,
+          "allocated_objects": 10214732
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10780476,
+          "peak_rss_kb": 152528
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.0936035279999885,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.0793103780000024,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.07865979400000356,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.07976704199998608,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.09641057700000033,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.09599429000002146,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.07942676800001891,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.07909336999998118,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.09836537200001771,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.0816033090000019,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.0869334580000043,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.08870611000000395,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.08800764000000072,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.09111714900001289,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.08991988199997536,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.0914968090000059,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.09200254399999608,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.09138714499999878,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.09085099099999638,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.09209616499998674,
+            "allocated_objects": 255209
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3799705,
+          "peak_rss_kb": 35664
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "identical",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "ubuntu",
+      "workload": "identical",
+      "trial": 2,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.9091073660000006,
+          "allocated_objects": 5111230
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10867057,
+          "peak_rss_kb": 129892
+        },
+        "cold_plus_suite": {
+          "seconds": 2.552193186000011,
+          "allocated_objects": 6699438
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14110900,
+          "peak_rss_kb": 155908
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.025968169999998736,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.024876699000003555,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.0245307739999987,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.024794681000003038,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.024538506999988385,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.025094054999982518,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02581480300000294,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.025714114000010113,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.025221683000012263,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.025159790000003568,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02519646799999009,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02545702899999469,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02552303699999925,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02499087300000724,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02547824600000581,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.025075782000016034,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.029186379999998735,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.028136708999994653,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.028393908999987616,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.04064121199999704,
+            "allocated_objects": 70193
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3809785,
+          "peak_rss_kb": 35608
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "identical",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "ubuntu",
+      "workload": "identical",
+      "trial": 2,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.9228705870000056,
+          "allocated_objects": 5111221
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10856713,
+          "peak_rss_kb": 128064
+        },
+        "cold_plus_suite": {
+          "seconds": 3.6369293049999953,
+          "allocated_objects": 10214730
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10780476,
+          "peak_rss_kb": 132292
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.10834671399999252,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.1150679959999934,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.11347938899999122,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.12408743299999969,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.11372989899999197,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.11412243200001626,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.11261161800001673,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.12724027699999851,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.11422074700001872,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.11765874899998607,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.11452808500001765,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.12804746000000478,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.11434368999999833,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.11345375400000535,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.11339398399999823,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.12714151199998014,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.11404820699999618,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.1141781270000024,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.10934818599997698,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.1286106150000137,
+            "allocated_objects": 255209
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3799705,
+          "peak_rss_kb": 35652
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "identical",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "ubuntu",
+      "workload": "identical",
+      "trial": 3,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.974602850000025,
+          "allocated_objects": 5111228
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10867057,
+          "peak_rss_kb": 122376
+        },
+        "cold_plus_suite": {
+          "seconds": 2.4993139540000016,
+          "allocated_objects": 6699440
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14110900,
+          "peak_rss_kb": 154672
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.025558605000014722,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.025314745999992283,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.025156619000000546,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.024898290999999517,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02514276799999493,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.026729701999983035,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.024988903000007667,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02503133799999091,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.025267571000000544,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.025405401999989863,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.025481949999999642,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02556295200000136,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.025763347999998132,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02612352899998882,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.025405460000001767,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.026838006999980735,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.027295548000012104,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02784575200001882,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02788184299998875,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.039339966000000004,
+            "allocated_objects": 70193
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3809785,
+          "peak_rss_kb": 35632
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "identical",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "ubuntu",
+      "workload": "identical",
+      "trial": 3,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.9205077949999918,
+          "allocated_objects": 5111221
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10856433,
+          "peak_rss_kb": 129916
+        },
+        "cold_plus_suite": {
+          "seconds": 1.9377015789999916,
+          "allocated_objects": 5365760
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10780196,
+          "peak_rss_kb": 131224
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.08200895800000296,
+            "allocated_objects": 255209
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3799425,
+          "peak_rss_kb": 35452
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "one",
+        "files": 10000,
+        "rule_count": 1
+      },
+      "host": "ubuntu",
+      "workload": "one",
+      "trial": 1,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.8853488610000113,
+          "allocated_objects": 5111230
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10866777,
+          "peak_rss_kb": 127312
+        },
+        "cold_plus_suite": {
+          "seconds": 2.0097295700000046,
+          "allocated_objects": 5365771
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14110620,
+          "peak_rss_kb": 127824
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.02672235100000364,
+            "allocated_objects": 70193
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3809505,
+          "peak_rss_kb": 35692
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "one",
+        "files": 10000,
+        "rule_count": 1
+      },
+      "host": "ubuntu",
+      "workload": "one",
+      "trial": 1,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.8783022830000107,
+          "allocated_objects": 5111221
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10856433,
+          "peak_rss_kb": 127848
+        },
+        "cold_plus_suite": {
+          "seconds": 1.983308889,
+          "allocated_objects": 5365763
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10780196,
+          "peak_rss_kb": 136184
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.07531291899999815,
+            "allocated_objects": 255209
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3799425,
+          "peak_rss_kb": 35688
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "one",
+        "files": 10000,
+        "rule_count": 1
+      },
+      "host": "ubuntu",
+      "workload": "one",
+      "trial": 2,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.9164365749999916,
+          "allocated_objects": 5111230
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10866777,
+          "peak_rss_kb": 129688
+        },
+        "cold_plus_suite": {
+          "seconds": 1.933533495000006,
+          "allocated_objects": 5365771
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14110620,
+          "peak_rss_kb": 136504
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.024894147000011912,
+            "allocated_objects": 70193
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3809505,
+          "peak_rss_kb": 35676
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "one",
+        "files": 10000,
+        "rule_count": 1
+      },
+      "host": "ubuntu",
+      "workload": "one",
+      "trial": 2,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.9094020090000043,
+          "allocated_objects": 5111221
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10856433,
+          "peak_rss_kb": 127920
+        },
+        "cold_plus_suite": {
+          "seconds": 2.0097408459999997,
+          "allocated_objects": 5365760
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10780196,
+          "peak_rss_kb": 140304
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.07674520599999823,
+            "allocated_objects": 255209
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3799425,
+          "peak_rss_kb": 35452
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "one",
+        "files": 10000,
+        "rule_count": 1
+      },
+      "host": "ubuntu",
+      "workload": "one",
+      "trial": 3,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.929107252999998,
+          "allocated_objects": 5111230
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10866777,
+          "peak_rss_kb": 126840
+        },
+        "cold_plus_suite": {
+          "seconds": 2.0634632970000126,
+          "allocated_objects": 5365770
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14110620,
+          "peak_rss_kb": 126840
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.025472491999991576,
+            "allocated_objects": 70193
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3809505,
+          "peak_rss_kb": 35664
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "one",
+        "files": 10000,
+        "rule_count": 1
+      },
+      "host": "ubuntu",
+      "workload": "one",
+      "trial": 3,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.8920618580000053,
+          "allocated_objects": 5111220
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10881842,
+          "peak_rss_kb": 129560
+        },
+        "cold_plus_suite": {
+          "seconds": 3.5809854040000175,
+          "allocated_objects": 10652533
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10807229,
+          "peak_rss_kb": 166984
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.07433102799998892,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.07214904599999272,
+            "allocated_objects": 245209
+          },
+          {
+            "seconds": 0.06496415199998751,
+            "allocated_objects": 225209
+          },
+          {
+            "seconds": 0.04269942499999502,
+            "allocated_objects": 190203
+          },
+          {
+            "seconds": 0.04441349499998637,
+            "allocated_objects": 170204
+          },
+          {
+            "seconds": 0.04536573900000462,
+            "allocated_objects": 170204
+          },
+          {
+            "seconds": 0.12751020700000026,
+            "allocated_objects": 425253
+          },
+          {
+            "seconds": 0.07137655600001835,
+            "allocated_objects": 236475
+          },
+          {
+            "seconds": 0.08354112500001065,
+            "allocated_objects": 241475
+          },
+          {
+            "seconds": 0.08641747699999769,
+            "allocated_objects": 246475
+          },
+          {
+            "seconds": 0.0841143220000049,
+            "allocated_objects": 251475
+          },
+          {
+            "seconds": 0.0717108559999815,
+            "allocated_objects": 240225
+          },
+          {
+            "seconds": 0.08317707200001223,
+            "allocated_objects": 242725
+          },
+          {
+            "seconds": 0.08047724600001516,
+            "allocated_objects": 240225
+          },
+          {
+            "seconds": 0.09020579699998166,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.10772226099999216,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.09373691300001497,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.10134920699999839,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.09588358799999241,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.09512578299998609,
+            "allocated_objects": 360204
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3823938,
+          "peak_rss_kb": 35396
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "varied",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "ubuntu",
+      "workload": "varied",
+      "trial": 1,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.9077070349999872,
+          "allocated_objects": 5111229
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10892186,
+          "peak_rss_kb": 129548
+        },
+        "cold_plus_suite": {
+          "seconds": 3.0747175999999854,
+          "allocated_objects": 8532348
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14137333,
+          "peak_rss_kb": 133880
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.025659925000013573,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.02218684399997528,
+            "allocated_objects": 60193
+          },
+          {
+            "seconds": 0.015334502000001748,
+            "allocated_objects": 40193
+          },
+          {
+            "seconds": 0.017099224000020286,
+            "allocated_objects": 100192
+          },
+          {
+            "seconds": 0.01874700500002291,
+            "allocated_objects": 80193
+          },
+          {
+            "seconds": 0.01872647199999733,
+            "allocated_objects": 80193
+          },
+          {
+            "seconds": 0.05157631099999094,
+            "allocated_objects": 240237
+          },
+          {
+            "seconds": 0.02030199800000787,
+            "allocated_objects": 51459
+          },
+          {
+            "seconds": 0.022878493999996863,
+            "allocated_objects": 56459
+          },
+          {
+            "seconds": 0.02427237500000956,
+            "allocated_objects": 61459
+          },
+          {
+            "seconds": 0.026439086000010548,
+            "allocated_objects": 66459
+          },
+          {
+            "seconds": 0.021905873999997993,
+            "allocated_objects": 55209
+          },
+          {
+            "seconds": 0.02237744600000724,
+            "allocated_objects": 57709
+          },
+          {
+            "seconds": 0.02149987699999656,
+            "allocated_objects": 55209
+          },
+          {
+            "seconds": 0.10886830100000111,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.09090241600000581,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.1110349020000001,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.10953795900002206,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.09951740299999301,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.10199988099998336,
+            "allocated_objects": 360204
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3833890,
+          "peak_rss_kb": 35676
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "varied",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "ubuntu",
+      "workload": "varied",
+      "trial": 1,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.9221016520000092,
+          "allocated_objects": 5111220
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10881842,
+          "peak_rss_kb": 129452
+        },
+        "cold_plus_suite": {
+          "seconds": 3.6686920230000055,
+          "allocated_objects": 10652534
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10807229,
+          "peak_rss_kb": 129452
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.07940659299998742,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.09025771899999313,
+            "allocated_objects": 245209
+          },
+          {
+            "seconds": 0.07935024999997609,
+            "allocated_objects": 225209
+          },
+          {
+            "seconds": 0.054381162999987964,
+            "allocated_objects": 190203
+          },
+          {
+            "seconds": 0.05096648299999629,
+            "allocated_objects": 170204
+          },
+          {
+            "seconds": 0.054984158999985766,
+            "allocated_objects": 170204
+          },
+          {
+            "seconds": 0.1334739529999922,
+            "allocated_objects": 425253
+          },
+          {
+            "seconds": 0.0976362669999844,
+            "allocated_objects": 236475
+          },
+          {
+            "seconds": 0.10139854199999832,
+            "allocated_objects": 241475
+          },
+          {
+            "seconds": 0.10325311699997997,
+            "allocated_objects": 246475
+          },
+          {
+            "seconds": 0.11862758699999176,
+            "allocated_objects": 251475
+          },
+          {
+            "seconds": 0.10191707600000655,
+            "allocated_objects": 240225
+          },
+          {
+            "seconds": 0.10184518299999468,
+            "allocated_objects": 242725
+          },
+          {
+            "seconds": 0.09925855899999192,
+            "allocated_objects": 240225
+          },
+          {
+            "seconds": 0.10963313499999572,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.09625858500001527,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.09644113800001719,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.09948226199998089,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.09712997099998688,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.09725568300001441,
+            "allocated_objects": 360204
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3823938,
+          "peak_rss_kb": 35648
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "varied",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "ubuntu",
+      "workload": "varied",
+      "trial": 2,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.9105146269999977,
+          "allocated_objects": 5111229
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10892186,
+          "peak_rss_kb": 129776
+        },
+        "cold_plus_suite": {
+          "seconds": 2.995096063999995,
+          "allocated_objects": 8532348
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14137333,
+          "peak_rss_kb": 148852
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.025879328999991458,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.022701675000007526,
+            "allocated_objects": 60193
+          },
+          {
+            "seconds": 0.015631743999989567,
+            "allocated_objects": 40193
+          },
+          {
+            "seconds": 0.01751459199999772,
+            "allocated_objects": 100192
+          },
+          {
+            "seconds": 0.01971655200000555,
+            "allocated_objects": 80193
+          },
+          {
+            "seconds": 0.019776843000016697,
+            "allocated_objects": 80193
+          },
+          {
+            "seconds": 0.05181819399999199,
+            "allocated_objects": 240237
+          },
+          {
+            "seconds": 0.020391991999986203,
+            "allocated_objects": 51459
+          },
+          {
+            "seconds": 0.022407559000015453,
+            "allocated_objects": 56459
+          },
+          {
+            "seconds": 0.02414066000000048,
+            "allocated_objects": 61459
+          },
+          {
+            "seconds": 0.026909619000008433,
+            "allocated_objects": 66459
+          },
+          {
+            "seconds": 0.0220803870000168,
+            "allocated_objects": 55209
+          },
+          {
+            "seconds": 0.022358666999991783,
+            "allocated_objects": 57709
+          },
+          {
+            "seconds": 0.0215474800000095,
+            "allocated_objects": 55209
+          },
+          {
+            "seconds": 0.09657710100000827,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.11048315400000774,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.08952401199999827,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.11095979300000636,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.09043401900001413,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.10782660400002442,
+            "allocated_objects": 360204
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3833890,
+          "peak_rss_kb": 35592
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "varied",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "ubuntu",
+      "workload": "varied",
+      "trial": 2,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.9163497590000134,
+          "allocated_objects": 5111220
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10881842,
+          "peak_rss_kb": 129484
+        },
+        "cold_plus_suite": {
+          "seconds": 3.7667970560000015,
+          "allocated_objects": 10652535
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10807229,
+          "peak_rss_kb": 150124
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.07998054999998772,
+            "allocated_objects": 255209
+          },
+          {
+            "seconds": 0.08525187099999698,
+            "allocated_objects": 245209
+          },
+          {
+            "seconds": 0.08318964399998663,
+            "allocated_objects": 225209
+          },
+          {
+            "seconds": 0.053583463999984815,
+            "allocated_objects": 190203
+          },
+          {
+            "seconds": 0.05273779800000966,
+            "allocated_objects": 170204
+          },
+          {
+            "seconds": 0.055686817999998084,
+            "allocated_objects": 170204
+          },
+          {
+            "seconds": 0.129462038000014,
+            "allocated_objects": 425253
+          },
+          {
+            "seconds": 0.09344763099997522,
+            "allocated_objects": 236475
+          },
+          {
+            "seconds": 0.09791329099999757,
+            "allocated_objects": 241475
+          },
+          {
+            "seconds": 0.09752653900000041,
+            "allocated_objects": 246475
+          },
+          {
+            "seconds": 0.09940944800001716,
+            "allocated_objects": 251475
+          },
+          {
+            "seconds": 0.09797269800000663,
+            "allocated_objects": 240225
+          },
+          {
+            "seconds": 0.10090278499998817,
+            "allocated_objects": 242725
+          },
+          {
+            "seconds": 0.09902840899999887,
+            "allocated_objects": 240225
+          },
+          {
+            "seconds": 0.0923312909999936,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.10250936600002092,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.09807055499999251,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.09928750099999206,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.09724522100000854,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.0998812280000152,
+            "allocated_objects": 360204
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3823938,
+          "peak_rss_kb": 35440
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "varied",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "ubuntu",
+      "workload": "varied",
+      "trial": 3,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x86_64-linux",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 1.902015586999994,
+          "allocated_objects": 5111229
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10892186,
+          "peak_rss_kb": 132124
+        },
+        "cold_plus_suite": {
+          "seconds": 2.9425815390000025,
+          "allocated_objects": 8532349
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14137333,
+          "peak_rss_kb": 156376
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.024185527000014417,
+            "allocated_objects": 70193
+          },
+          {
+            "seconds": 0.021361709000018436,
+            "allocated_objects": 60193
+          },
+          {
+            "seconds": 0.014509689000021808,
+            "allocated_objects": 40193
+          },
+          {
+            "seconds": 0.016343751000022166,
+            "allocated_objects": 100192
+          },
+          {
+            "seconds": 0.018179111999984343,
+            "allocated_objects": 80193
+          },
+          {
+            "seconds": 0.01810481100000061,
+            "allocated_objects": 80193
+          },
+          {
+            "seconds": 0.04941412600001627,
+            "allocated_objects": 240237
+          },
+          {
+            "seconds": 0.019609266000003345,
+            "allocated_objects": 51459
+          },
+          {
+            "seconds": 0.022001848000002155,
+            "allocated_objects": 56459
+          },
+          {
+            "seconds": 0.022934618000022056,
+            "allocated_objects": 61459
+          },
+          {
+            "seconds": 0.025613641999996162,
+            "allocated_objects": 66459
+          },
+          {
+            "seconds": 0.021171520000024202,
+            "allocated_objects": 55209
+          },
+          {
+            "seconds": 0.02173101399998245,
+            "allocated_objects": 57709
+          },
+          {
+            "seconds": 0.020755358999991813,
+            "allocated_objects": 55209
+          },
+          {
+            "seconds": 0.09168368999999643,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.11343103600000859,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.08676105899999698,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.09684561500000655,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.10056827200000384,
+            "allocated_objects": 360204
+          },
+          {
+            "seconds": 0.0976248489999989,
+            "allocated_objects": 360204
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3833890,
+          "peak_rss_kb": 35668
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "varied",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "ubuntu",
+      "workload": "varied",
+      "trial": 3,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 4.9831772,
+          "allocated_objects": 5506267
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10786222,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 5.120041799999967,
+          "allocated_objects": 5505641
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10706246,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [],
+        "retained_before": {
+          "ruby_heap_bytes": 3729140,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "graph",
+        "files": 10000,
+        "rule_count": 0
+      },
+      "host": "windows",
+      "workload": "graph",
+      "trial": 1,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 5.116354900000033,
+          "allocated_objects": 5506276
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10796046,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 4.922391299999958,
+          "allocated_objects": 5505646
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10716590,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [],
+        "retained_before": {
+          "ruby_heap_bytes": 3739220,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "graph",
+        "files": 10000,
+        "rule_count": 0
+      },
+      "host": "windows",
+      "workload": "graph",
+      "trial": 1,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 4.947828900000047,
+          "allocated_objects": 5506275
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10785702,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 5.062203699999998,
+          "allocated_objects": 5505651
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10706246,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [],
+        "retained_before": {
+          "ruby_heap_bytes": 3729140,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "graph",
+        "files": 10000,
+        "rule_count": 0
+      },
+      "host": "windows",
+      "workload": "graph",
+      "trial": 2,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 4.971423799999968,
+          "allocated_objects": 5506280
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10796046,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 4.974642000000017,
+          "allocated_objects": 5505651
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10716590,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [],
+        "retained_before": {
+          "ruby_heap_bytes": 3739220,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "graph",
+        "files": 10000,
+        "rule_count": 0
+      },
+      "host": "windows",
+      "workload": "graph",
+      "trial": 2,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 4.89436539999997,
+          "allocated_objects": 5506274
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10786022,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 5.073824200000047,
+          "allocated_objects": 5505648
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10706246,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [],
+        "retained_before": {
+          "ruby_heap_bytes": 3729140,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "graph",
+        "files": 10000,
+        "rule_count": 0
+      },
+      "host": "windows",
+      "workload": "graph",
+      "trial": 3,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 4.945598099999984,
+          "allocated_objects": 5506279
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10796046,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 4.966438299999993,
+          "allocated_objects": 5505649
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10716590,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [],
+        "retained_before": {
+          "ruby_heap_bytes": 3739220,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "graph",
+        "files": 10000,
+        "rule_count": 0
+      },
+      "host": "windows",
+      "workload": "graph",
+      "trial": 3,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 5.0427517000000535,
+          "allocated_objects": 5506261
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10789858,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 7.040679999999952,
+          "allocated_objects": 10610263
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10711634,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.08745499999997719,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.08639489999995931,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.08783849999997528,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.08745310000006157,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.10492120000003524,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09364790000006451,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.08785899999998037,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.10201129999995828,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09199339999997846,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.10024369999996452,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09637559999998757,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09964690000003884,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09424950000004628,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.10010699999997996,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09767460000000483,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09523849999993672,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09742240000002766,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09470259999989139,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.0988699000000679,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09589230000005955,
+            "allocated_objects": 255235
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3733448,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "identical",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "windows",
+      "workload": "identical",
+      "trial": 1,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 5.020239700000047,
+          "allocated_objects": 5506281
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10800202,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 5.844950200000085,
+          "allocated_objects": 7094983
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14042058,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.03163129999995817,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.033631000000013955,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.03055159999996704,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.030788900000061403,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.03114770000001954,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.030804099999954815,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.031111399999986133,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.030494599999997263,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.03109940000001643,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.031304900000009184,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.03058079999993879,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.030529099999967002,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.03051319999997304,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.030519599999934144,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.03134409999995569,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.031312699999944016,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.033755200000086916,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.03414409999993495,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.033826099999942016,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.052637200000049233,
+            "allocated_objects": 70219
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3743528,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "identical",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "windows",
+      "workload": "identical",
+      "trial": 1,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 5.059019400000011,
+          "allocated_objects": 5506267
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10789858,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 6.992180899999994,
+          "allocated_objects": 10610267
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10711634,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.09235869999997703,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.08849229999998443,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.08928149999997004,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.08933000000001812,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.10348320000002786,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.10318059999997331,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.08904629999994995,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09364449999998214,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09963670000001912,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.0891849000000775,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09771870000008676,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.10290300000008301,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09375980000004347,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.10099370000000363,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09461029999999937,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09757620000004863,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09956390000002102,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09514879999994719,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09900330000004942,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.0961878999999044,
+            "allocated_objects": 255235
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3733448,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "identical",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "windows",
+      "workload": "identical",
+      "trial": 2,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 5.001108400000021,
+          "allocated_objects": 5506278
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10800202,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 5.712506200000007,
+          "allocated_objects": 7094979
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14043898,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.030407599999989543,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.03004329999998845,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.02975580000008904,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.029857500000048276,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.029860399999961373,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.029692499999896427,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.029736899999988964,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.029826200000002245,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.034574600000041755,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.030241699999919547,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.030296899999939342,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.030110000000036052,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.03030219999993733,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.03009660000009262,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.030278500000008535,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.033449399999994966,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.033619400000020505,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.033338899999989735,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.033503399999972316,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.04725429999996322,
+            "allocated_objects": 70219
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3743528,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "identical",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "windows",
+      "workload": "identical",
+      "trial": 2,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 5.028252800000018,
+          "allocated_objects": 5506268
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10789858,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 7.138592399999993,
+          "allocated_objects": 10610269
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10711674,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.09071589999996377,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.0886948999999504,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.08859819999997853,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09008119999998598,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.10685479999995096,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.0962001999999984,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.0879767000000129,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.10110770000005687,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09379660000001877,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.10275939999996808,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09773299999994833,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09823819999996886,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09572750000006636,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.10001309999995556,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09625649999998132,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09605099999998856,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09887449999996534,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09636909999994714,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.0960463000000118,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.09423119999996743,
+            "allocated_objects": 255235
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3733448,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "identical",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "windows",
+      "workload": "identical",
+      "trial": 3,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 5.0470013000000336,
+          "allocated_objects": 5506283
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10800202,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 5.789539499999933,
+          "allocated_objects": 7094983
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14042058,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.030696100000000115,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.03305560000001151,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.02968780000003335,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.029917199999999866,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.02979789999994864,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.029922899999974106,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.030413800000019364,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.030143599999973958,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.030020799999988412,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.033387400000037815,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.03010519999997996,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.030264499999930194,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.030108000000041102,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.03070070000001124,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.0306386999999404,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.03344059999994897,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.033810700000003635,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.03389470000001893,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.03419059999998808,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.04898440000010851,
+            "allocated_objects": 70219
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3743528,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "identical",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "windows",
+      "workload": "identical",
+      "trial": 3,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 4.9893827000000215,
+          "allocated_objects": 5506270
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10789578,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 5.1833904000000075,
+          "allocated_objects": 5760807
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10711354,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.08667239999999765,
+            "allocated_objects": 255235
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3733168,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "one",
+        "files": 10000,
+        "rule_count": 1
+      },
+      "host": "windows",
+      "workload": "one",
+      "trial": 1,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 4.913709600000004,
+          "allocated_objects": 5506277
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10799922,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 5.051980700000001,
+          "allocated_objects": 5760816
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14041778,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.03192910000001348,
+            "allocated_objects": 70219
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3743248,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "one",
+        "files": 10000,
+        "rule_count": 1
+      },
+      "host": "windows",
+      "workload": "one",
+      "trial": 1,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 5.000407600000017,
+          "allocated_objects": 5506272
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10789578,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 5.088357499999972,
+          "allocated_objects": 5760805
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10711354,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.09066519999998945,
+            "allocated_objects": 255235
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3733168,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "one",
+        "files": 10000,
+        "rule_count": 1
+      },
+      "host": "windows",
+      "workload": "one",
+      "trial": 2,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 4.969672100000025,
+          "allocated_objects": 5506275
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10799922,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 5.508030099999985,
+          "allocated_objects": 5760815
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14041778,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.03173509999999169,
+            "allocated_objects": 70219
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3743248,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "one",
+        "files": 10000,
+        "rule_count": 1
+      },
+      "host": "windows",
+      "workload": "one",
+      "trial": 2,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 5.001504700000055,
+          "allocated_objects": 5506266
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10789578,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 5.2994070000000875,
+          "allocated_objects": 5760804
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10711354,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.08642200000008415,
+            "allocated_objects": 255235
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3733168,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "one",
+        "files": 10000,
+        "rule_count": 1
+      },
+      "host": "windows",
+      "workload": "one",
+      "trial": 3,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 5.0643581000000495,
+          "allocated_objects": 5506273
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10799922,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 5.136223400000063,
+          "allocated_objects": 5760813
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14041778,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.030295599999931255,
+            "allocated_objects": 70219
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3743248,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "one",
+        "files": 10000,
+        "rule_count": 1
+      },
+      "host": "windows",
+      "workload": "one",
+      "trial": 3,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 5.2832449,
+          "allocated_objects": 5506268
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10815883,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 7.725601200000028,
+          "allocated_objects": 11048077
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10739731,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.09271499999999833,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.10112310000010893,
+            "allocated_objects": 245235
+          },
+          {
+            "seconds": 0.11201240000002599,
+            "allocated_objects": 225235
+          },
+          {
+            "seconds": 0.07522510000001148,
+            "allocated_objects": 190229
+          },
+          {
+            "seconds": 0.06721830000003592,
+            "allocated_objects": 170230
+          },
+          {
+            "seconds": 0.07133250000003954,
+            "allocated_objects": 170230
+          },
+          {
+            "seconds": 0.18839909999996962,
+            "allocated_objects": 425279
+          },
+          {
+            "seconds": 0.09854920000009315,
+            "allocated_objects": 236501
+          },
+          {
+            "seconds": 0.10314080000000558,
+            "allocated_objects": 241501
+          },
+          {
+            "seconds": 0.10668109999994613,
+            "allocated_objects": 246501
+          },
+          {
+            "seconds": 0.09985439999991286,
+            "allocated_objects": 251501
+          },
+          {
+            "seconds": 0.09500149999996665,
+            "allocated_objects": 240251
+          },
+          {
+            "seconds": 0.09651499999995394,
+            "allocated_objects": 242751
+          },
+          {
+            "seconds": 0.09863099999995484,
+            "allocated_objects": 240251
+          },
+          {
+            "seconds": 0.14902460000007522,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.1357430000000477,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.11563620000003993,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.1482128999999759,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.12070249999999305,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.1148316999999679,
+            "allocated_objects": 360230
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3759025,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "varied",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "windows",
+      "workload": "varied",
+      "trial": 1,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 5.438154999999938,
+          "allocated_objects": 5506272
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10826227,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 7.111480400000005,
+          "allocated_objects": 8927883
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14070995,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.0385483000000022,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.03433899999993173,
+            "allocated_objects": 60219
+          },
+          {
+            "seconds": 0.0199708999999757,
+            "allocated_objects": 40219
+          },
+          {
+            "seconds": 0.030835199999955876,
+            "allocated_objects": 100218
+          },
+          {
+            "seconds": 0.024113599999964208,
+            "allocated_objects": 80219
+          },
+          {
+            "seconds": 0.023842800000011266,
+            "allocated_objects": 80219
+          },
+          {
+            "seconds": 0.05886310000005324,
+            "allocated_objects": 240263
+          },
+          {
+            "seconds": 0.025314500000035878,
+            "allocated_objects": 51485
+          },
+          {
+            "seconds": 0.028788100000042505,
+            "allocated_objects": 56485
+          },
+          {
+            "seconds": 0.03640500000005886,
+            "allocated_objects": 61485
+          },
+          {
+            "seconds": 0.03873939999994036,
+            "allocated_objects": 66485
+          },
+          {
+            "seconds": 0.030236900000090827,
+            "allocated_objects": 55235
+          },
+          {
+            "seconds": 0.046844799999917086,
+            "allocated_objects": 57735
+          },
+          {
+            "seconds": 0.03846729999997933,
+            "allocated_objects": 55235
+          },
+          {
+            "seconds": 0.09802700000000186,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.13209629999994377,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.10139400000002752,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.10585779999996703,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.1460192999999208,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.1339405999999599,
+            "allocated_objects": 360230
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3768977,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "varied",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "windows",
+      "workload": "varied",
+      "trial": 1,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 5.080375099999969,
+          "allocated_objects": 5506271
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10815883,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 7.204906299999948,
+          "allocated_objects": 11048079
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10739731,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.08950070000003052,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.08603070000003754,
+            "allocated_objects": 245235
+          },
+          {
+            "seconds": 0.08533760000000257,
+            "allocated_objects": 225235
+          },
+          {
+            "seconds": 0.05558610000002773,
+            "allocated_objects": 190229
+          },
+          {
+            "seconds": 0.056177300000058494,
+            "allocated_objects": 170230
+          },
+          {
+            "seconds": 0.0568838000000369,
+            "allocated_objects": 170230
+          },
+          {
+            "seconds": 0.13581799999997202,
+            "allocated_objects": 425279
+          },
+          {
+            "seconds": 0.09412380000003395,
+            "allocated_objects": 236501
+          },
+          {
+            "seconds": 0.08911699999998746,
+            "allocated_objects": 241501
+          },
+          {
+            "seconds": 0.09530580000000555,
+            "allocated_objects": 246501
+          },
+          {
+            "seconds": 0.09924609999995937,
+            "allocated_objects": 251501
+          },
+          {
+            "seconds": 0.0899970000000394,
+            "allocated_objects": 240251
+          },
+          {
+            "seconds": 0.098911199999975,
+            "allocated_objects": 242751
+          },
+          {
+            "seconds": 0.09552129999997305,
+            "allocated_objects": 240251
+          },
+          {
+            "seconds": 0.10464359999991757,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.11097669999992377,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.10563830000000962,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.11525779999999486,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.10727220000001125,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.10619959999996809,
+            "allocated_objects": 360230
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3759025,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "varied",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "windows",
+      "workload": "varied",
+      "trial": 2,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 5.117124500000045,
+          "allocated_objects": 5506281
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10826227,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 6.124021200000016,
+          "allocated_objects": 8927893
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14069835,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.03136979999999312,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.02800549999994928,
+            "allocated_objects": 60219
+          },
+          {
+            "seconds": 0.02027609999993274,
+            "allocated_objects": 40219
+          },
+          {
+            "seconds": 0.024730100000056154,
+            "allocated_objects": 100218
+          },
+          {
+            "seconds": 0.02553899999998066,
+            "allocated_objects": 80219
+          },
+          {
+            "seconds": 0.025676799999928335,
+            "allocated_objects": 80219
+          },
+          {
+            "seconds": 0.05984920000003058,
+            "allocated_objects": 240263
+          },
+          {
+            "seconds": 0.02654840000002423,
+            "allocated_objects": 51485
+          },
+          {
+            "seconds": 0.029075399999896945,
+            "allocated_objects": 56485
+          },
+          {
+            "seconds": 0.03176619999999275,
+            "allocated_objects": 61485
+          },
+          {
+            "seconds": 0.03378110000005563,
+            "allocated_objects": 66485
+          },
+          {
+            "seconds": 0.0266154999999344,
+            "allocated_objects": 55235
+          },
+          {
+            "seconds": 0.027643399999988105,
+            "allocated_objects": 57735
+          },
+          {
+            "seconds": 0.026409800000010364,
+            "allocated_objects": 55235
+          },
+          {
+            "seconds": 0.09890219999999772,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.12693070000000262,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.10891860000003817,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.11718870000004245,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.10306700000001001,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.11174700000003668,
+            "allocated_objects": 360230
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3768977,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "varied",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "windows",
+      "workload": "varied",
+      "trial": 2,
+      "side": "candidate"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "e2d347e14e0f8d06489582bcb7c5473295a7df4b"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 5.13949260000004,
+          "allocated_objects": 5506265
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10815883,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 7.0255710000000136,
+          "allocated_objects": 11048074
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 10739731,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.10011099999996986,
+            "allocated_objects": 255235
+          },
+          {
+            "seconds": 0.08657159999995656,
+            "allocated_objects": 245235
+          },
+          {
+            "seconds": 0.08174029999997856,
+            "allocated_objects": 225235
+          },
+          {
+            "seconds": 0.05577850000008766,
+            "allocated_objects": 190229
+          },
+          {
+            "seconds": 0.05604569999991327,
+            "allocated_objects": 170230
+          },
+          {
+            "seconds": 0.05634579999991729,
+            "allocated_objects": 170230
+          },
+          {
+            "seconds": 0.14961610000000292,
+            "allocated_objects": 425279
+          },
+          {
+            "seconds": 0.09028000000000702,
+            "allocated_objects": 236501
+          },
+          {
+            "seconds": 0.08719010000004346,
+            "allocated_objects": 241501
+          },
+          {
+            "seconds": 0.1038811999999325,
+            "allocated_objects": 246501
+          },
+          {
+            "seconds": 0.09673980000002302,
+            "allocated_objects": 251501
+          },
+          {
+            "seconds": 0.0948759999999993,
+            "allocated_objects": 240251
+          },
+          {
+            "seconds": 0.09897999999998319,
+            "allocated_objects": 242751
+          },
+          {
+            "seconds": 0.09447290000002795,
+            "allocated_objects": 240251
+          },
+          {
+            "seconds": 0.10246689999996761,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.10780699999997978,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.10580010000001039,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.10975999999993746,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.10591219999992063,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.10434689999999591,
+            "allocated_objects": 360230
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3759025,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "varied",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "windows",
+      "workload": "varied",
+      "trial": 3,
+      "side": "baseline"
+    },
+    {
+      "schema_version": 1,
+      "runtime": {
+        "ruby": "4.0.10",
+        "platform": "x64-mingw-ucrt",
+        "candidate_version": "1.1.1",
+        "revision": "7d73b3e0a1d7bf32ed339bccd7e8b86dd37a2fd6"
+      },
+      "result": {
+        "cold_graph": {
+          "seconds": 4.986464799999908,
+          "allocated_objects": 5506275
+        },
+        "graph_sha256": "c56e58db672f8e3864dd8bd4080b265933c26f468249f801573c234a69edb50d",
+        "retained_graph": {
+          "ruby_heap_bytes": 10826227,
+          "peak_rss_kb": null
+        },
+        "cold_plus_suite": {
+          "seconds": 6.1075292000000445,
+          "allocated_objects": 8927887
+        },
+        "retained_suite": {
+          "ruby_heap_bytes": 14069835,
+          "peak_rss_kb": null
+        },
+        "warm_rules": [
+          {
+            "seconds": 0.029952100000059545,
+            "allocated_objects": 70219
+          },
+          {
+            "seconds": 0.026749900000027083,
+            "allocated_objects": 60219
+          },
+          {
+            "seconds": 0.01923069999998006,
+            "allocated_objects": 40219
+          },
+          {
+            "seconds": 0.022378799999955845,
+            "allocated_objects": 100218
+          },
+          {
+            "seconds": 0.02357680000000073,
+            "allocated_objects": 80219
+          },
+          {
+            "seconds": 0.023388900000099966,
+            "allocated_objects": 80219
+          },
+          {
+            "seconds": 0.05992099999991751,
+            "allocated_objects": 240263
+          },
+          {
+            "seconds": 0.025908800000024712,
+            "allocated_objects": 51485
+          },
+          {
+            "seconds": 0.028031899999973575,
+            "allocated_objects": 56485
+          },
+          {
+            "seconds": 0.030251399999997375,
+            "allocated_objects": 61485
+          },
+          {
+            "seconds": 0.0328965999999582,
+            "allocated_objects": 66485
+          },
+          {
+            "seconds": 0.026145400000018526,
+            "allocated_objects": 55235
+          },
+          {
+            "seconds": 0.026784799999973075,
+            "allocated_objects": 57735
+          },
+          {
+            "seconds": 0.02579209999998966,
+            "allocated_objects": 55235
+          },
+          {
+            "seconds": 0.0959978000000774,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.1252567999999883,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.10115339999993012,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.10359510000000682,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.12245959999995648,
+            "allocated_objects": 360230
+          },
+          {
+            "seconds": 0.11103160000004664,
+            "allocated_objects": 360230
+          }
+        ],
+        "retained_before": {
+          "ruby_heap_bytes": 3768977,
+          "peak_rss_kb": null
+        },
+        "controls": {
+          "forbidden": 5000,
+          "empty": 1
+        },
+        "workload": "varied",
+        "files": 10000,
+        "rule_count": 20
+      },
+      "host": "windows",
+      "workload": "varied",
+      "trial": 3,
+      "side": "candidate"
+    }
+  ]
+}

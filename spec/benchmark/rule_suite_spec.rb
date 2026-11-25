@@ -44,4 +44,21 @@ RSpec.describe PerformanceStudy::RuleSuite do
     expect(commands).to include('1..3', 'STUDY_PAIRS', 'graph_sha256', 'rule_suite.rb')
     expect(commands).not_to include('gem push', 'bundle update')
   end
+
+  it 'preserves all paired raw samples with identical graph/evidence and correctness controls' do
+    path = File.expand_path('../../benchmark/study/rule-views-ci.json', __dir__)
+    evidence = JSON.parse(File.read(path))
+    samples = evidence.fetch('samples')
+    expect(samples.length).to eq(48)
+    expect(evidence.fetch('summary').length).to eq(16)
+    samples.group_by { |row| row.values_at('host', 'workload', 'trial') }.each_value do |pair|
+      expect(pair.map { |row| row['side'] }.sort).to eq(%w[baseline candidate])
+      expect(pair.map { |row| row['result']['graph_sha256'] }.uniq.length).to eq(1)
+      pair.each do |row|
+        expect(row['result']['files']).to eq(10_000)
+        expect(row['result']['controls']).to eq('forbidden' => 5000, 'empty' => 1)
+        expect(row['runtime']['revision']).to eq(evidence.fetch(row['side']))
+      end
+    end
+  end
 end
