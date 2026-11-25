@@ -8,7 +8,8 @@ RSpec.describe ArchUnit::Common::Extraction::ImportKind do
       :autoload,
       :load,
       :require_dependency,
-      :constant_reference
+      :constant_reference,
+      :rails_association
     )
   end
 

@@ -2,6 +2,9 @@
 
 ## 1.1.1 (unreleased)
 
+- Add opt-in static Rails association dependencies for explicit literal `class_name` on supported
+  model-body macros, with evidence, isolated baselines and CLI uncertainty counts. No Rails boot,
+  automatic inflection, or change to existing default graphs.
 - Lazily reuse immutable node/internal/external-edge views within each cached graph analysis
   across file and layer checks. Invalidation, per-rule filtering, callbacks and logging stay intact;
   views trade additional retained memory for less repeated projection work.

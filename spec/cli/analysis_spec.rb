@@ -125,6 +125,18 @@ RSpec.describe ArchUnit::CLI, 'analysis diagnostics' do
     expect(errors).to include('source_files=unavailable', 'Analysis: partial')
   end
 
+  it 'reports unavailable association counts when an enabled analysis cannot parse source' do
+    @root.join('broken.rb').write('class Broken <')
+    code, payload = invoke('--rails-associations')
+    expect(code).to eq(2)
+    scope = payload.dig('analysis', 'scopes', 0)
+    expect(scope).to include('rails_associations' => true, 'status' => 'error')
+    expect(scope['counters']).to include(
+      'rails_association_sites' => nil, 'unresolved_rails_associations' => nil,
+      'ambiguous_rails_associations' => nil
+    )
+  end
+
   it 'keeps different analysis roots and source policies separate rather than double counting' do
     other = @root.dirname.join('other')
     other.mkpath

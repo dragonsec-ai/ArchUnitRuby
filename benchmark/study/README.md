@@ -90,6 +90,27 @@ medians are 150,124 → 148,852 KiB. Even graph-only RSS varies 118,360 → 128,
 identical retained Ruby heap; do not attribute every high-water change to the indexes. Windows RSS
 remains unavailable/null. There is no memory-reduction claim.
 
+## Explicit Rails association opt-in cost (#102)
+
+Run `bundle exec ruby benchmark/study/rails_association_cost.rb pkg/association-cost.json` from the
+library root. The study reuses the synthetic fixture generator and measurement helpers, replacing
+the API files with models containing explicit `class_name:` strings. It alternates five pairs
+of imports-only checks with the feature disabled/enabled across the same 2,000 files. It verifies
+zero cross-file edges off and exactly 1,000 expected, evidenced association edges on, and checks
+snapshot reuse in both modes. No target source, dependencies, or Rails boot are executed.
+
+[Raw Windows samples](rails-association-windows.json), Ruby 4.0.6, five-trial medians:
+
+| Opt-in | Cold graph | Cold allocated objects | Warm graph lookup |
+| --- | ---: | ---: | ---: |
+| Off | 1.614 s | 629,466 | 3.42 ms |
+| On | 1.860 s | 926,503 | 2.64 ms |
+
+In this fixture the opt-in adds about 0.25 s cold and 0.50 MiB of post-GC Ruby heap growth; the
+two graphs have different dependency coverage. Warm samples are small lookup timings, not evidence
+that enabling the option is faster. These local samples are not performance guarantees, and
+there is no machine-speed gate. Windows peak RSS is unavailable.
+
 ## Shared-policy study
 
 `run.rb` generates Rails-like and four-engine layouts with 200 Ruby files by default. Density

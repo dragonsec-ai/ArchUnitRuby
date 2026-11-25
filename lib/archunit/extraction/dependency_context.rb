@@ -16,7 +16,8 @@ module ArchUnit
                     load_paths
                   end
         new(root:, targets:, load_paths:, profile:, cache: {},
-            include_evidence: options.constant_references?, rails_imports: options.rails_imports,
+            include_evidence: options.constant_references? || options.rails_associations?,
+            rails_imports: options.rails_imports,
             helper_load_paths: helpers)
       end
 

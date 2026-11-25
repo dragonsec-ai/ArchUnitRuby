@@ -31,6 +31,7 @@ module ArchUnit
           source_exclusions: options.source_exclusions,
           status: 'error', rules: [], analysis: AnalysisReport.new.to_h
         }
+        @payload[:rails_associations] = true if options.rails_associations
       end
 
       def add_rule(rule, violations: nil, analysis: nil)
@@ -101,6 +102,7 @@ module ArchUnit
 
       def write_notice(out)
         out.puts('Rails require_dependency imports: enabled') if payload[:rails_imports]
+        out.puts('Rails explicit association class names: enabled') if payload[:rails_associations]
         case payload[:status]
         when 'configured'
           out.puts('Rules are configured, not evaluated.')

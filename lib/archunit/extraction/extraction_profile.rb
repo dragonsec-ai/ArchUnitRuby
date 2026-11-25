@@ -25,6 +25,9 @@ module ArchUnit
         unresolved_imports
         unresolved_constant_references
         ambiguous_constant_references
+        rails_association_sites
+        unresolved_rails_associations
+        ambiguous_rails_associations
         resolution_cache_hits
         resolution_cache_misses
         raw_edges

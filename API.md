@@ -302,6 +302,18 @@ and unknown operands remain unresolved. No Rails boot or automatic autoload-root
 The option is immutable, validated and part of graph-cache identity; it composes with either
 dependency-analysis mode. Cross-file method replacement and dynamic Rails/glob values are not modeled.
 
+### Explicit Rails associations (unreleased)
+
+`CheckOptions.new(rails_associations: true)` independently enables dependencies from supported
+Rails model calls such as `belongs_to :store, class_name: '::Storage::Store'`. It can be combined
+with either analysis mode and with `rails_imports`; neither previously shipped option enables it.
+A unique known class declaration contributes a `:rails_association` edge with call-site and
+definition lines. It shares an edge with any import or constant reference to the same file.
+
+Use `--rails-associations` or `--no-rails-associations` in the CLI. Enabled scopes have separate
+baseline identities and report candidate, unresolved and ambiguous counts; disabled output and
+fingerprints stay unchanged. See [supported syntax and limitations](GUIDE.md#rails-associations).
+
 For autoloaded projects, opt into known project constant references alongside imports:
 
 ~~~ruby

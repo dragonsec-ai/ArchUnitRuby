@@ -11,9 +11,10 @@ module ArchUnit
         LOAD = :load
         REQUIRE_DEPENDENCY = :require_dependency
         CONSTANT_REFERENCE = :constant_reference
+        RAILS_ASSOCIATION = :rails_association
 
         ALL = [REQUIRE, REQUIRE_RELATIVE, AUTOLOAD, LOAD,
-               REQUIRE_DEPENDENCY, CONSTANT_REFERENCE].freeze
+               REQUIRE_DEPENDENCY, CONSTANT_REFERENCE, RAILS_ASSOCIATION].freeze
 
         def self.valid?(value)
           ALL.include?(value)

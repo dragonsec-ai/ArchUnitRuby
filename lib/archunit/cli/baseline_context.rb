@@ -17,12 +17,14 @@ module ArchUnit
       end
 
       def self.settings(scope, root)
-        {
+        context = {
           'root' => relative(scope[:project_root], root), 'kind' => scope[:kind],
           'dependency_analysis' => scope[:dependency_analysis],
           'rails_imports' => scope[:rails_imports], 'load_paths' => load_paths(scope),
           'source_exclusions' => scope[:effective_source_exclusions]
         }
+        context['rails_associations'] = true if scope[:rails_associations]
+        context
       end
 
       def self.relative(path, root)

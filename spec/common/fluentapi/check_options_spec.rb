@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
 RSpec.describe ArchUnit::Common::FluentApi::CheckOptions do
+  it 'keeps explicit Rails association analysis separately opt-in and boolean' do
+    options = described_class.new
+    expect(options).not_to be_rails_associations
+    expect(options.with(rails_associations: true)).to be_rails_associations
+    expect(options.with(rails_imports: true)).not_to be_rails_associations
+    expect { described_class.new(rails_associations: 'yes') }
+      .to raise_error(ArgumentError, 'rails_associations must be true or false')
+  end
+
   it 'defaults to strict empty tests with logging disabled and cache reuse' do
     options = described_class.new
 
