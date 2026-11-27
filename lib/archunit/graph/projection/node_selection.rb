@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../../common/pattern_matching'
+require_relative 'report_labels'
 
 module ArchUnit
   module GraphReporting
@@ -26,7 +27,7 @@ module ArchUnit
 
         def all_nodes(edges)
           edges.each_with_object(Set.new) do |edge, nodes|
-            nodes.add(edge.source).add(edge.target)
+            nodes.add(edge.source).add(ReportLabels.target(edge))
           end
         end
         private_class_method :all_nodes
@@ -79,16 +80,16 @@ module ArchUnit
 
         def matching_nodes(edges, filter)
           all_nodes(edges).select do |node|
-            Common::PatternMatching.matches_pattern?(node, filter)
+            Common::PatternMatching.matches_pattern?(ReportLabels.name(node), filter)
           end.to_set
         end
         private_class_method :matching_nodes
 
         def neighbors_of(edges, node)
           edges.filter_map do |edge|
-            if edge.source == node && edge.target != node
-              edge.target
-            elsif edge.target == node && edge.source != node
+            if edge.source == node
+              ReportLabels.target(edge)
+            elsif ReportLabels.target(edge) == node
               edge.source
             end
           end.uniq
@@ -98,8 +99,8 @@ module ArchUnit
         def next_nodes(edges, node, direction)
           edges.filter_map do |edge|
             if direction == :outgoing && edge.source == node
-              edge.target
-            elsif direction == :incoming && edge.target == node
+              ReportLabels.target(edge)
+            elsif direction == :incoming && ReportLabels.target(edge) == node
               edge.source
             end
           end.uniq

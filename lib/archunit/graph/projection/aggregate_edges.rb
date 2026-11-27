@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'collapse_node'
+require_relative 'report_labels'
 require_relative 'graph_report_edge'
 
 module ArchUnit
@@ -10,15 +10,15 @@ module ArchUnit
       module AggregateEdges
         module_function
 
-        def aggregate(edges, collapse:, include_self_dependencies:)
+        def aggregate(edges, labels, options)
           groups = Hash.new do |hash, key|
             hash[key] = { count: 0, external: false, import_kinds: [], evidence: [] }
           end
 
           edges.each do |edge|
-            source = CollapseNode.collapse(edge.source, collapse)
-            target = CollapseNode.collapse(edge.target, collapse)
-            next if !include_self_dependencies && source == target
+            source = labels.fetch(edge.source)
+            target = labels.fetch(ReportLabels.target(edge))
+            next if !options.include_self_dependencies && source == target
 
             accumulate(groups[[source, target]], edge)
           end

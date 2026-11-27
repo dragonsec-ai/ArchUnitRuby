@@ -57,6 +57,15 @@ RSpec.describe ArchUnit::Slices::Assertion do
     ).to eq([])
   end
 
+  it 'keeps internal evidence when the slice name also matches an ignored external module' do
+    internal = projected_edge('api', 'database')
+    external = projected_edge('api', 'database', external: true)
+    mixed = internal.with(cumulated_edges: external.cumulated_edges + internal.cumulated_edges)
+    options = ArchUnit::DiagramAdherenceOptions.new(ignore_external_slices: true)
+    violations = described_class.gather_diagram_adherence_violations([mixed], diagram, options)
+    expect(violations.map(&:dependency)).to eq([internal])
+  end
+
   it 'keeps immutable modifiers independent and validates assertion options' do
     base = ArchUnit::DiagramAdherenceOptions.new
     external = base.with(ignore_external_slices: true)

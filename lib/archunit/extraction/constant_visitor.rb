@@ -1,23 +1,28 @@
 # frozen_string_literal: true
 
 require 'prism'
+require_relative 'rails_association_calls'
+require_relative 'static_constant_name'
 
 module ArchUnit
   module Extraction
     # Collects declarations and uses with Ruby's lexical (not textual path) nesting.
     class ConstantVisitor < Prism::Visitor
-      Definition = Data.define(:name, :line_number)
+      include StaticConstantName
+
+      Definition = Data.define(:name, :line_number, :class_declaration)
       Reference = Data.define(:name, :nesting, :inherited_scope, :line_number, :end_line)
 
-      attr_reader :definitions, :references, :inherited_namespaces
+      attr_reader :definitions, :references, :inherited_namespaces, :associations
 
-      def initialize(namespace_names: nil)
+      def initialize(namespace_names: nil, rails_associations: false)
         super()
         @namespace_names = namespace_names
         @definitions = []
         @references = []
         @nesting = []
         @inherited_namespaces = []
+        @associations = RailsAssociationCalls.new if rails_associations
       end
 
       def visit_class_node(node)
@@ -86,13 +91,20 @@ module ArchUnit
         return unless name
 
         full_name = declaration_name(name)
-        define_constant(full_name, node.constant_path)
-        @inherited_namespaces << full_name if inherited
+        record_namespace(node, full_name, inherited)
         previous = @nesting
         @nesting = [full_name, *previous]
         visit(node.body)
       ensure
         @nesting = previous if previous
+      end
+
+      def record_namespace(node, full_name, inherited)
+        define_constant(full_name, node.constant_path, class_declaration: node.is_a?(Prism::ClassNode))
+        @inherited_namespaces << full_name if inherited
+        return unless @associations && inherited && !@dynamic_scope
+
+        @associations.collect(full_name, static_name(node.superclass), node.body)
       end
 
       def declaration_name(name)
@@ -108,10 +120,11 @@ module ArchUnit
         @nesting.empty? ? name : "#{@nesting.first}::#{name}"
       end
 
-      def define_constant(name, node)
+      def define_constant(name, node, class_declaration: false)
         return if @dynamic_scope
 
-        @definitions << Definition.new(name:, line_number: node.location.start_line)
+        line_number = node.location.start_line
+        @definitions << Definition.new(name:, line_number:, class_declaration:)
       end
 
       def record_reference(name, node)
@@ -121,15 +134,6 @@ module ArchUnit
           name:, nesting: @nesting.dup.freeze, inherited_scope: @nesting.first,
           line_number: node.location.start_line, end_line: node.location.end_line
         )
-      end
-
-      def static_name(node)
-        return node.name.to_s if node.is_a?(Prism::ConstantReadNode)
-        return unless node.is_a?(Prism::ConstantPathNode)
-        return "::#{node.name}" if node.parent.nil?
-
-        parent = static_name(node.parent)
-        "#{parent}::#{node.name}" if parent
       end
     end
     private_constant :ConstantVisitor

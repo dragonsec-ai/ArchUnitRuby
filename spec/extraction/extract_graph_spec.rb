@@ -103,7 +103,20 @@ RSpec.describe ArchUnit::Extraction, '.extract_graph' do
     )
   end
 
-  it 'guarantees that every source-target pair is unique' do
+  it 'does not merge an excluded import into the source inventory self-edge in imports mode' do
+    create_file('lib/source.rb', "require_relative 'lib/source.rb'")
+    create_file('lib/lib/source.rb')
+    options = ArchUnit::CheckOptions.new(source_exclusions: ['lib/lib/**'])
+    graph = described_class.extract_graph(@project_root, options:)
+    expect(graph.map { |item| [item.source, item.target, item.external, item.import_kinds] })
+      .to contain_exactly(['lib/source.rb', 'lib/source.rb', false, []],
+                          ['lib/source.rb', 'lib/source.rb', true, [:require_relative]])
+    rule = ArchUnit.files(@project_root).in_path('lib/source.rb').should_not
+                   .depend_on_external_modules.matching('lib/source.rb')
+    expect(rule.check(options).size).to eq(1)
+  end
+
+  it 'merges repeated imports within a target namespace' do
     create_file('lib/first.rb', <<~RUBY)
       require_relative 'target'
       load 'target.rb'
@@ -111,7 +124,7 @@ RSpec.describe ArchUnit::Extraction, '.extract_graph' do
     create_file('lib/second.rb', "require_relative 'target'\n")
     create_file('lib/target.rb')
 
-    pairs = extract.map { |edge| [edge.source, edge.target] }
+    pairs = extract.map { |edge| [edge.source, edge.target, edge.external] }
 
     expect(pairs.uniq).to eq(pairs)
   end

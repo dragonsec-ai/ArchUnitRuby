@@ -20,6 +20,11 @@ module ArchUnit
           super
         end
 
+        # External identifiers and project paths occupy different namespaces.
+        def self_dependency?
+          !external && source == target
+        end
+
         private
 
         def immutable_identifier(value, attribute)

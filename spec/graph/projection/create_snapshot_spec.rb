@@ -118,6 +118,36 @@ RSpec.describe ArchUnit::GraphSnapshotFactory, '.create' do
     )
   end
 
+  it 'does not follow an external import into an unrelated internal file of the same name' do
+    graph = ArchUnit::Graph.new([edge('a.rb', 'b.rb', external: true), edge('b.rb', 'c.rb')])
+    query = options(include_external_dependencies: true,
+                    reachable_from: ArchUnit::RegexFactory.path_matcher('a.rb'))
+    snapshot = described_class.create(graph, query)
+    expect(snapshot.edges).to contain_exactly(have_attributes(source: 'a.rb', external: true))
+    expect(snapshot.nodes.map(&:label)).not_to include('c.rb')
+    focus = options(include_external_dependencies: true, focus: query.reachable_from,
+                    focus_depth: 2)
+    expect(described_class.create(graph, focus).edges).to eq(snapshot.edges)
+    reverse = options(include_external_dependencies: true,
+                      dependents_of: ArchUnit::RegexFactory.path_matcher('c.rb'))
+    expect(described_class.create(graph, reverse).nodes.map(&:label)).to eq(%w[b.rb c.rb])
+  end
+
+  it 'keeps external endpoints distinct, including after collapse or suffix collisions' do
+    graph = ArchUnit::Graph.new(
+      [edge('x/a.rb', 'x/a.rb', external: true), edge('x/a.rb', 'y/b.rb'),
+       edge('x/a.rb', 'y/b.rb', external: true), edge('x/a.rb', 'y [external]/c.rb')]
+    )
+    query = options(include_external_dependencies: true,
+                    collapse: ArchUnit::FolderDepthCollapse.new(depth: 1))
+    snapshot = described_class.create(graph, query)
+    expect(snapshot.edges.map { |item| [item.target, item.external] }).to contain_exactly(
+      ['x [external]', true], ['y', false], ['y [external] [external]', true],
+      ['y [external]', false]
+    )
+    expect(snapshot.summary.raw_edge_count).to eq(4)
+  end
+
   it 'collapses nodes to folder depth before aggregating edges' do
     snapshot = described_class.create(
       sample_graph, options(collapse: ArchUnit::FolderDepthCollapse.new(depth: 2))

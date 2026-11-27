@@ -30,14 +30,18 @@ module ArchUnit
         profile:, options:
       )
 
-      analyses = options.constant_references? ? parse_sources(root, source_files, profile) : {}
-      edges = source_files.flat_map do |source|
-        dependencies_for_source(source, context, analyses[source])
-      end
-      edges.concat(constant_edges(analyses, profile)) if options.constant_references?
+      indexed = options.constant_references? || options.rails_associations?
+      analyses = indexed ? parse_sources(root, source_files, profile) : {}
+      edges = source_edges(source_files, context, analyses)
+      edges.concat(indexed_edges(analyses, options, profile)) if indexed
       edges.freeze
     end
     private_class_method :extract_dependencies_from
+
+    def source_edges(source_files, context, analyses)
+      source_files.flat_map { |source| dependencies_for_source(source, context, analyses[source]) }
+    end
+    private_class_method :source_edges
 
     def profiled_target_index(root, source_files, profile)
       ExtractionProfile.measure(profile, :target_index) do
@@ -51,12 +55,13 @@ module ArchUnit
     end
     private_class_method :parse_sources
 
-    def constant_edges(analyses, profile)
+    def indexed_edges(analyses, options, profile)
       ExtractionProfile.measure(profile, :constant_indexing) do
-        ConstantIndex.new(analyses, profile:).edges
+        ConstantIndex.new(analyses, profile:, rails_associations: options.rails_associations?)
+                     .edges(include_constants: options.constant_references?)
       end
     end
-    private_class_method :constant_edges
+    private_class_method :indexed_edges
 
     def dependencies_for_source(source, context, parse_result)
       imports = extract_imports_from(

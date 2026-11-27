@@ -4,6 +4,7 @@ require 'json'
 require 'tmpdir'
 require 'yaml'
 require_relative '../../benchmark/study/run'
+require_relative '../../benchmark/study/rails_association_cost'
 
 RSpec.describe PerformanceStudy::Runner do
   it 'keeps the isolated path-gem lock synchronized with the candidate version' do
@@ -32,6 +33,13 @@ RSpec.describe PerformanceStudy::Runner do
     expect(PerformanceStudy::Measurements.summarize([4.0, 1.0, 3.0,
                                                      2.0])[:median_seconds]).to eq(2.5)
     expect { described_class.run(trials: 0) }.to raise_error(ArgumentError)
+  end
+
+  it 'validates paired association graphs with both sample orders and no speed gates' do
+    groups = PerformanceStudy::RailsAssociationCost.run(pairs: 4, trials: 2)
+    expect(groups.map { |group| group.map { |sample| sample[:enabled] } })
+      .to eq([[false, true], [true, false]])
+    expect(groups.flatten.map { |sample| sample[:cold][:allocated_objects] }).to all(be_positive)
   end
 
   it 'uses bounded read-only Linux CI with immutable sources, research-only deps and artifacts' do

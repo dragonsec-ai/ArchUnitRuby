@@ -139,8 +139,8 @@ Things that are easy to get wrong and expensive to fix later:
   these strings, so inconsistency shows up as baffling rule failures.
 - **Every file gets a self-edge.** That is how a file with no dependencies still appears as a node.
   Projections filter self-edges out by default; node projection depends on them.
-- **Parallel edges are merged**, unioning their import kinds. Downstream code may assume
-  `(source, target)` is unique.
+- **Parallel edges are merged**, unioning their import kinds. Identity is
+  `(source, target, external)`: an external import can spell its name exactly like a project file.
 - **Globs are sugar, regex is the substrate.** Every user pattern compiles to a regex at build time
   in one place. Nothing downstream ever sees a glob.
 - **Violations carry data, not prose.** Message construction lives in `testing`, so one place

@@ -232,7 +232,9 @@ report.export_as_html('reports/services.html')
 
 Queries include `focus_on`, `reachable_from`, and `dependents_of`. Collapse by folder depth or a
 regular-expression replacement. Every format has an in-memory `to_<format>` and an
-`export_as_<format>(path)` terminal.
+`export_as_<format>(path)` terminal. External imports are leaves: a query never follows an import
+into an unrelated project file just because their names match. If two displayed labels collide,
+the external label gets a ` [external]` suffix (repeated if needed). Filters use the original names.
 
 ### Code Metrics
 
@@ -484,6 +486,45 @@ the helper explicitly. Rails itself documents
 [`require_dependency` as obsolete for modern autoloading](https://api.rubyonrails.org/classes/ActiveSupport/Dependencies/RequireDependency.html).
 This compatibility option models existing legacy/engine code, not complete Rails runtime behavior.
 
+<a id="rails-associations"></a>
+
+### Explicit Rails association class names (unreleased, opt-in)
+
+An association may name a model in a string, with no import or ordinary constant reference:
+
+~~~ruby
+class Order < ApplicationRecord
+  belongs_to :store, class_name: '::Storage::Store'
+end
+~~~
+
+Use `ArchUnit::CheckOptions.new(rails_associations: true)` or
+`bundle exec archunit check --rails-associations`. The option is separate from both
+`rails_imports` and `dependency_analysis`. It uses the same included-source declaration index
+as expanded mode, so it adds cold analysis work even if ordinary constant reads remain off.
+
+The supported sites are bare or `self.` calls directly in a named class body whose written
+superclass is `ApplicationRecord` or `ActiveRecord::Base` (optionally root-qualified).
+Supported macros are `belongs_to`, `has_one`, `has_many` and `has_and_belongs_to_many`.
+Use a symbol association name and a literal quoted string or symbol as `class_name:`, with
+an optional literal lambda scope. Names use ASCII constant path segments. A string hash key such
+as `"class_name" => ...` is not a Rails symbol option. Dynamic values, keyword splats, duplicate
+keys, polymorphic targets,
+`as:`, `through:`, and names that would need inflection are unresolved. Indirect calls, custom
+macros, concerns, alternate receivers, and custom base-class chains are outside the scanned sites.
+
+With a leading `::`, lookup starts at root. Otherwise, names are tried under the model's full
+name, then enclosing namespaces, then root (with Rails' root-first exception when the supplied
+name equals the model's basename). This is a bounded approximation of [Active Record lookup](https://github.com/rails/rails/blob/v8.1.0/activerecord/lib/active_record/inheritance.rb#L242-L269):
+the first known candidate must have a class declaration in one included file. Ambiguous and
+non-class candidates are not guessed past. No Rails boot, class ancestry checks, autoload mapping,
+runtime aliases, overridden macro behavior, or custom inflection are evaluated.
+
+The CLI reports `rails_association_sites`, `unresolved_rails_associations`, and
+`ambiguous_rails_associations` in enabled analysis scopes. They count only the supported call
+sites encountered and do not measure semantic coverage. An import and an association can share a
+file edge and retain separate evidence. Legacy checks and baselines are unchanged when disabled.
+
 ### Constant References (Opt-in)
 
 For autoloaded applications, enable dependencies from known project constants alongside imports:
@@ -706,7 +747,7 @@ Overlapping observed membership raises UserError instead of choosing a layer sil
 patterns can be overridden with `PresetOptions.folders` (String or Array of source globs per layer).
 Unknown/duplicate keys and empty patterns are errors. For arbitrary policies use `project_layers`.
 The Rails preset is opinionated and expects a services layer; it is not full Rails/DDD verification
-and does not automatically enable `rails_imports` or constant analysis.
+and does not automatically enable `rails_imports`, constant analysis, or Rails association analysis.
 For a Zeitwerk app, pass expanded analysis at check time:
 
 ~~~ruby

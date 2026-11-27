@@ -128,6 +128,16 @@ RSpec.describe ArchUnit::CLI, 'accepted-debt baselines' do
     RUBY
   end
 
+  it 'does not reuse debt with association analysis on but preserves disabled fingerprints' do
+    create
+    expect(check('--no-rails-associations').first).to eq(0)
+    code, report = check('--rails-associations')
+    expect(code).to eq(1)
+    expect(report['baseline']).to include(
+      'accepted_count' => 0, 'new_count' => 1, 'stale_count' => 1
+    )
+  end
+
   it 'consumes duplicate fingerprints one occurrence at a time' do
     repeated_rule(2)
     expect(create.first).to eq(0)

@@ -12,7 +12,7 @@ module ArchUnit
       include BaselineOptions
 
       attr_reader :command, :project_root, :config_path, :format, :dependency_analysis, :parser,
-                  :rails_imports, :load_paths, :source_exclusions
+                  :rails_imports, :rails_associations, :load_paths, :source_exclusions
 
       def initialize(arguments, cwd:)
         @arguments = arguments.dup
@@ -21,7 +21,7 @@ module ArchUnit
         @project_root = File.expand_path(cwd)
         @format = json_requested? ? 'json' : 'text'
         @dependency_analysis = 'imports'
-        @rails_imports = false
+        @rails_imports = @rails_associations = false
         @load_paths = []
         @source_exclusions = []
         @parser = build_parser
@@ -110,6 +110,9 @@ module ArchUnit
         end
         options.on('--[no-]rails-imports', 'Opt into static require_dependency imports') do |value|
           @rails_imports = value
+        end
+        options.on('--[no-]rails-associations', 'Analyze Rails class_name options') do |value|
+          @rails_associations = value
         end
       end
     end

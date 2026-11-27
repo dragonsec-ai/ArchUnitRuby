@@ -11,7 +11,7 @@ module ArchUnit
       # Maps every non-self edge without changing its labels.
       def per_edge
         lambda do |edge|
-          next if edge.source == edge.target
+          next if edge.self_dependency?
 
           map_identity(edge)
         end
@@ -30,7 +30,6 @@ module ArchUnit
       def per_external_edge
         lambda do |edge|
           next unless edge.external
-          next if edge.source == edge.target
 
           map_identity(edge)
         end

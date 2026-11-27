@@ -48,6 +48,7 @@ RSpec.describe 'the CI workflow' do
       'ruby scripts/check_namespace_receivers.rb',
       'ruby scripts/check_static_paths.rb',
       'ruby scripts/check_rails_imports.rb',
+      'ruby scripts/check_rails_associations.rb',
       'ruby scripts/check_source_exclusions.rb',
       'ruby scripts/check_analysis_diagnostics.rb',
       'ruby scripts/check_baselines.rb',
@@ -107,6 +108,9 @@ RSpec.describe 'the CI workflow' do
 
   it 'exercises opt-in Rails imports on every supported compatibility platform' do
     expect(steps).to include(include('run' => 'bundle exec ruby scripts/check_rails_imports.rb'))
+    expect(steps).to include(
+      include('run' => 'bundle exec ruby scripts/check_rails_associations.rb')
+    )
   end
 
   it 'exercises caller-owned source policies on every compatibility platform' do

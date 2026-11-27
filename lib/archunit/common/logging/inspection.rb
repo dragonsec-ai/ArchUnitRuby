@@ -47,7 +47,7 @@ module ArchUnit
         end
 
         def describe_edge(edge)
-          return "discovered file: #{edge.source.inspect}" if edge.source == edge.target
+          return "discovered file: #{edge.source.inspect}" if edge.self_dependency?
 
           "dependency: #{edge.source.inspect} -> #{edge.target.inspect} " \
             "(external=#{edge.external}, kinds=#{edge.import_kinds.inspect})"
