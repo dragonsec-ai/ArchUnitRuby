@@ -18,6 +18,8 @@
   different file or silently passing. Ordinary Windows separators remain supported.
 - Extend the existing extraction benchmark with allocation counts, full graph/evidence digests,
   and excluded-tree workloads; retain generous CI timing ceilings.
+- Explain potentially misleading imports-only Rails preset passes in CLI text and JSON when no
+  imports connect the selected files. Default rules, baselines and exit codes are unchanged.
 
 ## 1.1.0 - 2026-11-23
 

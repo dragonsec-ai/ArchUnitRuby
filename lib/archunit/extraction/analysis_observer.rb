@@ -19,6 +19,11 @@ module ArchUnit
       def self.record(snapshot, cache_hit: false)
         Thread.current[KEY]&.observe(snapshot, cache_hit:)
       end
+
+      def self.advisory_sink
+        observer = Thread.current[KEY]
+        observer if observer.respond_to?(:advise)
+      end
     end
   end
 end
