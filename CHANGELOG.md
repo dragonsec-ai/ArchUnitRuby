@@ -2,6 +2,9 @@
 
 ## 1.1.1 (unreleased)
 
+- Add file-scoped named method-call restrictions, with an optional bare-call mode, source
+  coordinates in test and CLI output, and explicit occurrence-based baseline support.
+
 - Add opt-in static Rails association dependencies for explicit literal `class_name` on supported
   model-body macros, with evidence, isolated baselines and CLI uncertainty counts. No Rails boot,
   automatic inflection, or change to existing default graphs.

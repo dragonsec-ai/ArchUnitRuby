@@ -54,10 +54,21 @@ module SemanticStudy
       options = ArchUnit::CheckOptions.new(dependency_analysis: :imports_and_constants)
       graph = ArchUnit::Extraction.extract_graph(root, options:, profile:)
       count = boundary_count(root, specification, options)
+      calls = named_call_count(root, specification)
       { name: specification['name'], direct_file_boundary_violations: count,
-        counters: profile.counters, syntax: syntax_facts(specification),
+        named_call_violations: calls, counters: profile.counters,
+        syntax: syntax_facts(specification),
         metric_method_fields: ArchUnit::MetricMethodInfo.members,
         has_semantic_method_edges: graph.any? { |edge| edge.respond_to?(:resolved_method) } }
+    end
+
+    def named_call_count(root, specification)
+      file = ArchUnit.project_files(root).in_path('app/api/**')
+      count = file.should_not.contain_calls_named(:delete_all).check.length
+      return count unless specification.key?('expected_named_calls')
+      return count if specification['expected_named_calls'] == count
+
+      raise "unexpected named call count: #{specification['name']}"
     end
 
     def boundary_count(root, specification, options)

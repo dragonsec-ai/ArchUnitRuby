@@ -52,6 +52,8 @@ module ArchUnit
   Violation = Common::Assertion::Violation
   EmptyTestViolation = Common::Assertion::EmptyTestViolation
   CheckOptions = Common::FluentApi::CheckOptions
+  NamedCallOptions = Files::FluentApi::NamedCallOptions
+  NamedCallViolation = Files::Assertion::NamedCallViolation
   Checkable = Common::FluentApi::Checkable
   ImportKind = Common::Extraction::ImportKind
   Edge = Common::Extraction::Edge

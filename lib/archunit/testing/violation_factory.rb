@@ -7,6 +7,7 @@ require_relative '../files/assertion/cycle_free'
 require_relative '../files/assertion/depend_on_external_modules'
 require_relative '../files/assertion/depend_on_files'
 require_relative '../files/assertion/matching_files'
+require_relative '../files/assertion/named_calls'
 require_relative '../layers/assertion/layer_dependency_violation'
 require_relative '../metrics/assertion/custom_metric'
 require_relative '../metrics/assertion/metric_predicate'
@@ -15,6 +16,7 @@ require_relative '../metrics/assertion/metric_zone'
 require_relative '../slices/assertion/slice_dependency_violation'
 require_relative 'layer_violation_formatter'
 require_relative 'metric_violation_formatter'
+require_relative 'named_call_formatter'
 require_relative 'slice_violation_formatter'
 require_relative 'test_violation'
 
@@ -25,6 +27,7 @@ module ArchUnit
     class ViolationFactory
       extend LayerViolationFormatter
       extend MetricViolationFormatter
+      extend NamedCallFormatter
       extend SliceViolationFormatter
 
       FORMATTERS = {
@@ -34,6 +37,7 @@ module ArchUnit
         Files::Assertion::ExternalModuleDependencyViolation => :external_module_dependency,
         Files::Assertion::CycleViolation => :cycle,
         Files::Assertion::CustomFileViolation => :custom_file,
+        Files::Assertion::NamedCallViolation => :named_call,
         Layers::Assertion::LayerDependencyViolation => :layer_dependency,
         Slices::Assertion::SliceDependencyViolation => :slice_dependency
       }.merge(MetricViolationFormatter::FORMATTERS).freeze

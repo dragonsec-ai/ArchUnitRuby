@@ -12,6 +12,7 @@ module ArchUnit
         Files::Assertion::FileDependencyViolation => :dependency,
         Files::Assertion::ExternalModuleDependencyViolation => :dependency,
         Files::Assertion::FilePatternViolation => :pattern,
+        Files::Assertion::NamedCallViolation => :named_call,
         Files::Assertion::CycleViolation => :cycle,
         Layers::Assertion::LayerDependencyViolation => :layer,
         Slices::Assertion::SliceDependencyViolation => :slice,
@@ -51,6 +52,12 @@ module ArchUnit
           'negated' => value.negated? }
       end
 
+      def self.named_call(value)
+        call = value.call
+        { 'file' => identifier(call.file), 'name' => call.name, 'receiver' => call.receiver.to_s,
+          'safe_navigation' => call.safe_navigation }
+      end
+
       def self.filter(value)
         [value.regexp.source, value.regexp.options, value.target.to_s, value.matching.to_s,
          value.exclusions.map { |item| filter(item) }.sort_by { |item| JSON.generate(item) }]
@@ -82,8 +89,8 @@ module ArchUnit
 
         normalized
       end
-      private_class_method :dependency, :edge, :layer, :slice, :pattern, :filter, :cycle,
-                           :threshold, :identifier
+      private_class_method :dependency, :edge, :layer, :slice, :pattern, :named_call, :filter,
+                           :cycle, :threshold, :identifier
     end
   end
 end

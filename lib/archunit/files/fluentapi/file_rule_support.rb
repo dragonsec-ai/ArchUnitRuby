@@ -19,6 +19,13 @@ module ArchUnit
           )
         end
 
+        def selected_paths(paths, filters)
+          selected = paths.select do |path|
+            Common::PatternMatching.matches_all_patterns?(path, filters)
+          end
+          Common::Logging::Inspection.selection('selected file', selected) { |path| path }
+        end
+
         def matching_nodes(nodes, filters)
           nodes.select do |node|
             Common::PatternMatching.matches_all_patterns?(node.label, filters)

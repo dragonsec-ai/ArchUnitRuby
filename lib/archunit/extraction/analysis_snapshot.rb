@@ -23,9 +23,9 @@ module ArchUnit
         build(root, patterns, settings, graph_counters(options, counters), status)
       end
 
-      def self.source(discovery, count: nil, status: 'analyzed')
+      def self.source(discovery, count: nil, status: 'analyzed', kind: 'source_metrics')
         settings = {
-          kind: 'source_metrics', dependency_analysis: nil, rails_imports: nil, load_paths: nil
+          kind:, dependency_analysis: nil, rails_imports: nil, load_paths: nil
         }
         counters = COUNTERS.to_h { |key| [key, key == :source_files ? count : nil] }
         build(discovery.root, discovery.patterns, settings, counters, status)
