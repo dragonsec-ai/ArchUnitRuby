@@ -139,6 +139,30 @@ dense graphs can have exponentially many results. Scope cycle rules to meaningfu
 
 <a id="layer-rules"></a>
 
+### Named method calls (unreleased)
+
+Use `should_not.contain_calls_named(:delete_all)` or pass a nonempty array of exact names. The
+optional `ArchUnit::NamedCallOptions.new(receiver: :bare)` limits the rule to calls with no
+explicit receiver. The default `:any` includes explicit `self`, other receivers, and safe
+navigation. The positive mood is not supported.
+
+This is a syntactic check. A call to a locally defined method with the same name also matches;
+Prism distinguishes method definitions, comments, strings, and local variable reads from calls.
+Ordinary operators and attribute/index assignments are included when parsed as explicit calls.
+Implicit sends in compound assignments, `receiver.()`, and targets of `send` or `public_send`
+are not inferred. Neither alias expansion nor runtime receiver types are checked.
+
+CLI violations add a `call` object with `file`, `name`, `receiver` (`bare`, `self` or
+`explicit`), `safe_navigation`, and one-based `line` and byte `column` of the call token.
+The `source_calls` analysis scope has no dependency counts. A baseline matches occurrences by
+file, method name, receiver form and safe-navigation flag, not receiver identity or line number.
+It accepts at most the previously recorded number of matching calls.
+
+Named-call rules share a cached source inventory per project and effective source exclusions. They
+don't change or reuse the dependency graph: a mixed graph and call suite has separate source passes.
+Use `clear_cache: true` or `ArchUnit.clear_graph_cache` after source edits in a long-lived process.
+Included parse errors fail the check, even when the malformed file isn't selected by the rule.
+
 ## Layer rules
 
 Use `ArchUnit.project_layers(project_locator = nil)` to name architectural layers and then declare

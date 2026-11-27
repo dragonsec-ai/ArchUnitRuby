@@ -38,7 +38,7 @@ module ArchUnit
         payload[:rules] << {
           name: rule.name, rationale: rule.checkable.rationale, status: rule_status(violations),
           analysis: analysis || { status: 'unavailable', scope_ids: [] },
-          violations: (violations || []).map { |violation| violation_payload(violation) }
+          violations: violation_payloads(violations)
         }
       end
 
@@ -84,6 +84,15 @@ module ArchUnit
       def violation_payload(violation)
         formatted = Testing::ViolationFactory.from_violation(violation)
         { type: violation.class.name, message: formatted.message, details: formatted.details }
+      end
+
+      def violation_payloads(violations)
+        (violations || []).map do |violation|
+          result = violation_payload(violation)
+          named_call = violation.is_a?(Files::Assertion::NamedCallViolation)
+          result[:call] = violation.call.to_h if named_call
+          result
+        end
       end
 
       def write_text(out)

@@ -171,6 +171,18 @@ rule = ArchUnit.project_files.in_folder('app/services/**')
                )
 ~~~
 
+### Keep write calls out of query files (unreleased)
+
+~~~ruby
+rule = ArchUnit.project_files.in_path('app/queries/**')
+               .should_not.contain_calls_named(%i[delete_all destroy_all])
+expect(rule).to pass
+~~~
+
+`store.read` is allowed; `store.delete_all` is reported at the written call site. This also
+matches the same spelling on unrelated receivers, and does not infer `send(:delete_all)`.
+Use it for a naming policy in a known part of your own code, not as proof of read-only behavior.
+
 ### Layer Dependencies
 
 Named layers express an allowlist or blocklist over groups of files:
