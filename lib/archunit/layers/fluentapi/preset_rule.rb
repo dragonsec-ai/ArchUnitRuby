@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'layered_architecture'
+require_relative 'rails_import_coverage'
 require_relative '../../error/user_error'
 
 module ArchUnit
@@ -26,15 +27,25 @@ module ArchUnit
 
         def perform_check(options)
           graph = ArchUnit::Extraction.extract_graph(architecture.project_locator, options:)
-          graph.each do |edge|
-            validate_membership(edge.source) if edge.source == edge.target && !edge.external
+          coverage = RailsImportCoverage.for(name, options, architecture.layer_definitions.size)
+          validate_files(graph, coverage)
+          architecture.check(options.with(clear_cache: false)).tap do |violations|
+            coverage&.finish(graph) if violations.empty?
           end
-          architecture.check(options.with(clear_cache: false))
+        end
+
+        def validate_files(graph, coverage)
+          graph.each do |edge|
+            next if edge.external || edge.source != edge.target
+
+            layer = validate_membership(edge.source)
+            coverage&.record(edge.source, layer)
+          end
         end
 
         def validate_membership(path)
           matches = architecture.layer_definitions.select { |layer| layer.matches?(path) }
-          return if matches.length <= 1
+          return matches.first if matches.length <= 1
 
           names = matches.map(&:name).join(', ')
           raise UserError, "preset file '#{path}' matches multiple layers: #{names}"

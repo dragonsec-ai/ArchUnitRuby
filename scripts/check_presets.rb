@@ -14,6 +14,7 @@ module PresetSmoke
   def run
     Dir.mktmpdir('archunit-preset-smoke') do |base|
       %i[layered hexagonal rails].each { |name| verify(base, name) }
+      verify_autoload(base)
     end
     puts 'Layered, hexagonal and Rails presets passed allowed/forbidden controls in both modes.'
   end
@@ -60,10 +61,37 @@ module PresetSmoke
   def verify_cli(base, root, name)
     config = File.join(base, "#{name}-trusted.rb")
     File.write(config, "rule('preset') { architecture_preset(:#{name}) }")
+    status, report = check_cli(root, config)
+    abort 'CLI preset failed' unless status.zero? && report['status'] == 'passed'
+    abort 'unexpected hint for explicit imports' if report.fetch('analysis').key?('advisories')
+  end
+
+  def autoload_fixture(base)
+    root, folders = fixture(base, :rails)
+    sources = ['class OrdersController; end', 'class OrderService; end',
+               'class Order; def ui; ::OrdersController; end; end']
+    folders.zip(sources).each do |folder, source|
+      File.write(File.join(root, folder, 'unit.rb'), source)
+    end
+    root
+  end
+
+  def verify_autoload(base)
+    root = autoload_fixture(base)
+    config = File.join(base, 'rails-trusted.rb')
+    status, report = check_cli(root, config)
+    code = report.dig('analysis', 'advisories', 0, 'code')
+    abort 'missing Rails hint' unless status.zero? && code == 'rails_no_scoped_imports'
+    status, report = check_cli(root, config, '--dependency-analysis', 'imports_and_constants')
+    count = report.dig('summary', 'violation_count')
+    abort 'missing dependency in expanded mode' unless status == 1 && count == 1
+  end
+
+  def check_cli(root, config, *flags)
     output = StringIO.new
-    arguments = ['check', '--project', root, '--config', config, '--format', 'json']
+    arguments = ['check', '--project', root, '--config', config, '--format', 'json', *flags]
     status = ArchUnit::CLI.run(arguments, out: output, err: StringIO.new)
-    abort 'CLI preset failed' unless status.zero? && JSON.parse(output.string)['status'] == 'passed'
+    [status, JSON.parse(output.string)]
   end
 end
 

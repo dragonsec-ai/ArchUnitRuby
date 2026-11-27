@@ -8,6 +8,9 @@ module ArchUnit
       def self.write(analysis, out)
         out.puts("Analysis: #{analysis[:status]}")
         analysis[:scopes].each { |scope| write_scope(scope, out) }
+        analysis.fetch(:advisories, []).each do |hint|
+          out.puts("  Advisory (#{hint[:rule_names].join(', ')}): #{hint[:message]}")
+        end
         out.puts(analysis[:notice]) unless analysis[:scopes].empty?
       end
 

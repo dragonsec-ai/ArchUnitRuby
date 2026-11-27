@@ -442,6 +442,12 @@ multiple roots can overlap, and a metric pass and a graph pass can inspect the s
 Scopes describe synchronous built-in extraction in the current check, not arbitrary user work
 started in other threads/fibers.
 
+In the development version, `analysis.advisories` is an optional schema-1 array. Each entry has
+a stable `code`, affected `rule_names`, and the same `message` as the text report. The
+`rails_no_scoped_imports` hint applies only to passing, populated Rails presets in imports mode
+with zero cross-file imports among their selected files. It does not count skipped constants or
+affect violations, baselines or exit codes. No advisory field is emitted when there is no hint.
+
 `imports` counts accepted static import expressions, including external imports.
 Unresolved imports count unsupported/dynamic import expressions; literal external gem imports are
 not counted as unresolved expressions. Unresolved/ambiguous constant observations can include

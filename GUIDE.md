@@ -718,6 +718,11 @@ ArchUnit.assert_passes(rule, options)
 For a CLI-configured preset use `bundle exec archunit check --dependency-analysis imports_and_constants`.
 Neither option boots Rails or reproduces its runtime autoloading.
 
+In the development version, a passing imports-only Rails preset gets a CLI hint if all its
+layers contain files but no cross-file import connects any two selected files. A genuinely
+independent set of files can also trigger the hint. It is not a violation or a count of missed
+references, and it does not change the exit code. Plain Ruby, RSpec and Minitest checks stay silent.
+
 In trusted CLI configuration use `rule('Core independent') { architecture_preset(:hexagonal) }`;
 the helper defaults to the CLI's selected project root. Public `ArchUnit.architecture_preset` uses
 normal project auto-discovery when no locator is supplied.
