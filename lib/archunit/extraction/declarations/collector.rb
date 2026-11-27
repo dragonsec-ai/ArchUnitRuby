@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../static_constant_name'
+require_relative 'constant_assignment'
 require_relative 'parameters'
 require_relative 'scope'
 
@@ -59,8 +60,19 @@ module ArchUnit
 
         def advance_children(node, scope, pending)
           collect_mixins(node, scope) if node.is_a?(Prism::CallNode)
+          record_assignment(node, scope)
           scope = nested_context(node, scope)
           node.compact_child_nodes.reverse_each { |child| pending << [child, scope] }
+        end
+
+        def record_assignment(node, scope)
+          written = ConstantAssignment.written_name(node)
+          return unless written
+
+          @namespaces << Facts::Namespace.new(
+            kind: :constant_write, name: scope.qualify(written.freeze), written_name: written,
+            nesting: scope.nesting, context: scope.context, site: site(node.location)
+          )
         end
 
         def nested_context(node, scope)

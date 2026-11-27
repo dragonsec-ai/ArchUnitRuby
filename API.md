@@ -238,6 +238,29 @@ for a calculation over `ClassInfo`; zone guards are `not_in_zone_of_pain` and
 
 <a id="frameworks"></a>
 
+## Class declaration selection (unreleased)
+
+~~~ ruby
+selection = ArchUnit.project_classes(root)
+                    .in_namespace('Billing')
+                    .descendants_of('::Commands::Base')
+                    .selection
+~~~
+
+`with_constant_name('Billing::Invoice')` selects an exact class name. `in_namespace` matches
+namespace segments, and chained filters use AND. Builders are lazy and immutable. `selection`
+returns matched classes with contributing declaration locations, written methods and relationships,
+plus a separate list of uncertainties. Its status is `:complete` (matches and no uncertainties),
+`:empty` (no match and no uncertainty), or `:unknown` (uncertainties may coexist with matches).
+This is inspection, not a test assertion or a baseline-supported rule.
+
+Ancestry uses only known, explicit superclass links. A missing external parent, conflicting reopens,
+rebinding, relative lookup we cannot prove, or a cyclic chain can leave selection unknown. No
+runtime reflection, effective methods, implicit `Object`, or mixin ancestry is inferred. The
+selector covers all in-scope declaration sites for a class, not a particular folder or load order.
+Use `CheckOptions.new(source_exclusions: ...)` to limit the source set. Cached declaration facts
+refresh with `clear_cache: true` or `ArchUnit.clear_graph_cache`.
+
 ## Checking and test frameworks
 
 Every architecture rule includes `ArchUnit::Checkable` and exposes `check(options = nil)`. It returns

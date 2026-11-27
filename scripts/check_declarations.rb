@@ -20,6 +20,7 @@ Dir.mktmpdir('archunit-declaration-smoke') do |directory|
     raise 'must not execute'
   RUBY
   root.join('b.rb').write('class Orders::Create; def self.build(...); end; end')
+  root.join('base.rb').write('class Base; end')
 
   facts = ArchUnit::Extraction.extract_declarations(root)
   files = facts.namespaces.select { |item| item.name == 'Orders::Create' }.map { |item| item.site.file }
@@ -27,5 +28,9 @@ Dir.mktmpdir('archunit-declaration-smoke') do |directory|
   scopes = facts.method_declarations.map(&:scope)
   abort 'wrong method scopes' unless scopes == %i[instance singleton]
   abort 'wrong written superclass' unless facts.relationships.first.written_target == '::Base'
+  scope = ArchUnit.project_classes(root).in_namespace('Orders').descendants_of('::Base')
+  result = scope.selection
+  abort 'lost installed class selection' unless result.status == :complete &&
+                                                result.matches.map(&:name) == ['Orders::Create']
 end
 puts 'Declaration facts passed read-only extraction and installed-gem smoke.'

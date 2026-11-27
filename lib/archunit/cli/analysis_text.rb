@@ -16,13 +16,21 @@ module ArchUnit
 
       def self.write_scope(scope, out)
         mode = scope[:dependency_analysis] || 'source metrics (dependency analysis unavailable)'
-        out.puts("  Scope #{scope[:id]}: #{scope[:project_root]} — #{mode}; #{scope[:status]}")
+        out.puts(scope_heading(scope, mode))
         counts = scope[:counters].map do |name, value|
           "#{name}=#{value.nil? ? 'unavailable' : value}"
         end
         out.puts("    #{counts.join(', ')}; cache_hits=#{scope[:cache_hits]}")
       end
       private_class_method :write_scope
+
+      def self.scope_heading(scope, mode)
+        if scope[:kind] == 'source_declarations'
+          mode = 'source declarations (dependency analysis unavailable)'
+        end
+        "  Scope #{scope[:id]}: #{scope[:project_root]} — #{mode}; #{scope[:status]}"
+      end
+      private_class_method :scope_heading
     end
   end
 end

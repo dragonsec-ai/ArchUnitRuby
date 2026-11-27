@@ -2,7 +2,7 @@
 
 RSpec.describe 'ArchUnitRuby architecture' do
   let(:project_root) { File.expand_path('..', __dir__) }
-  let(:domain_names) { %w[files graph layers metrics slices] }
+  let(:domain_names) { %w[classes files graph layers metrics slices] }
 
   it 'keeps common independent from project code and limits its external toolchain' do
     internal_dependencies = ArchUnit.project_files(project_root)

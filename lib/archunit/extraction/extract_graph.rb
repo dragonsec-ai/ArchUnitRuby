@@ -53,6 +53,7 @@ module ArchUnit
     private_class_method :extract_graph_entry
 
     def clear_graph_cache
+      Declarations::Cache.clear if const_defined?(:Declarations, false)
       GRAPH_CACHE_MUTEX.synchronize { graph_cache.clear }
       nil
     end

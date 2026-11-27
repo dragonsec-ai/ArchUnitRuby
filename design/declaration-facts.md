@@ -29,29 +29,34 @@ known independently from the method's unknown ownership.
 - Mixin observations cover bare or explicit-`self` calls inside a named class/module's lexical
   scope, outside singleton-class bodies. They are not an inventory of every possible mixin.
 - The opt-in project collector uses the existing project locator, exclusions and fail-closed
-  parser. It parses each included file once per inventory request and retains facts, not ASTs.
+  parser. It parses each included file once per cold inventory and retains facts, not ASTs.
   The ordinary `require 'archunit'` path does not load the collector at all.
 
-## Proposed selector contract (next slice)
+## Bounded selector contract
 
 The sentence is “project classes in namespace Billing, with constant name Billing::Invoice,
 should ...”. A classes scope is separate from the file scope and does not introduce class
-nodes in the file graph. Following the siblings' scope grammar, propose
+nodes in the file graph. Following the siblings' scope grammar, use
 `project_classes(root).in_namespace('Billing').with_constant_name('Billing::Invoice')`.
 The exact selector normalizes a leading `::`; the namespace selector includes descendants by
-segment (`Billing::Invoice`, not `BillingTools::Invoice` or `Billing` itself). A source filter
-would select contributing declaration sites, not authorize reading excluded reopens.
+segment (`Billing::Invoice`, not `BillingTools::Invoice` or `Billing` itself). Source exclusions
+remove contributing sites before grouping; excluded reopens are not read. Only ordinary
+class declarations are class candidates, not constants assigned `Class.new` or an alias.
 
-A bounded ancestry selector would report **matched**, **not matched in the declared graph**, or
-**unknown**. External, dynamic, cyclic and conflicting ancestry cannot be returned as a
-proved nonmatch. Transitive decisions must be iterative and derived from known declarations;
-no implicit runtime/mixin/effective method claims. A later rule terminal must propagate unknowns
-and keep the normal empty-selector failure. Inspection results themselves are not rule passes.
+`descendants_of` follows an iterative chain of explicit superclass declarations. It considers
+root-qualified names, top-level spellings, and unqualified names with a known lexical declaration
+inside a namespace. It does not guess at imported, inherited or alias-based lookup. External,
+dynamic, cyclic and conflicting ancestry are unknown unless a known link already proves the
+requested ancestry and the chain is not cyclic. No implicit `Object` or mixin edges are created.
+Explicit constant assignments that may rebind a selected class or namespace make it uncertain.
+Reflection and metaprogramming are not modeled.
 
-Keep the inventory opt-in, reuse the common source-discovery/parser policy, and cache by
-canonical root and effective exclusions once a project consumer exists. Add a distinct analysis
-scope identifier before any rule consumes these facts or accepts baseline debt. The fact
-collector may accept an already parsed AST so later features need not reparse per selector.
+Class selection is inspection, not an architecture rule. `selection` exposes matches and
+uncertainties, with status `:complete`, `:empty`, or `:unknown`. Known matches can coexist with
+unknown candidates. Future rule terminals must propagate unknowns and fail normally on an empty
+selection. #105 is responsible for the rule/violation model and its baseline adapter.
 
-The first slice covers internal extraction and provenance only. Public selectors, ancestry
-resolution, warm project inventory, and rule/baseline integration are not shipped by it.
+The inventory stays opt-in and cached by canonical root and effective exclusions. Reporting uses
+the distinct `source_declarations` analysis scope, not dependency graph counts. The fact collector
+can also accept an already parsed AST. Each feature that starts enforcing these facts must define
+its baseline identity explicitly before accepting debt.
