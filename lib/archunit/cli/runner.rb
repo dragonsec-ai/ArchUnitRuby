@@ -81,8 +81,8 @@ module ArchUnit
         options = Common::FluentApi::CheckOptions.new(
           dependency_analysis: @options.dependency_analysis.to_sym,
           rails_imports: @options.rails_imports, rails_associations: @options.rails_associations,
-          load_paths: @options.load_paths,
-          source_exclusions: @options.source_exclusions
+          load_paths: @options.load_paths, source_exclusions: @options.source_exclusions,
+          cycle_reporting: @options.cycle_reporting.to_sym
         )
         check_rules(rules, options)
         BaselineRun.new(@options).finish(@report, @evaluations)

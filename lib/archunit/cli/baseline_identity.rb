@@ -57,6 +57,10 @@ module ArchUnit
       end
 
       def self.cycle(value)
+        if value.witness?
+          raise ArgumentError, 'cycle witness reporting is incompatible with baselines'
+        end
+
         edges = value.cycle.map { |item| edge(item) }
         return unless edges.map(&:first).uniq.length == edges.length
 

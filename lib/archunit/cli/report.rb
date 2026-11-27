@@ -32,6 +32,7 @@ module ArchUnit
           status: 'error', rules: [], analysis: AnalysisReport.new.to_h
         }
         @payload[:rails_associations] = true if options.rails_associations
+        @payload[:cycle_reporting] = 'witness' if options.cycle_reporting == 'witness'
       end
 
       def add_rule(rule, violations: nil, analysis: nil)
@@ -83,7 +84,13 @@ module ArchUnit
 
       def violation_payload(violation)
         formatted = Testing::ViolationFactory.from_violation(violation)
-        { type: violation.class.name, message: formatted.message, details: formatted.details }
+        result = {
+          type: violation.class.name, message: formatted.message, details: formatted.details
+        }
+        if violation.is_a?(Files::Assertion::CycleViolation) && violation.witness?
+          result[:cycle_reporting] = 'witness'
+        end
+        result
       end
 
       def write_text(out)
@@ -101,6 +108,7 @@ module ArchUnit
       end
 
       def write_notice(out)
+        write_cycle_notice(out) if payload[:cycle_reporting] == 'witness'
         out.puts('Rails require_dependency imports: enabled') if payload[:rails_imports]
         out.puts('Rails explicit association class names: enabled') if payload[:rails_associations]
         case payload[:status]
@@ -109,6 +117,10 @@ module ArchUnit
         when 'initialized'
           out.puts('Review and customize the trusted Ruby configuration before checking.')
         end
+      end
+
+      def write_cycle_notice(out)
+        out.puts('Cycle reporting: one witness per cyclic group, not all cycle paths.')
       end
 
       def write_rule(rule, out)

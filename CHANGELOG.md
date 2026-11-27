@@ -20,6 +20,8 @@
   and excluded-tree workloads; retain generous CI timing ceilings.
 - Explain potentially misleading imports-only Rails preset passes in CLI text and JSON when no
   imports connect the selected files. Default rules, baselines and exit codes are unchanged.
+- Add opt-in file cycle witnesses: one concrete path per cyclic group without enumerating all
+  paths. Exhaustive output stays the default and is required for path-based baselines.
 
 ## 1.1.0 - 2026-11-23
 

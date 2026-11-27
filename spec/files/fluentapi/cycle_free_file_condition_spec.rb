@@ -33,6 +33,21 @@ RSpec.describe ArchUnit::Files::FluentApi::CycleFreeFileCondition do
     expect(rule.check).to eq([])
   end
 
+  it 'reports a witness only for cycles wholly within the selected files' do
+    create_file('a.rb', "require_relative 'b'\nrequire_relative 'c'")
+    create_file('b.rb', "require_relative 'a'")
+    create_file('c.rb', "require_relative 'd'")
+    create_file('d.rb', "require_relative 'c'")
+    files = ArchUnit.files(@project_root)
+    options = ArchUnit::CheckOptions.new(cycle_reporting: :witness)
+    expect(files.should.have_no_cycles.check(options).map(&:path))
+      .to eq([%w[a.rb b.rb a.rb], %w[c.rb d.rb c.rb]])
+    selected = files.in_path('a.rb').should.have_no_cycles
+    expect(selected.check(options)).to be_empty
+    missing = files.in_path('missing.rb').should.have_no_cycles
+    expect(missing.check(options).first).to be_a(ArchUnit::EmptyTestViolation)
+  end
+
   it 'reports every cycle as a readable closed path' do
     create_file('lib/a.rb', "require_relative 'b'\n")
     create_file('lib/b.rb', "require_relative 'a'\n")

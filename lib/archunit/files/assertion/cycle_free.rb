@@ -11,19 +11,29 @@ module ArchUnit
       class CycleViolation < Common::Assertion::Violation
         attr_reader :cycle, :path
 
-        def initialize(cycle:)
+        def initialize(cycle:, witness: false)
+          unless [true, false].include?(witness)
+            raise ArgumentError, 'witness must be true or false'
+          end
+
+          @witness = witness
           @cycle = immutable_cycle(cycle)
           @path = [cycle.first.source_label, *cycle.map(&:target_label)].freeze
           super()
         end
 
+        # @return [Boolean] whether this is one example, not exhaustive cycle reporting
+        def witness?
+          @witness
+        end
+
         def ==(other)
-          other.is_a?(self.class) && cycle == other.cycle
+          other.is_a?(self.class) && cycle == other.cycle && witness? == other.witness?
         end
         alias eql? ==
 
         def hash
-          [self.class, cycle].hash
+          [self.class, cycle, witness?].hash
         end
 
         private
@@ -48,10 +58,10 @@ module ArchUnit
 
       module_function
 
-      def gather_cycle_violations(cycles)
+      def gather_cycle_violations(cycles, witness: false)
         raise ArgumentError, 'cycles must be an Array' unless cycles.is_a?(Array)
 
-        cycles.map { |cycle| CycleViolation.new(cycle:) }
+        cycles.map { |cycle| CycleViolation.new(cycle:, witness:) }
       end
     end
   end
