@@ -96,9 +96,10 @@ module ArchUnit
         end
 
         def cycle(violation)
+          label = violation.witness? ? 'Cycle witness (not exhaustive)' : 'Cycle'
           TestViolation.new(
             message: 'Circular dependency detected',
-            details: "Cycle: #{violation.path.join(' -> ')}."
+            details: "#{label}: #{violation.path.join(' -> ')}."
           )
         end
 

@@ -19,6 +19,7 @@ module ArchUnitCLISmoke
       check_imports(executable, root)
       check_constants(executable, root)
       check_parse_failure(executable, root)
+      check_cycle_witness(executable, root)
     end
     puts "CLI init/check/explain passed for archunit #{ArchUnit::VERSION} from #{executable}"
   end
@@ -54,6 +55,24 @@ module ArchUnitCLISmoke
     abort 'CLI lost parse diagnostics' if failure.dig('error', 'diagnostics').to_a.empty?
     explanation = check(executable, root, 'explain', '--format=json', expected: 0)
     abort 'CLI explanation pretends to check' unless explanation['status'] == 'configured'
+  end
+
+  def check_cycle_witness(executable, root)
+    prepare_cycle(root)
+    payload = check(executable, root, 'check', '--format=json', '--cycle-reporting=witness',
+                    expected: 1)
+    witness = payload.dig('rules', 0, 'violations', 0, 'cycle_reporting')
+    abort 'CLI failed to label cycle witnesses' unless witness == 'witness'
+    check(executable, root, 'baseline', '--format=json', '--cycle-reporting=witness',
+          '--output=debt.json', expected: 2)
+    abort 'CLI wrote a witness baseline' if File.exist?(File.join(root, 'debt.json'))
+  end
+
+  def prepare_cycle(root)
+    configuration = "rule('cycles') { project_files.should.have_no_cycles }"
+    File.write(File.join(root, '.archunit.rb'), configuration)
+    File.write(File.join(root, 'app/api/request.rb'), "require_relative '../db/settings'")
+    File.write(File.join(root, 'app/db/settings.rb'), "require_relative '../api/request'")
   end
 
   def prepare_project(root)

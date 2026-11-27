@@ -133,9 +133,11 @@ rules = [
 Positive dependency rules are allowlists: every selected dependency must match at least one target.
 Negated dependency rules are blocklists: matching dependencies become violations.
 
-Cycle projection uses iterative strongly-connected-component and elementary-cycle traversals, so
-long dependency chains do not consume Ruby's call stack. It still enumerates all elementary cycles;
-dense graphs can have exponentially many results. Scope cycle rules to meaningful components.
+Cycle projection uses iterative traversals. By default, it enumerates all elementary cycles; dense
+graphs can have exponentially many results. To report one reproducible closed path per cyclic group,
+pass `CheckOptions.new(cycle_reporting: :witness)` to the check. Both modes decide whether the
+entire selected file graph is acyclic; the witness list is not a count of all paths.
+`CycleViolation#witness?` distinguishes a witness from an exhaustive result.
 
 <a id="layer-rules"></a>
 
@@ -421,6 +423,9 @@ format option applies to init/check/explain and errors; help/version remain plai
 `--format json` produces one document with `schema_version: 1`, `archunit_version`, `command`,
 `project_root`, `config_path`, `dependency_analysis`, `rails_imports`, `load_paths`, `source_exclusions`,
 `status`, `rules`, `analysis`, and `summary`. The new settings/diagnostics are additive schema-1 fields.
+With `check --cycle-reporting witness`, the report adds `cycle_reporting: "witness"` at the top
+level and on each witness violation. The default (`exhaustive`) omits these fields. The summary
+counts reported violations, not all possible cycles. Witness mode cannot generate or use a baseline.
 Rule entries carry `name`, nullable `rationale`, `status`, `analysis`, and `violations`;
 each violation carries its `type`,
 shared formatter `message`, and `details`. Summary counts describe completed/listed rules and their

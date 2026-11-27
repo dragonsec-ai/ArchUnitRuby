@@ -37,16 +37,25 @@ module ArchUnit
           )
           return empty_test if empty_test
 
-          cycles = cycles_within(views.internal_edges, nodes)
-          Assertion.gather_cycle_violations(cycles)
+          cycle_violations(views.internal_edges, nodes, options)
         end
 
-        def cycles_within(internal_edges, nodes)
+        def cycle_violations(internal_edges, nodes, options)
+          edges = edges_within(internal_edges, nodes)
+          projection = Common::Projection
+          if options.cycle_reporting == :witness
+            witnesses = projection.project_cycle_witnesses(edges)
+            Assertion.gather_cycle_violations(witnesses, witness: true)
+          else
+            Assertion.gather_cycle_violations(projection.project_cycles(edges))
+          end
+        end
+
+        def edges_within(internal_edges, nodes)
           selected_labels = nodes.to_h { |node| [node.label, true] }
-          edges = internal_edges.select do |edge|
+          internal_edges.select do |edge|
             selected_labels[edge.source_label] && selected_labels[edge.target_label]
           end
-          Common::Projection.project_cycles(edges)
         end
       end
     end

@@ -67,4 +67,40 @@ RSpec.describe ArchUnit::Common::Projection, '.project_cycles' do
     expect { described_class.project_cycles([Object.new]) }
       .to raise_error(ArgumentError, /only ProjectedEdge/)
   end
+
+  it 'reports exactly one stable closed path per cyclic group with all its edge evidence' do
+    a_to_b = projected_edge('a', 'b')
+    duplicate = projected_edge('a', 'b', raw: raw_edge('a/helper.rb', 'b/main.rb', kind: :load))
+    reverse = projected_edge('b', 'a')
+    edges = [a_to_b, duplicate, reverse, projected_edge('b', 'c'), projected_edge('c', 'a'),
+             projected_edge('c', 'd'), projected_edge('d', 'e'), projected_edge('e', 'd'),
+             projected_edge('f', 'f'), projected_edge('f', 'a')]
+
+    paths = [%w[a b], %w[d e]]
+    [edges, edges.reverse, edges.shuffle(random: Random.new(42))].each do |order|
+      witnesses = described_class.project_cycle_witnesses(order)
+      expect(witnesses.map { |cycle| cycle.map(&:source_label) }).to eq(paths)
+      expect(witnesses).to be_frozen
+      expect(witnesses).to all(be_frozen)
+      raw = witnesses.first.first.cumulated_edges
+      expect(raw).to match_array(a_to_b.cumulated_edges + duplicate.cumulated_edges)
+      expect(witnesses.first.last).to eq(reverse)
+    end
+  end
+
+  it 'uses an SCC pass without enumerating the thousands of paths in a dense cyclic group' do
+    labels = (0...14).map { |index| format('file-%02d', index) }
+    edges = labels.combination(2).map { |source, target| projected_edge(source, target) }
+    edges << projected_edge(labels.last, labels.first)
+    expect(described_class.project_cycles(edges).length).to eq(4096)
+    expect(described_class::Cycles::JohnsonCycles).not_to receive(:call)
+    expect(described_class::Cycles::TarjanScc).to receive(:call).once.and_call_original
+    expect(described_class.project_cycle_witnesses(edges).first&.map(&:source_label))
+      .to eq([labels[0], labels[1], labels.last])
+  end
+
+  it 'returns no witnesses for an acyclic or self-only selected graph' do
+    edges = [projected_edge('a', 'b'), projected_edge('b', 'c'), projected_edge('c', 'c')]
+    expect(described_class.project_cycle_witnesses(edges)).to eq([])
+  end
 end

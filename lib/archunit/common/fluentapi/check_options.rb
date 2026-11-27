@@ -9,7 +9,7 @@ module ArchUnit
       # Immutable options shared by every terminal rule check.
       CheckOptions = Data.define(
         :allow_empty_tests, :logging, :clear_cache, :load_paths, :dependency_analysis,
-        :rails_imports, :source_exclusions, :rails_associations
+        :rails_imports, :source_exclusions, :rails_associations, :cycle_reporting
       ) do
         # Normalizes nil or an existing options value for terminal execution.
         # @param value [CheckOptions, nil]
@@ -29,10 +29,11 @@ module ArchUnit
         # @param rails_imports [Boolean] opt into static Rails require_dependency syntax
         # @param rails_associations [Boolean] opt into explicit Rails association class names
         # @param source_exclusions [Array<String>] additional project-relative source globs
+        # @param cycle_reporting [Symbol] :exhaustive or one :witness per cyclic component
         def initialize( # rubocop:disable Metrics/ParameterLists
           allow_empty_tests: false, logging: nil, clear_cache: false, load_paths: [],
           dependency_analysis: :imports, rails_imports: false, source_exclusions: [],
-          rails_associations: false
+          rails_associations: false, cycle_reporting: :exhaustive
         )
           validate_boolean(allow_empty_tests, :allow_empty_tests)
           validate_logging(logging)
@@ -40,9 +41,7 @@ module ArchUnit
           validate_rails_options(rails_imports, rails_associations)
           load_paths = immutable_load_paths(load_paths)
           source_exclusions = Common::Extraction::SourceExclusions.normalize(source_exclusions)
-          unless %i[imports imports_and_constants].include?(dependency_analysis)
-            raise ArgumentError, 'dependency_analysis must be :imports or :imports_and_constants'
-          end
+          validate_modes(dependency_analysis, cycle_reporting)
 
           super
         end
@@ -70,6 +69,15 @@ module ArchUnit
         end
 
         private
+
+        def validate_modes(dependency_analysis, cycle_reporting)
+          unless %i[imports imports_and_constants].include?(dependency_analysis)
+            raise ArgumentError, 'dependency_analysis must be :imports or :imports_and_constants'
+          end
+          return if %i[exhaustive witness].include?(cycle_reporting)
+
+          raise ArgumentError, 'cycle_reporting must be :exhaustive or :witness'
+        end
 
         def validate_rails_options(imports, associations)
           validate_boolean(imports, :rails_imports)

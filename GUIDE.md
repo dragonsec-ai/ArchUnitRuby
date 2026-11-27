@@ -862,6 +862,12 @@ records the decision and probes. Graph queries are available, but semantic CLI t
 
 PlantUML support is a small component-diagram subset. `.archignore` does not support negation or
 nested ignore files. Dense graphs can have exponentially many cycles despite iterative traversal.
+
+For file cycle rules, `bundle exec archunit check --cycle-reporting witness` or
+`ArchUnit::CheckOptions.new(cycle_reporting: :witness)` shows one concrete cycle per cyclic group.
+The whole selected graph is checked; a shorter report cannot turn a cycle into a pass. Self-edges,
+external imports and dependencies outside the file selection are treated as in the default mode.
+Use the default exhaustive mode for path-based baselines and when you need every cycle path.
 No-target-execution is not an OS sandbox against a hostile, concurrently changing filesystem.
 
 For reproducible Linux/Windows timing, startup, memory and changed-source evidence, see the

@@ -5,7 +5,7 @@ module ArchUnit
     # Execution-only options are excluded; source exclusions already live in the pattern key.
     module GraphCacheKey
       REPRESENTED_ELSEWHERE = %i[
-        allow_empty_tests logging clear_cache source_exclusions
+        allow_empty_tests logging clear_cache source_exclusions cycle_reporting
       ].freeze
       private_constant :REPRESENTED_ELSEWHERE
 
