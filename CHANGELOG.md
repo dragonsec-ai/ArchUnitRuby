@@ -14,6 +14,8 @@
   from directory children in a pruned iterative source walker, preserving sorted graph inputs.
 - Fail closed on unreadable/disappearing included directory listings instead of inheriting Find's
   silent listing-error skip. Excluded trees are still pruned without opening their descendants.
+- Refuse ambiguous POSIX source paths containing a literal backslash rather than checking a
+  different file or silently passing. Ordinary Windows separators remain supported.
 - Extend the existing extraction benchmark with allocation counts, full graph/evidence digests,
   and excluded-tree workloads; retain generous CI timing ceilings.
 

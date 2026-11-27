@@ -43,6 +43,9 @@ ArchUnit.project_files('/workspace/my_app/Gemfile')
 Source discovery skips symlinked files and directories, including project-local aliases. This
 avoids duplicate file identities and unintentionally parsing linked source outside the project.
 Direct file-information extraction also checks the canonical source path against the project root.
+On POSIX a literal backslash is legal in a name, but cannot be represented as an ArchUnit file
+identifier. Rename that project root, or rename or exclude the affected source. Discovery reports
+an error rather than silently analyzing a different file.
 
 ### Project-wide exclusions
 

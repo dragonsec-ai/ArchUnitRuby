@@ -65,6 +65,28 @@ RSpec.describe 'Pruned source discovery' do
     expect(ArchUnit::Extraction.enumerate_source_files(@root)).to eq(['lib/kept.rb'])
   end
 
+  it 'never reinterprets a literal backslash in a directory entry as a file separator' do
+    name = 'actual\\name.rb'
+    allow(Dir).to receive(:children).with(@root.to_s, any_args).and_return([name])
+    source = instance_double(File::Stat, symlink?: false, directory?: false, file?: true)
+    allow(File).to receive(:lstat).and_call_original
+    allow(File).to receive(:lstat).with(File.join(@root, name)).and_return(source)
+    expect { ArchUnit::Extraction.enumerate_source_files(@root, exclude_patterns: ['actual/**']) }
+      .to raise_error(ArchUnit::TechnicalError, /literal backslash/)
+    expect(ArchUnit::Extraction.enumerate_source_files(@root, exclude_patterns: ['*.rb'])).to eq([])
+  end
+
+  it 'rejects two native POSIX paths that would otherwise identify the same Ruby file' do
+    skip 'backslash is a native path separator' if File::ALT_SEPARATOR
+
+    write_source('normal/nested/item.rb')
+    write_source('normal\\nested/item.rb')
+    expect { ArchUnit::Extraction.extract_graph(@root) }
+      .to raise_error(ArchUnit::TechnicalError, /literal backslash/)
+    expect(ArchUnit::Extraction.enumerate_source_files(@root, exclude_patterns: ['*nested']))
+      .to be_empty
+  end
+
   [Errno::EACCES, Errno::ENOENT, Errno::ENOTDIR].each do |error|
     it "fails closed when an included directory listing raises #{error}" do
       write_source('lib/source.rb')

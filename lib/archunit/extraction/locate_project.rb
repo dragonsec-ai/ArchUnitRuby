@@ -3,6 +3,7 @@
 require 'pathname'
 require_relative '../error/technical_error'
 require_relative '../error/user_error'
+require_relative 'source_identifier'
 
 module ArchUnit
   # Ruby-specific project discovery and source extraction.
@@ -12,7 +13,7 @@ module ArchUnit
     def locate_project(locator = nil, working_directory: Dir.pwd)
       working_root = existing_directory(working_directory, :working_directory)
       root = project_root(locator, working_root)
-      normalize_path(root.realpath)
+      SourceIdentifier.root(root.realpath)
     rescue UserError, TechnicalError
       raise
     rescue SystemCallError => e
@@ -71,10 +72,5 @@ module ArchUnit
       Pathname.new(value)
     end
     private_class_method :pathname
-
-    def normalize_path(path)
-      path.to_s.tr('\\', '/')
-    end
-    private_class_method :normalize_path
   end
 end

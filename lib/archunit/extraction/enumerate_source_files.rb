@@ -4,6 +4,7 @@ require 'pathname'
 require_relative '../error/technical_error'
 require_relative '../error/user_error'
 require_relative 'arch_ignore'
+require_relative 'source_identifier'
 require_relative 'source_walker'
 require_relative '../common/fluentapi/check_options'
 
@@ -109,7 +110,7 @@ module ArchUnit
       root = Pathname.new(value).expand_path
       raise UserError, 'project_root must be an existing directory' unless root.directory?
 
-      root.realpath
+      Pathname.new(SourceIdentifier.root(root.realpath))
     rescue SystemCallError => e
       raise TechnicalError, "could not enumerate Ruby source files: #{e.message}"
     end
