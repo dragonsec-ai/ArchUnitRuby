@@ -5,6 +5,13 @@ module ArchUnit
     # Concise human diagnostics; nil remains unavailable, never zero.
     # @api private
     module AnalysisText
+      SOURCE_LABELS = {
+        'source_calls' => 'source calls',
+        'source_declarations' => 'source declarations',
+        'source_metrics' => 'source metrics'
+      }.freeze
+      private_constant :SOURCE_LABELS
+
       def self.write(analysis, out)
         out.puts("Analysis: #{analysis[:status]}")
         analysis[:scopes].each { |scope| write_scope(scope, out) }
@@ -15,8 +22,8 @@ module ArchUnit
       end
 
       def self.write_scope(scope, out)
-        mode = scope[:dependency_analysis] || 'source metrics (dependency analysis unavailable)'
-        out.puts(scope_heading(scope, mode))
+        mode = scope[:dependency_analysis] || source_scope(scope)
+        out.puts("  Scope #{scope[:id]}: #{scope[:project_root]} — #{mode}; #{scope[:status]}")
         counts = scope[:counters].map do |name, value|
           "#{name}=#{value.nil? ? 'unavailable' : value}"
         end
@@ -24,13 +31,11 @@ module ArchUnit
       end
       private_class_method :write_scope
 
-      def self.scope_heading(scope, mode)
-        if scope[:kind] == 'source_declarations'
-          mode = 'source declarations (dependency analysis unavailable)'
-        end
-        "  Scope #{scope[:id]}: #{scope[:project_root]} — #{mode}; #{scope[:status]}"
+      def self.source_scope(scope)
+        name = SOURCE_LABELS.fetch(scope[:kind], 'source analysis')
+        "#{name} (dependency analysis unavailable)"
       end
-      private_class_method :scope_heading
+      private_class_method :source_scope
     end
   end
 end

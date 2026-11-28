@@ -13,6 +13,7 @@ RSpec.describe SemanticStudy::Probes do
     dynamic = observations.find { |item| item[:name] == 'dynamic_parameter_receiver' }
     expect(dynamic[:syntax][:calls]).to include(include(name: :delete_all,
                                                         resolved_runtime_receiver: nil))
+    expect(dynamic[:named_call_violations]).to eq(1)
     inherited = observations.find { |item| item[:name] == 'inherited_unqualified_constant' }
     expect(inherited[:direct_file_boundary_violations]).to eq(0)
     expect(inherited[:counters][:unresolved_constant_references]).to be_positive

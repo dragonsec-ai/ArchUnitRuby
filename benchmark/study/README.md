@@ -183,3 +183,21 @@ bundle exec ruby real_project.rb /path/to/pinned-sparse-discourse ../../pkg/disc
 The root RSpec study test is candidate-only, with four pairs and one trial, no native comparator
 or startup workers. The comparator is optional research tooling. Failed installation/controls are
 study failures, never measured zeroes or evidence of superiority.
+
+## Bounded file cycle reporting
+
+From the repository root, run `bundle exec ruby benchmark/study/cycle_witnesses.rb`. Each fixture
+contains every forward edge and one closing edge, so there are exactly `2**(vertices - 2)` simple
+cycles. The script checks this count and the deterministic witness path. It compares the two
+projection/reporting modes only, excluding discovery, parsing, and serialization. Three alternating
+runs per mode; medians below from Ruby 4.0.6 on Windows. These are observations, not CI timing gates.
+
+| Vertices | Exhaustive → witness paths | Median time (ms) | Allocated Ruby objects |
+| ---: | ---: | ---: | ---: |
+| 10 | 256 → 1 | 2.47 → 0.40 | 7,944 → 927 |
+| 14 | 4,096 → 1 | 46.96 → 0.61 | 128,866 → 1,745 |
+| 18 | 65,536 → 1 | 1,710.71 → 0.86 | 2,296,780 → 2,835 |
+
+In the last case the exhaustive paths contain 655,360 edge entries versus three in the witness.
+Witness mode classifies all components; it bounds report size to one path per cyclic component,
+not a fixed number of paths across the project.

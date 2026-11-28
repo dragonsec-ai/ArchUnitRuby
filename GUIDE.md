@@ -171,6 +171,18 @@ rule = ArchUnit.project_files.in_folder('app/services/**')
                )
 ~~~
 
+### Keep write calls out of query files (unreleased)
+
+~~~ruby
+rule = ArchUnit.project_files.in_path('app/queries/**')
+               .should_not.contain_calls_named(%i[delete_all destroy_all])
+expect(rule).to pass
+~~~
+
+`store.read` is allowed; `store.delete_all` is reported at the written call site. This also
+matches the same spelling on unrelated receivers, and does not infer `send(:delete_all)`.
+Use it for a naming policy in a known part of your own code, not as proof of read-only behavior.
+
 ### Layer Dependencies
 
 Named layers express an allowlist or blocklist over groups of files:
@@ -862,6 +874,12 @@ records the decision and probes. Graph queries are available, but semantic CLI t
 
 PlantUML support is a small component-diagram subset. `.archignore` does not support negation or
 nested ignore files. Dense graphs can have exponentially many cycles despite iterative traversal.
+
+For file cycle rules, `bundle exec archunit check --cycle-reporting witness` or
+`ArchUnit::CheckOptions.new(cycle_reporting: :witness)` shows one concrete cycle per cyclic group.
+The whole selected graph is checked; a shorter report cannot turn a cycle into a pass. Self-edges,
+external imports and dependencies outside the file selection are treated as in the default mode.
+Use the default exhaustive mode for path-based baselines and when you need every cycle path.
 No-target-execution is not an OS sandbox against a hostile, concurrently changing filesystem.
 
 For reproducible Linux/Windows timing, startup, memory and changed-source evidence, see the

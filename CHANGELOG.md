@@ -2,6 +2,9 @@
 
 ## 1.1.1 (unreleased)
 
+- Add file-scoped named method-call restrictions, with an optional bare-call mode, source
+  coordinates in test and CLI output, and explicit occurrence-based baseline support.
+
 - Add opt-in static Rails association dependencies for explicit literal `class_name` on supported
   model-body macros, with evidence, isolated baselines and CLI uncertainty counts. No Rails boot,
   automatic inflection, or change to existing default graphs.
@@ -22,6 +25,8 @@
   and excluded-tree workloads; retain generous CI timing ceilings.
 - Explain potentially misleading imports-only Rails preset passes in CLI text and JSON when no
   imports connect the selected files. Default rules, baselines and exit codes are unchanged.
+- Add opt-in file cycle witnesses: one concrete path per cyclic group without enumerating all
+  paths. Exhaustive output stays the default and is required for path-based baselines.
 
 ## 1.1.0 - 2026-11-23
 

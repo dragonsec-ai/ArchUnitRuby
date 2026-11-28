@@ -192,4 +192,26 @@ RSpec.describe 'Declaration-backed class selectors' do
     ArchUnit::CLI::AnalysisText.write(report.to_h, output)
     expect(output.string).to include('source declarations (dependency analysis unavailable)')
   end
+
+  it 'reports calls, declarations and dependency graphs separately in one analysis session' do
+    write('a.rb', "require_relative 'b'\nclass A; end")
+    write('b.rb', "require_relative 'a'\nstore.delete_all")
+    files = ArchUnit.project_files(@root)
+    report = ArchUnit::CLI::AnalysisReport.new
+
+    ArchUnit::Extraction::AnalysisObserver.capture(report) do
+      expect(classes.selection.matches.map(&:name)).to eq(['A'])
+      expect(files.should_not.contain_calls_named(:delete_all).check.size).to eq(1)
+      witness = ArchUnit::CheckOptions.new(cycle_reporting: :witness)
+      expect(files.should.have_no_cycles.check(witness).first).to be_witness
+    end
+
+    expect(report.to_h[:scopes].map { |scope| scope[:kind] })
+      .to eq(%w[source_declarations source_calls dependency_graph])
+    output = StringIO.new
+    ArchUnit::CLI::AnalysisText.write(report.to_h, output)
+    expect(output.string).to include('source declarations (dependency analysis unavailable)',
+                                    'source calls (dependency analysis unavailable)',
+                                    ' — imports; analyzed')
+  end
 end

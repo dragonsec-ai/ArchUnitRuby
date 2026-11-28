@@ -2,12 +2,14 @@
   {
     "name": "explicit_constant_forbidden_method",
     "source": "module Api; class Request; def call = ::Db::Store.delete_all; end; end",
+    "expected_named_calls": 1,
     "expected_direct_db": 1,
     "comparator_policy": "method_name"
   },
   {
     "name": "explicit_constant_allowed_method",
     "source": "module Api; class Request; def call = ::Db::Store.read; end; end",
+    "expected_named_calls": 0,
     "expected_direct_db": 1,
     "comparator_policy": "method_name"
   },
@@ -20,6 +22,7 @@
   {
     "name": "dynamic_parameter_receiver",
     "source": "module Api; class Request; def call(store) = store.delete_all; end; end",
+    "expected_named_calls": 1,
     "expected_direct_db": 0,
     "comparator_policy": "method"
   },

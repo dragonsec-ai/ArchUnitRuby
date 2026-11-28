@@ -133,11 +133,37 @@ rules = [
 Positive dependency rules are allowlists: every selected dependency must match at least one target.
 Negated dependency rules are blocklists: matching dependencies become violations.
 
-Cycle projection uses iterative strongly-connected-component and elementary-cycle traversals, so
-long dependency chains do not consume Ruby's call stack. It still enumerates all elementary cycles;
-dense graphs can have exponentially many results. Scope cycle rules to meaningful components.
+Cycle projection uses iterative traversals. By default, it enumerates all elementary cycles; dense
+graphs can have exponentially many results. To report one reproducible closed path per cyclic group,
+pass `CheckOptions.new(cycle_reporting: :witness)` to the check. Both modes decide whether the
+entire selected file graph is acyclic; the witness list is not a count of all paths.
+`CycleViolation#witness?` distinguishes a witness from an exhaustive result.
 
 <a id="layer-rules"></a>
+
+### Named method calls (unreleased)
+
+Use `should_not.contain_calls_named(:delete_all)` or pass a nonempty array of exact names. The
+optional `ArchUnit::NamedCallOptions.new(receiver: :bare)` limits the rule to calls with no
+explicit receiver. The default `:any` includes explicit `self`, other receivers, and safe
+navigation. The positive mood is not supported.
+
+This is a syntactic check. A call to a locally defined method with the same name also matches;
+Prism distinguishes method definitions, comments, strings, and local variable reads from calls.
+Ordinary operators and attribute/index assignments are included when parsed as explicit calls.
+Implicit sends in compound assignments, `receiver.()`, and targets of `send` or `public_send`
+are not inferred. Neither alias expansion nor runtime receiver types are checked.
+
+CLI violations add a `call` object with `file`, `name`, `receiver` (`bare`, `self` or
+`explicit`), `safe_navigation`, and one-based `line` and byte `column` of the call token.
+The `source_calls` analysis scope has no dependency counts. A baseline matches occurrences by
+file, method name, receiver form and safe-navigation flag, not receiver identity or line number.
+It accepts at most the previously recorded number of matching calls.
+
+Named-call rules share a cached source inventory per project and effective source exclusions. They
+don't change or reuse the dependency graph: a mixed graph and call suite has separate source passes.
+Use `clear_cache: true` or `ArchUnit.clear_graph_cache` after source edits in a long-lived process.
+Included parse errors fail the check, even when the malformed file isn't selected by the rule.
 
 ## Layer rules
 
@@ -444,6 +470,9 @@ format option applies to init/check/explain and errors; help/version remain plai
 `--format json` produces one document with `schema_version: 1`, `archunit_version`, `command`,
 `project_root`, `config_path`, `dependency_analysis`, `rails_imports`, `load_paths`, `source_exclusions`,
 `status`, `rules`, `analysis`, and `summary`. The new settings/diagnostics are additive schema-1 fields.
+With `check --cycle-reporting witness`, the report adds `cycle_reporting: "witness"` at the top
+level and on each witness violation. The default (`exhaustive`) omits these fields. The summary
+counts reported violations, not all possible cycles. Witness mode cannot generate or use a baseline.
 Rule entries carry `name`, nullable `rationale`, `status`, `analysis`, and `violations`;
 each violation carries its `type`,
 shared formatter `message`, and `details`. Summary counts describe completed/listed rules and their

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'cycles/johnson_cycles'
+require_relative 'cycles/cycle_witnesses'
 require_relative 'edge_projections'
 require_relative 'project_edges'
 require_relative 'projected_edge'
@@ -16,12 +17,22 @@ module ArchUnit
       end
 
       def project_cycles(edges)
+        project_cycle_paths(edges, Cycles::JohnsonCycles)
+      end
+
+      # Reports one evidence-backed path per cyclic component, not all its paths.
+      def project_cycle_witnesses(edges)
+        project_cycle_paths(edges, Cycles::CycleWitnesses, sort_labels: true)
+      end
+
+      def project_cycle_paths(edges, algorithm, sort_labels: false)
         projected_edges = normalize_projected_edges(edges)
-        label_ids = label_ids_for(projected_edges)
+        label_ids = label_ids_for(projected_edges, sort_labels:)
         edges_by_ids = index_edges(projected_edges, label_ids)
-        paths = Cycles::JohnsonCycles.call(adjacency_for(edges_by_ids))
+        paths = algorithm.call(adjacency_for(edges_by_ids))
         cycles_from_paths(paths, edges_by_ids)
       end
+      private_class_method :project_cycle_paths
 
       def cycles_from_paths(paths, edges_by_ids)
         paths.map do |path|
@@ -64,8 +75,9 @@ module ArchUnit
       end
       private_class_method :projected_edges_from
 
-      def label_ids_for(edges)
+      def label_ids_for(edges, sort_labels:)
         labels = edges.flat_map { |edge| [edge.source_label, edge.target_label] }.uniq
+        labels.sort! if sort_labels
         labels.each_with_index.to_h.freeze
       end
       private_class_method :label_ids_for

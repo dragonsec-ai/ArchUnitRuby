@@ -16,6 +16,7 @@ require_relative 'analysis_snapshot'
 require_relative 'analysis_observer'
 require_relative 'graph_assembly'
 require_relative 'graph_views'
+require_relative 'named_call_analysis'
 
 module ArchUnit
   # Assembles the normalized dependency graph for a Ruby project.
@@ -55,6 +56,7 @@ module ArchUnit
     def clear_graph_cache
       Declarations::Cache.clear if const_defined?(:Declarations, false)
       GRAPH_CACHE_MUTEX.synchronize { graph_cache.clear }
+      clear_named_calls
       nil
     end
 

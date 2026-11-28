@@ -3,6 +3,7 @@
 require 'optparse'
 require_relative '../common/extraction/source_exclusions'
 require_relative 'baseline_options'
+require_relative 'cycle_reporting_options'
 
 module ArchUnit
   module CLI
@@ -10,6 +11,7 @@ module ArchUnit
     # @api private
     class Options
       include BaselineOptions
+      include CycleReportingOptions
 
       attr_reader :command, :project_root, :config_path, :format, :dependency_analysis, :parser,
                   :rails_imports, :rails_associations, :load_paths, :source_exclusions
@@ -46,6 +48,7 @@ module ArchUnit
 
       def validate_arguments
         validate_baseline_options
+        validate_cycle_reporting
         unless @arguments.empty?
           raise OptionParser::InvalidArgument, "unexpected arguments: #{@arguments.join(' ')}"
         end
@@ -66,6 +69,7 @@ module ArchUnit
           load_path_option(options)
           source_exclusion_option(options)
           baseline_options(options)
+          cycle_reporting_option(options)
           output_options(options)
         end
       end

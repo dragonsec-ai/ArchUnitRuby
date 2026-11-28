@@ -19,6 +19,12 @@ RSpec.describe 'Cycle analysis on deep graphs' do
     expect(algorithms::JohnsonCycles.call(ring)).to eq([vertices])
   end
 
+  it 'finds no witnesses on a long chain and exactly one on a long ring' do
+    ring = vertices.to_h { |vertex| [vertex, [(vertex + 1) % size]] }
+    expect(algorithms::CycleWitnesses.call(chain)).to eq([])
+    expect(algorithms::CycleWitnesses.call(ring)).to eq([vertices])
+  end
+
   it 'unblocks a deep dependency chain without recursion' do
     search = algorithms::JohnsonCycles.new(chain)
     blocked_by = vertices.to_h { |vertex| [vertex, Set.new(chain.fetch(vertex))] }

@@ -77,6 +77,9 @@ jobs:
       - name: Exercise architecture presets
         run: bundle exec ruby scripts/check_presets.rb
 
+      - name: Exercise named method calls
+        run: bundle exec ruby scripts/check_named_calls.rb
+
       - name: Exercise documented library examples
         run: bundle exec ruby scripts/check_documentation_examples.rb
 
@@ -183,6 +186,7 @@ jobs:
           ruby scripts/check_baselines.rb
           ruby scripts/check_declarations.rb
           ruby scripts/check_presets.rb
+          ruby scripts/check_named_calls.rb
           ruby scripts/check_documentation_examples.rb
           ruby scripts/check_cli.rb
           ruby -e "

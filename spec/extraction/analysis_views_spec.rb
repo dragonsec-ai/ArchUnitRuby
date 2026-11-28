@@ -33,6 +33,7 @@ RSpec.describe ArchUnit::Extraction, 'analysis-owned views' do
     options = ArchUnit::CheckOptions.new(allow_empty_tests: true)
     expect(views(options)).to equal(first)
     expect(views.nodes).to equal(first.nodes)
+    expect(views(options.with(cycle_reporting: :witness))).to equal(first)
   end
 
   it 'keeps old views until explicit rebuild, even after an on-disk edit' do
