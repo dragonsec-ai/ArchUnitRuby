@@ -32,12 +32,14 @@ RSpec.describe 'Rule rationale' do
     files = ArchUnit.project_files(@root)
     metrics = ArchUnit.metrics(@root)
     slices = ArchUnit.project_slices(@root).defined_by('app/(**)/')
+    call_shape = ArchUnit::MethodSignature.new(name: :call)
     [
       files.should.have_name('*.rb'),
       files.should.have_no_cycles,
       files.should_not.depend_on_files.in_folder('app/database/**'),
       files.should_not.depend_on_external_modules.matching('json'),
       files.should_not.contain_calls_named(:require_relative),
+      ArchUnit.project_classes(@root).should.declare_method(call_shape),
       files.should.adhere_to(->(_file) { true }, 'Ruby files'),
       ArchUnit.project_layers(@root).layer('api').defined_by('app/api/**')
               .where_layer('api').may_only_depend_on_layers,

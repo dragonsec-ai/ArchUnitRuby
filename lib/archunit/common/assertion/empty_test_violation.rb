@@ -21,7 +21,8 @@ module ArchUnit
         end
 
         def ==(other)
-          other.is_a?(self.class) && filters == other.filters && is_negated == other.is_negated
+          other.instance_of?(self.class) && filters == other.filters &&
+            is_negated == other.is_negated
         end
         alias eql? ==
 

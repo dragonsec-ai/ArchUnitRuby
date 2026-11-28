@@ -74,6 +74,9 @@ jobs:
       - name: Exercise opt-in declaration extraction
         run: bundle exec ruby scripts/check_declarations.rb
 
+      - name: Exercise declared method signatures
+        run: bundle exec ruby scripts/check_method_signatures.rb
+
       - name: Exercise architecture presets
         run: bundle exec ruby scripts/check_presets.rb
 
@@ -185,6 +188,7 @@ jobs:
           ruby scripts/check_analysis_diagnostics.rb
           ruby scripts/check_baselines.rb
           ruby scripts/check_declarations.rb
+          ruby scripts/check_method_signatures.rb
           ruby scripts/check_presets.rb
           ruby scripts/check_named_calls.rb
           ruby scripts/check_documentation_examples.rb

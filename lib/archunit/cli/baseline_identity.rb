@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../testing/violation_factory'
+require_relative 'method_signature_payload'
 require 'json'
 
 module ArchUnit
@@ -14,6 +15,7 @@ module ArchUnit
         Files::Assertion::FilePatternViolation => :pattern,
         Files::Assertion::NamedCallViolation => :named_call,
         Files::Assertion::CycleViolation => :cycle,
+        Classes::Assertion::MethodSignatureViolation => :method_signature,
         Layers::Assertion::LayerDependencyViolation => :layer,
         Slices::Assertion::SliceDependencyViolation => :slice,
         Metrics::Assertion::MetricThresholdViolation => :threshold
@@ -58,6 +60,10 @@ module ArchUnit
           'safe_navigation' => call.safe_navigation }
       end
 
+      def self.method_signature(value)
+        MethodSignaturePayload.identity(value)
+      end
+
       def self.filter(value)
         [value.regexp.source, value.regexp.options, value.target.to_s, value.matching.to_s,
          value.exclusions.map { |item| filter(item) }.sort_by { |item| JSON.generate(item) }]
@@ -90,7 +96,7 @@ module ArchUnit
         normalized
       end
       private_class_method :dependency, :edge, :layer, :slice, :pattern, :named_call, :filter,
-                           :cycle, :threshold, :identifier
+                           :cycle, :method_signature, :threshold, :identifier
     end
   end
 end

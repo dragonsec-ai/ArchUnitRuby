@@ -4,6 +4,7 @@ require_relative '../../common/fluentapi/check_options'
 require_relative '../../extraction/declarations'
 require_relative '../projection/select_classes'
 require_relative 'class_filters'
+require_relative 'positive_class_condition_builder'
 
 module ArchUnit
   # Inspection of bounded class declarations, kept separate from file graph rules.
@@ -33,6 +34,17 @@ module ArchUnit
         # @return [ClassScope]
         def descendants_of(name)
           adding(:ancestor, name)
+        end
+
+        # Begins a positive declaration rule without reading the project.
+        # @return [PositiveClassConditionBuilder]
+        def should
+          PositiveClassConditionBuilder.new(self)
+        end
+
+        # @api private
+        def identity
+          @filters.to_h.transform_values { |names| names.sort.freeze }.freeze
         end
 
         # Reads a declaration snapshot. This is inspection, not a passing/failing rule.

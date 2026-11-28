@@ -287,6 +287,34 @@ selector covers all in-scope declaration sites for a class, not a particular fol
 Use `CheckOptions.new(source_exclusions: ...)` to limit the source set. Cached declaration facts
 refresh with `clear_cache: true` or `ArchUnit.clear_graph_cache`.
 
+### Declared method signatures (unreleased)
+
+~~~ ruby
+shape = ArchUnit::MethodSignature.new(name: :call, positional: 1, keywords: %i[actor request_id])
+rule = ArchUnit.project_classes(root).in_namespace('Commands').should.declare_method(shape)
+ArchUnit.assert_passes(rule)
+~~~
+
+The rule requires an ordinary `def` on each selected class that accepts the specified call.
+`positional` is the number passed, not the number written. `keywords` is the exact set passed:
+omitting a required keyword fails, and a keyword-rest parameter accepts extras. Implicit conversion
+to a positional Hash is not a named keyword interface. `scope: :singleton` checks `def self.call`
+and `class << self`; `block: :declared` requires explicit block capture or forwarding syntax.
+The default is `scope: :instance, block: :any`.
+
+This is declaration-only: methods inherited or supplied by mixins, aliasing, or metaprogramming
+do not satisfy it. It does not prove public visibility, receiver behavior, or return types.
+Conditional definitions, ambiguous class selection, or conflicting signatures fail as unknown.
+Multiple known declarations satisfy the rule if they all accept the requested call. Empty scopes
+fail unless explicitly allowed; that option does not suppress unknown results. The negative mood
+is not offered.
+
+The same scope is available as `project_classes` in a named CLI rule. JSON adds a
+`method_signature` object carrying the expected shape, observed candidates and source locations.
+Confirmed failures can use baselines; the fingerprint includes the normalized selector and
+expected shape. Unknowns fail a plain CLI check (exit 1) and reject baseline creation or use
+before any accepted-debt write (exit 2).
+
 ## Checking and test frameworks
 
 Every architecture rule includes `ArchUnit::Checkable` and exposes `check(options = nil)`. It returns
