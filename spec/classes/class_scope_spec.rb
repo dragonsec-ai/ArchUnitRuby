@@ -64,6 +64,34 @@ RSpec.describe 'Declaration-backed class selectors' do
       .to eq(:empty)
   end
 
+  it 'accepts Ruby constant tokens that do not fit an uppercase-letter category' do
+    name = "Billing::\u01C5emo\u{1F680}"
+    write('unicode.rb', "class #{name}; end")
+    expect(classes.with_constant_name("::#{name}").selection.matches.map(&:name)).to eq([name])
+    invalid_names = ["#{name}::", "#{name}#suffix", "#{name} ", "#{name}; Other", "#{name}\nOther"]
+    invalid_names.each do |invalid|
+      expect { classes.with_constant_name(invalid) }.to raise_error(ArgumentError)
+    end
+  end
+
+  it 'keeps same-spelled constants in UTF-8 and Latin-1 separate' do
+    utf8 = "\u00C9quipe"
+    latin1 = utf8.encode('ISO-8859-1')
+    body = "module #{utf8}; class Invoice; end; end"
+    @root.join('utf8.rb').binwrite(body)
+    @root.join('latin.rb').binwrite("# encoding: ISO-8859-1\n#{body}".encode(latin1.encoding))
+
+    [utf8, latin1].each do |namespace|
+      qualified = "#{namespace}::Invoice"
+      expect(classes.in_namespace(namespace).selection.matches.map(&:name)).to eq([qualified])
+      match = classes.with_constant_name(qualified).selection.matches.first
+      expect(match.declarations.size).to eq(1)
+      expect(match.name).to eq(qualified)
+    end
+    expect(classes.in_namespace(utf8).in_namespace(latin1).selection.status).to eq(:empty)
+    expect(classes.selection.matches.size).to eq(2)
+  end
+
   it 'selects bounded transitive superclass links without using mixins or inferring Object' do
     write('relations.rb', <<~RUBY)
       class Root < ::Outside; end
