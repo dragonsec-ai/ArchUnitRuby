@@ -210,8 +210,8 @@ RSpec.describe 'Declaration-backed class selectors' do
       .to eq(%w[source_declarations source_calls dependency_graph])
     output = StringIO.new
     ArchUnit::CLI::AnalysisText.write(report.to_h, output)
-    expect(output.string).to include('source declarations (dependency analysis unavailable)',
-                                    'source calls (dependency analysis unavailable)',
-                                    ' — imports; analyzed')
+    headings = ['source declarations (dependency analysis unavailable)',
+                'source calls (dependency analysis unavailable)', ' — imports; analyzed']
+    expect(output.string).to include(*headings)
   end
 end
