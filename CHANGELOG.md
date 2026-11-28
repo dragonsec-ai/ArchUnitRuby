@@ -1,6 +1,9 @@
 # Changelog
 
-## 1.1.1 (unreleased)
+## 1.2.0 - 2026-11-28
+
+Additive release over 1.1.0. Existing import-only checks and exhaustive cycle reporting remain
+the defaults. The new class and call rules read source without running the application.
 
 - Add file-scoped named method-call restrictions, with an optional bare-call mode, source
   coordinates in test and CLI output, and explicit occurrence-based baseline support.
@@ -29,6 +32,8 @@
   imports connect the selected files. Default rules, baselines and exit codes are unchanged.
 - Add opt-in file cycle witnesses: one concrete path per cyclic group without enumerating all
   paths. Exhaustive output stays the default and is required for path-based baselines.
+- Help readers choose an analysis mode, fix Reference navigation and narrow-screen code/contents
+  layout in the documentation, and make the linked demo usable with the published gem.
 
 ## 1.1.0 - 2026-11-23
 

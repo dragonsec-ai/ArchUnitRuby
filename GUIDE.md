@@ -1,6 +1,6 @@
 # ArchUnitRuby user guide
 
-Recipes and operational details for the 1.x API, including the additions in 1.1.
+Recipes and operational details for the 1.x API, including the additions in 1.1 and 1.2.
 Start with the [README](README.md#quickstart), use this guide for complete workflows, and consult
 the [API contract](API.md) for exact semantics. The documentation site follows `main`, not the
 published gem. CLI, baselines, presets, Rails helper imports and caller-owned exclusions require
@@ -171,7 +171,7 @@ rule = ArchUnit.project_files.in_folder('app/services/**')
                )
 ~~~
 
-### Keep write calls out of query files (unreleased)
+### Keep write calls out of query files (1.2+)
 
 ~~~ruby
 rule = ArchUnit.project_files.in_path('app/queries/**')
@@ -503,7 +503,7 @@ This compatibility option models existing legacy/engine code, not complete Rails
 
 <a id="rails-associations"></a>
 
-### Explicit Rails association class names (unreleased, opt-in)
+### Explicit Rails association class names (1.2+, opt-in)
 
 An association may name a model in a string, with no import or ordinary constant reference:
 
@@ -774,7 +774,7 @@ ArchUnit.assert_passes(rule, options)
 For a CLI-configured preset use `bundle exec archunit check --dependency-analysis imports_and_constants`.
 Neither option boots Rails or reproduces its runtime autoloading.
 
-In the development version, a passing imports-only Rails preset gets a CLI hint if all its
+As of 1.2, a passing imports-only Rails preset gets a CLI hint if all its
 layers contain files but no cross-file import connects any two selected files. A genuinely
 independent set of files can also trigger the hint. It is not a violation or a count of missed
 references, and it does not change the exit code. Plain Ruby, RSpec and Minitest checks stay silent.
