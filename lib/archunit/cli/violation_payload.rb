@@ -26,7 +26,7 @@ module ArchUnit
         when Classes::Assertion::MethodSignatureViolation
           result[:method_signature] = MethodSignaturePayload.build(violation)
         when Classes::Assertion::EmptyClassSelectionViolation
-          result[:class_selector] = violation.scope
+          result[:class_selector] = MethodSignaturePayload.selector(violation.scope)
         end
       end
       private_class_method :add_evidence

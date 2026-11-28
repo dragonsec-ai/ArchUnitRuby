@@ -68,6 +68,23 @@ RSpec.describe 'Declared method rules' do
     expect(reasons).to all(eq(:missing_declaration))
   end
 
+  it 'distinguishes same-spelled method and keyword names with different encodings' do
+    method_name = "\u00E9crire"
+    keyword = "r\u00F4le"
+    legacy_name = method_name.encode('ISO-8859-1')
+    legacy_key = keyword.encode('ISO-8859-1')
+    source = "# encoding: ISO-8859-1\nmodule Commands; class Run; " \
+             "def #{method_name}(id, #{keyword}:); end; end; end"
+    @root.join('legacy.rb').binwrite(source.encode(legacy_name.encoding))
+
+    expect(verify(name: legacy_name, keywords: [legacy_key])).to pass
+    method_mismatch = verify(name: method_name, keywords: [legacy_key]).check.first
+    keyword_mismatch = verify(name: legacy_name, keywords: [keyword]).check.first
+    expect(method_mismatch.finding.reason).to eq(:missing_declaration)
+    expect(keyword_mismatch.finding.reason).to eq(:incompatible_signature)
+    expect(ArchUnit.format_violations([keyword_mismatch])).to include(method_name, keyword)
+  end
+
   it 'does not accept inherited, mixed-in, aliased or generated substitutes for a def' do
     write('dynamic.rb', <<~RUBY)
       class Parent; def call(...); end; end

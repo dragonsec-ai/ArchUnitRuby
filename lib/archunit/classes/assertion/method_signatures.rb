@@ -27,7 +27,7 @@ module ArchUnit
       def method_candidates(subject, signature)
         subject.method_declarations.select do |method|
           (method.scope == signature.scope || method.scope == :unknown) &&
-            method.name.to_s.encode(Encoding::UTF_8) == signature.name
+            method.name.to_s == signature.name
         end.freeze
       end
       private_class_method :method_candidates

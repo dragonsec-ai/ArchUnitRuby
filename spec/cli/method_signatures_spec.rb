@@ -94,6 +94,24 @@ RSpec.describe ArchUnit::CLI, 'declared method signatures' do
     expect(@baseline.binread).to eq(before)
   end
 
+  it 'does not transfer debt between same-spelled constants in different encodings' do
+    name = "\u00C9quipe"
+    declaration = "class #{name}; def call; end; end"
+    @source.binwrite(declaration)
+    configure(selector: 'with_constant_name("\u00C9quipe")')
+    expect(invoke('baseline', '--output', @baseline.to_s).first).to eq(0)
+
+    @source.binwrite("# encoding: ISO-8859-1\n#{declaration}".encode('ISO-8859-1'))
+    configure(selector: 'with_constant_name("\u00C9quipe".encode("ISO-8859-1"))')
+    status, report = invoke('check', '--baseline', @baseline.to_s)
+    expect(status).to eq(1)
+    expect(report.fetch('baseline')).to include('new_count' => 1, 'stale_count' => 1)
+    finding = report.dig('rules', 0, 'violations', 0, 'method_signature')
+    identifier = { 'text' => name, 'encoding' => 'ISO-8859-1', 'bytes' => 'c97175697065' }
+    expect(finding.fetch('owner')).to eq(identifier)
+    expect(finding.dig('selector', 'constants')).to eq([identifier])
+  end
+
   it 'reports no selected classes separately and does not baseline an empty guard' do
     configure(selector: "in_namespace('Elsewhere')")
     code, report = invoke

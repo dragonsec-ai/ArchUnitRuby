@@ -34,7 +34,7 @@ module ArchUnit
         end
 
         def self.names(groups, kind)
-          groups.fetch(kind, []).map { |parameter| parameter.name.to_s.encode(Encoding::UTF_8) }
+          groups.fetch(kind, []).map { |parameter| parameter.name.to_s }
         end
 
         def self.accepts_block?(groups, policy)

@@ -18,16 +18,15 @@ module ArchUnit
     private
 
     def normalized_name(value)
-      name = value.to_s.encode(Encoding::UTF_8) if value.is_a?(String) || value.is_a?(Symbol)
-      return name.freeze if valid_name?(name)
+      name = value.to_s if value.is_a?(String) || value.is_a?(Symbol)
+      return name.dup.freeze if valid_name?(name)
 
       raise ArgumentError, 'method and keyword names must be non-blank Strings or Symbols'
-    rescue EncodingError => e
-      raise ArgumentError, "invalid method or keyword encoding: #{e.message}"
     end
 
     def valid_name?(name)
-      name&.valid_encoding? && !name.strip.empty? && !name.match?(/[[:cntrl:]]/)
+      name&.encoding&.ascii_compatible? && name.valid_encoding? &&
+        !name.strip.empty? && !name.match?(/[[:cntrl:]]/)
     end
 
     def normalized_keywords(values)

@@ -274,9 +274,11 @@ selection = ArchUnit.project_classes(root)
 ~~~
 
 `with_constant_name('Billing::Invoice')` selects an exact class name. `in_namespace` matches
-namespace segments, and chained filters use AND. Builders are lazy and immutable. `selection`
-returns matched classes with contributing declaration locations, written methods and relationships,
-plus a separate list of uncertainties. Its status is `:complete` (matches and no uncertainties),
+namespace segments, and chained filters use AND. Non-ASCII names retain their Ruby source
+encoding; use a selector string in the same encoding as its declaration. Builders are lazy
+and immutable. `selection` returns matched classes with contributing declaration locations,
+written methods and relationships, plus a separate list of uncertainties.
+Its status is `:complete` (matches and no uncertainties),
 `:empty` (no match and no uncertainty), or `:unknown` (uncertainties may coexist with matches).
 This is inspection, not a test assertion or a baseline-supported rule.
 
@@ -301,6 +303,7 @@ omitting a required keyword fails, and a keyword-rest parameter accepts extras. 
 to a positional Hash is not a named keyword interface. `scope: :singleton` checks `def self.call`
 and `class << self`; `block: :declared` requires explicit block capture or forwarding syntax.
 The default is `scope: :instance, block: :any`.
+Use method and keyword names in their declared source encoding for non-ASCII identifiers.
 
 This is declaration-only: methods inherited or supplied by mixins, aliasing, or metaprogramming
 do not satisfy it. It does not prove public visibility, receiver behavior, or return types.
@@ -311,6 +314,8 @@ is not offered.
 
 The same scope is available as `project_classes` in a named CLI rule. JSON adds a
 `method_signature` object carrying the expected shape, observed candidates and source locations.
+Non-ASCII identifiers in legacy encodings are reported with `text`, `encoding`, and hex
+`bytes` rather than a bare string; this preserves distinct Ruby names with the same spelling.
 Confirmed failures can use baselines; the fingerprint includes the normalized selector and
 expected shape. Unknowns fail a plain CLI check (exit 1) and reject baseline creation or use
 before any accepted-debt write (exit 2).
