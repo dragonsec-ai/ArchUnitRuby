@@ -31,7 +31,7 @@ metadata check does not publish a gem. Do not dispatch `Release` for a dry run: 
 to RubyGems and creates the version tag. Keep publication behind explicit maintainer authorization.
 
 1. Update `ArchUnit::VERSION` in `lib/archunit/version.rb` and add the release to `CHANGELOG.md`.
-2. Refresh the local gem's `Gemfile.lock` entry, date the changelog heading as
+2. Refresh the local gem entries in `Gemfile.lock` and `benchmark/study/Gemfile.lock`, date the changelog heading as
    `## <version> - YYYY-MM-DD`, and update the README installation example to `~> <version>`.
 3. Ensure `main` is green and run `bundle exec ruby scripts/check_release_metadata.rb --release`.
    The development check permits an unreleased heading; the publishing check deliberately does not.
