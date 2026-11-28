@@ -38,8 +38,9 @@ of the [ArchUnitEverything family](#community), inspired by—but not affiliated
 | --- | --- |
 | `1.0` | Fluent file/layer/slice rules, cycles and naming, metrics, graph/diagram exports, RSpec/Minitest integrations, opt-in constant-file analysis |
 | `1.1` | Everything in 1.0, plus CLI, analysis diagnostics, accepted-debt baselines, architecture presets, Rails helper imports, caller-owned source exclusions, and further extraction fixes |
+| `1.2` | Named-call rules, selectors for declared classes, method-signature rules, compact cycle reports, and opt-in Rails association analysis |
 
-This guide and its installation example target the **1.1 series**. Check
+This guide and its installation example target the **1.2 series**. Check
 [RubyGems](https://rubygems.org/gems/archunit) for published versions; the documentation site
 follows `main` and can be ahead of the registry during release preparation.
 Installing 1.0.0 does not provide the CLI or other 1.1 additions. See the
@@ -56,7 +57,7 @@ Ruby 3.3+ is required. Add ArchUnitRuby to your test dependencies:
 ~~~ruby
 # Gemfile
 group :test do
-  gem 'archunit', '~> 1.1.0'
+  gem 'archunit', '~> 1.2.0'
   gem 'rspec' # Omit this line if RSpec is already in your bundle.
 end
 ~~~
@@ -131,7 +132,9 @@ In a long-lived process, clear the graph cache after source edits; separate RSpe
 | Capability | Public entry point | Details |
 | --- | --- | --- |
 | File boundaries, external modules, naming, locations, custom predicates | `project_files` | [File rules](API.md#file-rules) |
-| Directed dependency cycles | `project_files.should.have_no_cycles` | [Rule recipes](GUIDE.md#recipes) |
+| Directed dependency cycles, with compact witnesses in 1.2 | `project_files.should.have_no_cycles` | [Cycle checks](API.md#file-rules) |
+| Restrict calls by name in selected files | `should_not.contain_calls_named` — **1.2+** | [Named-call rules](API.md#named-method-calls) |
+| Select declared classes and require specific method signatures | `project_classes` — **1.2+** | [Class and method rules](API.md#class-declarations) |
 | Named-layer allowlists and blocklists | `project_layers` | [Layer rules](API.md#layer-rules) |
 | Component slices and PlantUML conformance | `project_slices` | [Slices and diagrams](API.md#slices) |
 | Mermaid, DOT, D2, JSON, CSV, and offline HTML reports | `project_graph` | [Graph reports](API.md#graph-reports) |

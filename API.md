@@ -79,7 +79,7 @@ The source walker owns a pruned iterative traversal and reuses one status per en
 come from directory child components under the canonical root, not unchecked absolute-prefix
 slicing; the final source list is sorted once. Included entry/listing failures raise
 `TechnicalError`, including unreadable or disappearing directories; they are not silently skipped.
-This stricter listing-error handling is part of unreleased 1.1.1. Excluded directories are pruned
+This stricter listing-error handling starts in 1.2. Excluded directories are pruned
 before their children are listed. Concurrent hostile filesystem mutation is not sandboxed.
 
 The detected root's `.archignore` is applied centrally to graphs and file-based metrics. It accepts
@@ -137,11 +137,11 @@ Cycle projection uses iterative traversals. By default, it enumerates all elemen
 graphs can have exponentially many results. To report one reproducible closed path per cyclic group,
 pass `CheckOptions.new(cycle_reporting: :witness)` to the check. Both modes decide whether the
 entire selected file graph is acyclic; the witness list is not a count of all paths.
-`CycleViolation#witness?` distinguishes a witness from an exhaustive result.
+`CycleViolation#witness?` distinguishes a witness from an exhaustive result (1.2+).
 
-<a id="layer-rules"></a>
+<a id="named-method-calls"></a>
 
-### Named method calls (unreleased)
+### Named method calls (1.2+)
 
 Use `should_not.contain_calls_named(:delete_all)` or pass a nonempty array of exact names. The
 optional `ArchUnit::NamedCallOptions.new(receiver: :bare)` limits the rule to calls with no
@@ -164,6 +164,8 @@ Named-call rules share a cached source inventory per project and effective sourc
 don't change or reuse the dependency graph: a mixed graph and call suite has separate source passes.
 Use `clear_cache: true` or `ArchUnit.clear_graph_cache` after source edits in a long-lived process.
 Included parse errors fail the check, even when the malformed file isn't selected by the rule.
+
+<a id="layer-rules"></a>
 
 ## Layer rules
 
@@ -262,9 +264,9 @@ Thresholds use exactly `should_be_below`, `should_be_above`, `should_be`,
 for a calculation over `ClassInfo`; zone guards are `not_in_zone_of_pain` and
 `not_in_zone_of_uselessness`.
 
-<a id="frameworks"></a>
+<a id="class-declarations"></a>
 
-## Class declaration selection (unreleased)
+## Class declaration selection (1.2+)
 
 ~~~ ruby
 selection = ArchUnit.project_classes(root)
@@ -289,7 +291,7 @@ selector covers all in-scope declaration sites for a class, not a particular fol
 Use `CheckOptions.new(source_exclusions: ...)` to limit the source set. Cached declaration facts
 refresh with `clear_cache: true` or `ArchUnit.clear_graph_cache`.
 
-### Declared method signatures (unreleased)
+### Declared method signatures (1.2+)
 
 ~~~ ruby
 shape = ArchUnit::MethodSignature.new(name: :call, positional: 1, keywords: %i[actor request_id])
@@ -319,6 +321,8 @@ Non-ASCII identifiers in legacy encodings are reported with `text`, `encoding`, 
 Confirmed failures can use baselines; the fingerprint includes the normalized selector and
 expected shape. Unknowns fail a plain CLI check (exit 1) and reject baseline creation or use
 before any accepted-debt write (exit 2).
+
+<a id="frameworks"></a>
 
 ## Checking and test frameworks
 
@@ -384,7 +388,7 @@ and unknown operands remain unresolved. No Rails boot or automatic autoload-root
 The option is immutable, validated and part of graph-cache identity; it composes with either
 dependency-analysis mode. Cross-file method replacement and dynamic Rails/glob values are not modeled.
 
-### Explicit Rails associations (unreleased)
+### Explicit Rails associations (1.2+)
 
 `CheckOptions.new(rails_associations: true)` independently enables dependencies from supported
 Rails model calls such as `belongs_to :store, class_name: '::Storage::Store'`. It can be combined
@@ -424,11 +428,11 @@ mode participates in graph-cache identity, and `clear_cache: true` rebuilds the 
 
 ### Semantic boundaries
 
-Method-call restrictions, effective method/signature protocols, and semantic component selectors
-are not provided by the current file graph or metric method facts. The bounded
+The separate [named-call rules](#named-method-calls) and [declared-class rules](#class-declarations)
+check source syntax, not runtime dispatch. Inherited, mixed-in, aliased, or generated methods do
+not satisfy a declared signature rule. The earlier
 [semantic evaluation](https://github.com/dragonsec-ai/ArchUnitRuby/blob/main/design/semantic-boundaries.md)
-records exact comparator pins, executable probes and the compatibility/unknowns required before
-adding such APIs. This is a technical evaluation, not a newly shipped semantic backend.
+records comparator pins, executable probes, and open decisions for modeling effective methods.
 
 <a id="presets"></a>
 
@@ -539,7 +543,7 @@ multiple roots can overlap, and a metric pass and a graph pass can inspect the s
 Scopes describe synchronous built-in extraction in the current check, not arbitrary user work
 started in other threads/fibers.
 
-In the development version, `analysis.advisories` is an optional schema-1 array. Each entry has
+As of 1.2, `analysis.advisories` is an optional schema-1 array. Each entry has
 a stable `code`, affected `rule_names`, and the same `message` as the text report. The
 `rails_no_scoped_imports` hint applies only to passing, populated Rails presets in imports mode
 with zero cross-file imports among their selected files. It does not count skipped constants or
