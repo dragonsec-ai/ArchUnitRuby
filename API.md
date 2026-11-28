@@ -274,9 +274,11 @@ selection = ArchUnit.project_classes(root)
 ~~~
 
 `with_constant_name('Billing::Invoice')` selects an exact class name. `in_namespace` matches
-namespace segments, and chained filters use AND. Builders are lazy and immutable. `selection`
-returns matched classes with contributing declaration locations, written methods and relationships,
-plus a separate list of uncertainties. Its status is `:complete` (matches and no uncertainties),
+namespace segments, and chained filters use AND. Non-ASCII names retain their Ruby source
+encoding; use a selector string in the same encoding as its declaration. Builders are lazy
+and immutable. `selection` returns matched classes with contributing declaration locations,
+written methods and relationships, plus a separate list of uncertainties.
+Its status is `:complete` (matches and no uncertainties),
 `:empty` (no match and no uncertainty), or `:unknown` (uncertainties may coexist with matches).
 This is inspection, not a test assertion or a baseline-supported rule.
 
