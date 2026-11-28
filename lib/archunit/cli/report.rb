@@ -2,11 +2,11 @@
 
 require 'json'
 require_relative '../version'
-require_relative '../testing/violation_factory'
 require_relative '../error/source_parse_error'
 require_relative 'analysis_report'
 require_relative 'analysis_text'
 require_relative 'baseline_text'
+require_relative 'violation_payload'
 
 module ArchUnit
   module CLI
@@ -39,7 +39,7 @@ module ArchUnit
         payload[:rules] << {
           name: rule.name, rationale: rule.checkable.rationale, status: rule_status(violations),
           analysis: analysis || { status: 'unavailable', scope_ids: [] },
-          violations: violation_payloads(violations)
+          violations: Array(violations).map { |violation| ViolationPayload.build(violation) }
         }
       end
 
@@ -80,26 +80,6 @@ module ArchUnit
         return 'not_checked' unless violations
 
         violations.empty? ? 'passed' : 'failed'
-      end
-
-      def violation_payload(violation)
-        formatted = Testing::ViolationFactory.from_violation(violation)
-        result = {
-          type: violation.class.name, message: formatted.message, details: formatted.details
-        }
-        if violation.is_a?(Files::Assertion::CycleViolation) && violation.witness?
-          result[:cycle_reporting] = 'witness'
-        end
-        result
-      end
-
-      def violation_payloads(violations)
-        (violations || []).map do |violation|
-          result = violation_payload(violation)
-          named_call = violation.is_a?(Files::Assertion::NamedCallViolation)
-          result[:call] = violation.call.to_h if named_call
-          result
-        end
       end
 
       def write_text(out)

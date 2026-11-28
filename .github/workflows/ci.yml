@@ -71,6 +71,9 @@ jobs:
       - name: Exercise explicit accepted-debt baselines
         run: bundle exec ruby scripts/check_baselines.rb
 
+      - name: Exercise opt-in declaration extraction
+        run: bundle exec ruby scripts/check_declarations.rb
+
       - name: Exercise architecture presets
         run: bundle exec ruby scripts/check_presets.rb
 
@@ -181,6 +184,7 @@ jobs:
           ruby scripts/check_source_exclusions.rb
           ruby scripts/check_analysis_diagnostics.rb
           ruby scripts/check_baselines.rb
+          ruby scripts/check_declarations.rb
           ruby scripts/check_presets.rb
           ruby scripts/check_named_calls.rb
           ruby scripts/check_documentation_examples.rb

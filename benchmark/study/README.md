@@ -139,6 +139,17 @@ Ruby coverage. Engine shapes are generated, not full monorepo/Rails applications
 a universal winner or optimize to a leaderboard. Shared-runner times are observations, not hard
 timing gates; no graph baseline is auto-updated. Existing correctness canaries stay separate.
 
+## Opt-in class declaration selection
+
+From the root, run `bundle exec ruby benchmark/study/declaration_selection.rb`. The fixture
+contains 500 single-class files in an explicit superclass chain. Every sample checks that it
+selects the 499 descendants of the root. On Windows / Ruby 4.0.6, five trials gave median
+end-to-end selector times of **253 ms cold** and **15.9 ms warm**, with **104,109** and **15,548**
+Ruby allocations respectively. The median post-GC heap increase after the cold check was
+**273,792 bytes** (Ruby object storage, not RSS). The script separately reports the ordinary
+gem require and first opt-in scope setup, and verifies the default require did not load
+declaration extraction. These are fixture measurements, not timing ceilings.
+
 ## Real production source
 
 `real_project.rb` checks pinned Discourse `2de9c9be4f89e392fe500dd27f928d6b1184bf09`, with three
