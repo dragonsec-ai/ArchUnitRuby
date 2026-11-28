@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../common/fluentapi/checkable'
+require_relative '../classes/fluentapi/classes'
 require_relative '../files/fluentapi/files'
 require_relative '../layers/fluentapi/layers'
 require_relative '../layers/fluentapi/architecture_preset'
@@ -48,6 +49,10 @@ module ArchUnit
         Files::FluentApi.project_files(@project_root)
       end
       alias files project_files
+
+      def project_classes
+        ArchUnit.project_classes(@project_root)
+      end
 
       def project_layers
         Layers::FluentApi.project_layers(@project_root)

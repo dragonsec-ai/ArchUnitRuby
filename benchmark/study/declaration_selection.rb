@@ -87,4 +87,4 @@ module DeclarationSelectionStudy
   end
 end
 
-DeclarationSelectionStudy.run
+DeclarationSelectionStudy.run if $PROGRAM_NAME == __FILE__

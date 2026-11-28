@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../testing/violation_factory'
+require_relative 'method_signature_payload'
 
 module ArchUnit
   module CLI
@@ -22,6 +23,10 @@ module ArchUnit
           result[:cycle_reporting] = 'witness' if violation.witness?
         when Files::Assertion::NamedCallViolation
           result[:call] = violation.call.to_h
+        when Classes::Assertion::MethodSignatureViolation
+          result[:method_signature] = MethodSignaturePayload.build(violation)
+        when Classes::Assertion::EmptyClassSelectionViolation
+          result[:class_selector] = MethodSignaturePayload.selector(violation.scope)
         end
       end
       private_class_method :add_evidence

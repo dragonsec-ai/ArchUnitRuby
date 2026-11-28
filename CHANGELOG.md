@@ -12,6 +12,8 @@
   reports. This can reveal previously missed violations, including in imports-only projects.
 - Inspect declared classes by exact constant name, namespace, or bounded superclass ancestry.
   Keep reopened source sites and surface uncertain results without changing file dependency rules.
+- Require written instance or singleton methods with a compatible call shape, reporting uncertainty
+  as a failure rather than counting it as a supported signature or accepted debt.
 - Lazily reuse immutable node/internal/external-edge views within each cached graph analysis
   across file and layer checks. Invalidation, per-rule filtering, callbacks and logging stay intact;
   views trade additional retained memory for less repeated projection work.

@@ -16,6 +16,7 @@ require_relative '../metrics/assertion/metric_zone'
 require_relative '../slices/assertion/slice_dependency_violation'
 require_relative 'layer_violation_formatter'
 require_relative 'metric_violation_formatter'
+require_relative 'method_signature_formatter'
 require_relative 'named_call_formatter'
 require_relative 'slice_violation_formatter'
 require_relative 'test_violation'
@@ -27,10 +28,11 @@ module ArchUnit
     class ViolationFactory
       extend LayerViolationFormatter
       extend MetricViolationFormatter
+      extend MethodSignatureFormatter
       extend NamedCallFormatter
       extend SliceViolationFormatter
 
-      FORMATTERS = {
+      FORMATTERS = MethodSignatureFormatter::FORMATTERS.merge(
         Common::Assertion::EmptyTestViolation => :empty_test,
         Files::Assertion::FilePatternViolation => :file_pattern,
         Files::Assertion::FileDependencyViolation => :file_dependency,
@@ -40,7 +42,7 @@ module ArchUnit
         Files::Assertion::NamedCallViolation => :named_call,
         Layers::Assertion::LayerDependencyViolation => :layer_dependency,
         Slices::Assertion::SliceDependencyViolation => :slice_dependency
-      }.merge(MetricViolationFormatter::FORMATTERS).freeze
+      ).merge(MetricViolationFormatter::FORMATTERS).freeze
 
       class << self
         def from_violation(violation)
@@ -120,10 +122,8 @@ module ArchUnit
         end
 
         def generic(violation)
-          TestViolation.new(
-            message: 'Architecture violation',
-            details: "Unformatted violation type: #{violation.class.name}."
-          )
+          details = "Unformatted violation type: #{violation.class.name}."
+          TestViolation.new(message: 'Architecture violation', details:)
         end
 
         def describe_filter(filter)

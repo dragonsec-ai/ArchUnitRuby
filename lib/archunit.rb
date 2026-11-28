@@ -24,6 +24,7 @@ require_relative 'archunit/common/projection/edge_projections'
 require_relative 'archunit/common/projection/project_edges'
 require_relative 'archunit/common/projection/project_to_nodes'
 require_relative 'archunit/classes/fluentapi/classes'
+require_relative 'archunit/classes/fluentapi/method_signature'
 require_relative 'archunit/common/projection/project_cycles'
 require_relative 'archunit/extraction/locate_project'
 require_relative 'archunit/extraction/enumerate_source_files'
@@ -109,6 +110,7 @@ module ArchUnit
   MetricPredicateViolation = Metrics::Assertion::MetricPredicateViolation
   CustomMetricViolation = Metrics::Assertion::CustomMetricViolation
   TestViolation = Testing::TestViolation
+  MethodSignatureViolation = Classes::Assertion::MethodSignatureViolation
   TestResult = Testing::TestResult
   ColorUtils = Testing::ColorUtils
   ViolationFactory = Testing::ViolationFactory

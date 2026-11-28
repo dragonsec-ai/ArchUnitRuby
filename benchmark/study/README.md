@@ -150,6 +150,14 @@ Ruby allocations respectively. The median post-GC heap increase after the cold c
 gem require and first opt-in scope setup, and verifies the default require did not load
 declaration extraction. These are fixture measurements, not timing ceilings.
 
+Run `bundle exec ruby benchmark/study/method_signatures.rb` to reuse that fixture for 20
+declaration-based rules (ten passing, ten rejecting all 499 subclasses). Every trial checks all
+findings before accepting the measurement. Five Windows / Ruby 4.0.6 trials measured a median
+**560,233 allocations with one shared inventory** versus **2,244,077** when deliberately
+rebuilding before each rule. Median added Ruby heap after GC for the shared run was about
+**287 KiB**. The timings (1.78 s and 14.98 s respectively) and startup sample were taken with
+other checks running on the local machine; do not read them as isolated latency guarantees.
+
 ## Real production source
 
 `real_project.rb` checks pinned Discourse `2de9c9be4f89e392fe500dd27f928d6b1184bf09`, with three
